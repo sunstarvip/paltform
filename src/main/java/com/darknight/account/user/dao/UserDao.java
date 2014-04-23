@@ -7,4 +7,5 @@ import com.darknight.account.user.entity.User;
  * Created by DarKnight on 14-2-5.
  */
 public interface UserDao extends DefaultJpaRepository<User, String> {
+
 }
