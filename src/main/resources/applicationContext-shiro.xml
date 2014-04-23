@@ -5,15 +5,34 @@
 
     <description>Shiro安全配置</description>
 
-    <!-- 項目自定义的Realm, 所有accountService依赖的dao都需要用depends-on声明 -->
-    <bean id="shiroRealm" class="com.darknight.security.shiro.impl.DefaultShiroRealmImpl">
-        <property name="userDao" ref="userDao"/>
-    </bean>
-
     <!-- 用户授权信息Cache, 采用EhCache -->
     <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"/>
     </bean>
+
+    <!-- 凭证匹配器-->
+    <bean id="credentialsMatcher" class="com.darknight.security.shiro.RetryLimitHashedCredentialsMatcher">
+        <constructor-arg ref="shiroEhcacheManager"/>
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
+    <!-- 項目自定义的Realm, 所有accountService依赖的dao都需要用depends-on声明 -->
+    <bean id="shiroRealm" class="com.darknight.security.shiro.impl.DefaultShiroRealmImpl">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    <!-- Realm实现-->
+    <bean id="userRealm" class="com.darknight.security.shiro.impl.DefaultShiroRealmImpl">
+        <property name="userService" ref="userService"/>
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="true"/>
+        <property name="authenticationCachingEnabled" value="true"/>
+        <property name="authenticationCacheName" value="authenticationCache"/>
+        <property name="authorizationCachingEnabled" value="true"/>
+        <property name="authorizationCacheName" value="authorizationCache"/>
+    </bean>
+
 
     <!-- Shiro's main business-tier object for web-enabled applications -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
