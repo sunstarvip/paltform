@@ -13,9 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "t_platform_user")
 public class User extends DefaultEntity{
-    private String name;
-    private String accountName;
-    private String password;
+    private String name; // 用户昵称, 非唯一
+    private String accountName; // 账户名称, 唯一
+    private String password; // 账户密码
 
     private List<Role> roleList;
 
