@@ -19,11 +19,11 @@
     </bean>
 
     <!-- 項目自定义的Realm, 所有accountService依赖的dao都需要用depends-on声明 -->
-    <bean id="shiroRealm" class="com.darknight.security.shiro.impl.DefaultShiroRealmImpl">
+    <bean id="shiroRealm" class="com.darknight.security.shiro.realm.impl.DefaultShiroRealmImpl">
         <property name="userDao" ref="userDao"/>
     </bean>
     <!-- Realm实现-->
-    <bean id="userRealm" class="com.darknight.security.shiro.impl.DefaultShiroRealmImpl">
+    <bean id="userRealm" class="com.darknight.security.shiro.realm.impl.DefaultShiroRealmImpl">
         <property name="userService" ref="userService"/>
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>

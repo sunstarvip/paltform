@@ -7,6 +7,7 @@ import com.darknight.account.role.service.RoleService;
 import com.darknight.account.user.dao.UserDao;
 import com.darknight.account.user.entity.User;
 import com.darknight.account.user.service.UserService;
+import com.darknight.security.shiro.password.PasswordMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService{
 
     private RoleService roleService;
     private PermissionService permissionService;
+    private PasswordMaker passwordMaker;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -42,10 +44,58 @@ public class UserServiceImpl implements UserService{
         this.permissionService = permissionService;
     }
 
+    @Autowired
+    public void setPasswordMaker(PasswordMaker passwordMaker) {
+        this.passwordMaker = passwordMaker;
+    }
+
+    @Override
+    public User find(String userId) {
+        return userDao.findOne(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public User save(User user) {
+        return userDao.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public User saveAndFlush(User user) {
+        return userDao.saveAndFlush(user);
+    }
+
+    @Override
+    public void flush() {
+        userDao.flush();
+    }
+
+    @Override
+    public void delete(User user) {
+        userDao.delete(user);
+        flush();
+    }
+
     @Override
     public User findByAccountName(String accountName) {
         User user = userDao.findByAccountName(accountName);
         return user;
+    }
+
+    @Override
+    public String getCredentialsSalt(String accountName) {
+        User user = findByAccountName(accountName);
+        return user.getAccountName() + user.getSalt();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void changePassword(String userId, String newPassword) {
+        User user = userDao.findOne(userId);
+        user.setPassword(newPassword);
+        passwordMaker.encryptPassword(user);
+        saveAndFlush(user);
     }
 
     @Override

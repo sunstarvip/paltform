@@ -11,7 +11,21 @@ import java.util.Set;
  * Created by DarKnight on 14-2-5.
  */
 public interface UserService {
+    User find(String userId);
+
+    User save(User user);
+
+    User saveAndFlush(User user);
+
+    void flush();
+
+    void delete(User user);
+
     User findByAccountName(String accountName);
+
+    String getCredentialsSalt(String accountName);
+
+    void changePassword(String userId, String newPassword);
 
     List<Role> findRoleList(String accountName);
 

@@ -16,6 +16,7 @@ public class User extends DefaultEntity{
     private String name; // 用户昵称, 非唯一
     private String accountName; // 账户名称, 唯一
     private String password; // 账户密码
+    private String salt; // 用于生成处理后的密码
     private String userStatus = UserStatus.NORMAL; //用户状态
 
     private List<Role> roleList;
@@ -42,6 +43,14 @@ public class User extends DefaultEntity{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getUserStatus() {
