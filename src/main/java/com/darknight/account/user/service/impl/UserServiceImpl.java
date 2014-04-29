@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by DarKnight on 14-2-5.
@@ -40,16 +43,76 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Role> findRoles(String accountName) {
+    public User findByAccountName(String accountName) {
+        User user = userDao.findByAccountName(accountName);
+        return user;
+    }
+
+    @Override
+    public List<Role> findRoleList(String accountName) {
         User user = userDao.findByAccountName(accountName);
         List<Role> roleList = user.getRoleList();
         return roleList;
     }
 
     @Override
-    public List<Permission> findPermissions(String accountName) {
-        List<Role> roleList = findRoles(accountName);
+    public Set<Role> findRoleSet(String accountName) {
+        List<Role> roleList = findRoleList(accountName);
+        Set<Role> roleSet = new HashSet<>(roleList);
+        return roleSet;
+    }
+
+    @Override
+    public List<String> findRoleIdList(String accountName) {
+        List<Role> roleList = findRoleList(accountName);
+        List<String> roleIdList = new ArrayList<>();
+        for(Role role : roleList) {
+            roleIdList.add(role.getId());
+        }
+        return roleIdList;
+    }
+
+    @Override
+    public Set<String> findRoleIdSet(String accountName) {
+        List<Role> roleList = findRoleList(accountName);
+        Set<String> roleIdSet = new HashSet<>();
+        for(Role role : roleList) {
+            roleIdSet.add(role.getId());
+        }
+        return roleIdSet;
+    }
+
+    @Override
+    public List<Permission> findPermissionList(String accountName) {
+        List<Role> roleList = findRoleList(accountName);
         List<Permission> permissionList = permissionService.findByRoles(roleList);
         return permissionList;
+    }
+
+    @Override
+    public Set<Permission> findPermissionSet(String accountName) {
+        List<Permission> permissionList = findPermissionList(accountName);
+        Set<Permission> permissionSet = new HashSet<>(permissionList);
+        return permissionSet;
+    }
+
+    @Override
+    public List<String> findPermissionIdList(String accountName) {
+        List<Permission> permissionList = findPermissionList(accountName);
+        List<String> permissionIdList = new ArrayList<>();
+        for(Permission permission : permissionList) {
+            permissionIdList.add(permission.getId());
+        }
+        return permissionIdList;
+    }
+
+    @Override
+    public Set<String> findPermissionIdSet(String accountName) {
+        List<Permission> permissionList = findPermissionList(accountName);
+        Set<String> permissionIdSet = new HashSet<>();
+        for(Permission permission : permissionList) {
+            permissionIdSet.add(permission.getId());
+        }
+        return permissionIdSet;
     }
 }

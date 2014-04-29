@@ -1,14 +1,20 @@
 package com.darknight.security.shiro.impl;
 
+import com.darknight.account.role.entity.Role;
 import com.darknight.account.user.dao.UserDao;
+import com.darknight.account.user.entity.User;
 import com.darknight.account.user.service.UserService;
 import com.darknight.security.shiro.CustomerShiroRealm;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 默认自定义ShiroRealm
@@ -27,8 +33,10 @@ public class DefaultShiroRealmImpl implements CustomerShiroRealm {
         String username = (String)principals.getPrimaryPrincipal();
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.findRoles(username));
-        authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        //配置用户角色
+        authorizationInfo.setRoles(userService.findRoleIdSet(username));
+        //配置用户权限
+        authorizationInfo.setStringPermissions(userService.findPermissionIdSet(username));
 
         return authorizationInfo;
     }
@@ -38,19 +46,19 @@ public class DefaultShiroRealmImpl implements CustomerShiroRealm {
 
         String username = (String)token.getPrincipal();
 
-        User user = userService.findByUsername(username);
+        User user = userService.findByAccountName(username);
 
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
         }
 
-        if(Boolean.TRUE.equals(user.getLocked())) {
+        if(StringUtils.equals(User.UserStatus.LOCKED, user.getUserStatus())) {
             throw new LockedAccountException(); //帐号锁定
         }
 
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getUsername(), //用户名
+                user.getAccountName(), //用户名
                 user.getPassword(), //密码
                 ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
                 getName()  //realm name
