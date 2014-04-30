@@ -19,11 +19,13 @@ public interface UserService {
 
     void delete(User user);
 
+    User createUser(User user);
+
     User findByAccountName(String accountName);
 
     String getCredentialsSalt(String accountName);
 
-    void changePassword(String userId, String newPassword);
+    User changePassword(String userId, String newPassword);
 
     List<Role> findRoleList(String accountName);
 

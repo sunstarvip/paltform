@@ -73,6 +73,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public User createUser(User user) {
+        user = passwordMaker.encryptPassword(user);
+        save(user);
+        return user;
+    }
+
+    @Override
     public User findByAccountName(String accountName) {
         User user = userDao.findByAccountName(accountName);
         return user;
@@ -86,11 +94,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = false)
-    public void changePassword(String userId, String newPassword) {
+    public User changePassword(String userId, String newPassword) {
         User user = userDao.findOne(userId);
         user.setPassword(newPassword);
-        passwordMaker.encryptPassword(user);
+        user = passwordMaker.encryptPassword(user);
         save(user);
+        return user;
     }
 
     @Override

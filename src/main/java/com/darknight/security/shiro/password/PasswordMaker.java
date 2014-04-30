@@ -26,7 +26,7 @@ public class PasswordMaker {
         this.userService = userService;
     }
 
-    public void encryptPassword(User user) {
+    public User encryptPassword(User user) {
         if(StringUtils.isEmpty(user.getSalt())) {
             user.setSalt(randomNumberGenerator.nextBytes().toHex());
         }
@@ -37,6 +37,7 @@ public class PasswordMaker {
                 ByteSource.Util.bytes(userService.getCredentialsSalt(user.getAccountName())),
                 hashIterations).toHex();
         user.setPassword(newPassword);
+        return user;
     }
 
     public interface AlgorithmName {
