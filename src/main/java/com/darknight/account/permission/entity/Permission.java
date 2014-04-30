@@ -13,6 +13,9 @@ import java.util.List;
 @Table(name = "t_platform_permission")
 public class Permission extends DefaultEntity {
     private String name;
+    private String description; // 权限描述
+    private String available = Available.YES; // 权限是否可用
+
     private List<Role> roleList;
 
     public String getName() {
@@ -23,6 +26,22 @@ public class Permission extends DefaultEntity {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     public List<Role> getRoleList() {
@@ -31,5 +50,10 @@ public class Permission extends DefaultEntity {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+    public interface Available {
+        public static String YES = "YES";//可用状态
+        public static String NO = "NO";//不可用状态
     }
 }

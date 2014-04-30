@@ -57,12 +57,6 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = false)
     public User save(User user) {
-        return userDao.save(user);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public User saveAndFlush(User user) {
         return userDao.saveAndFlush(user);
     }
 
@@ -72,6 +66,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void delete(User user) {
         userDao.delete(user);
         flush();
@@ -95,7 +90,7 @@ public class UserServiceImpl implements UserService{
         User user = userDao.findOne(userId);
         user.setPassword(newPassword);
         passwordMaker.encryptPassword(user);
-        saveAndFlush(user);
+        save(user);
     }
 
     @Override

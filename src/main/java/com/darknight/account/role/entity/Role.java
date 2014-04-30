@@ -15,6 +15,8 @@ import java.util.List;
 @Table(name = "t_platform_role")
 public class Role extends DefaultEntity {
     private String name; // 角色名称
+    private String description; // 角色描述
+    private String available = Available.YES; // 角色是否可用
 
     private List<User> userList;
     private List<Permission> permissionList;
@@ -25,6 +27,22 @@ public class Role extends DefaultEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -45,5 +63,10 @@ public class Role extends DefaultEntity {
 
     public void setPermissionList(List<Permission> permissionList) {
         this.permissionList = permissionList;
+    }
+
+    public interface Available {
+        public static String YES = "YES";//可用状态
+        public static String NO = "NO";//不可用状态
     }
 }

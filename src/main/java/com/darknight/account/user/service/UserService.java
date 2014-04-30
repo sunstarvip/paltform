@@ -15,8 +15,6 @@ public interface UserService {
 
     User save(User user);
 
-    User saveAndFlush(User user);
-
     void flush();
 
     void delete(User user);
