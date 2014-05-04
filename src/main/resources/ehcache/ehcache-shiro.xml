@@ -1,6 +1,6 @@
 <ehcache updateCheck="false" name="shiroCache">
 
-   <defaultCache
+    <defaultCache
             maxElementsInMemory="10000"
             eternal="false"
             timeToIdleSeconds="120"
@@ -9,4 +9,13 @@
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"
             />
+
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
 </ehcache>

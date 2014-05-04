@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by DarKnight on 2014/4/29 0029.
  */
-@Component
 public class DefaultCustomerRealm extends AuthorizingRealm {
     private UserService userService;
 

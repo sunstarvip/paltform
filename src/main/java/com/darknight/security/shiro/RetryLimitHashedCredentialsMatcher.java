@@ -1,15 +1,11 @@
 package com.darknight.security.shiro;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.Cache;
 
-import javax.security.auth.login.AccountLockedException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,10 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by DarKnight on 2014/4/23 0023.
  */
 public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher {
-    private Ehcache passwordRetryCache;
+    private Cache<String, AtomicInteger> passwordRetryCache;
 
-    public RetryLimitHashedCredentialsMatcher() {
-        CacheManager cacheManager = CacheManager.newInstance(CacheManager.class.getClassLoader().getResource("ehcache.xml"));
+    public RetryLimitHashedCredentialsMatcher(org.apache.shiro.cache.CacheManager cacheManager) {
         passwordRetryCache = cacheManager.getCache("passwordRetryCache");
     }
 
@@ -29,12 +24,11 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         String username = (String)token.getPrincipal();
         //retry count + 1
-        Element element = passwordRetryCache.get(username);
-        if(element == null) {
-            element = new Element(username , new AtomicInteger(0));
-            passwordRetryCache.put(element);
+        AtomicInteger retryCount = passwordRetryCache.get(username);
+        if(retryCount == null) {
+            retryCount = new AtomicInteger(0);
+            passwordRetryCache.put(username, retryCount);
         }
-        AtomicInteger retryCount = (AtomicInteger)element.getObjectValue();
         if(retryCount.incrementAndGet() > 5) {
             //if retry count > 5 throw
             throw new ExcessiveAttemptsException();

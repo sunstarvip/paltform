@@ -27,8 +27,13 @@
     <bean id="parameterMap" class="java.util.HashMap">
         <constructor-arg>
             <map>
+                <!--String-->
                 <entry key="parameter.YES" value="${parameter.YES}"/>
                 <entry key="parameter.NO" value="${parameter.NO}"/>
+                <entry key="parameter.NORMAL" value="${parameter.NORMAL}"/>
+                <entry key="parameter.LOCKED" value="${parameter.LOCKED}"/>
+                <entry key="parameter.MD5" value="${parameter.MD5}"/>
+                <!--Integer-->
                 <entry key="parameter.START" value="${parameter.START}"/>
             </map>
         </constructor-arg>
