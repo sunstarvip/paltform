@@ -13,13 +13,13 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
             <list>
-                <value>i18n.messages</value>
+                <!--<value>i18n.messages</value>-->
             </list>
         </property>
     </bean>
 
     <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
-    <context:component-scan base-package="com.darknight.*">
+    <context:component-scan base-package="com.darknight.platform.*">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -42,7 +42,7 @@
     <!-- Jpa Entity Manager 配置 -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.darknight.*"/>
+        <property name="packagesToScan" value="com.darknight.platform.*"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="databasePlatform" value="${jdbc.sql.dialect}"/>
@@ -64,9 +64,9 @@
     </bean>
 
     <!-- Spring Data Jpa配置 -->
-    <jpa:repositories base-package="com.darknight.*" transaction-manager-ref="transactionManager"
+    <jpa:repositories base-package="com.darknight.platform.*" transaction-manager-ref="transactionManager"
                       entity-manager-factory-ref="entityManagerFactory"
-                      factory-class="com.darknight.base.dao.factory.DefaultRepositoryFactoryBean"/>
+                      factory-class="com.darknight.core.base.dao.factory.DefaultRepositoryFactoryBean"/>
 
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
