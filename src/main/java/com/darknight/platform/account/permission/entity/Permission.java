@@ -1,8 +1,11 @@
 package com.darknight.platform.account.permission.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
+import com.darknight.platform.account.role.entity.Role;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by DarKnight on 2014/4/23 0023.
@@ -12,7 +15,8 @@ import javax.persistence.*;
 public class Permission extends DefaultEntity {
     private String name;
     private String description; // 权限描述
-    private String available = Available.YES; // 权限是否可用
+
+    private List<Role> roleList = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -30,16 +34,16 @@ public class Permission extends DefaultEntity {
         this.description = description;
     }
 
-    public String getAvailable() {
-        return available;
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "t_platform_permission_role",
+            joinColumns ={@JoinColumn(name = "permission_id", referencedColumnName = "id") },
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    public List<Role> getRoleList() {
+        return roleList;
     }
 
-    public void setAvailable(String available) {
-        this.available = available;
-    }
-
-    public interface Available {
-        public static String YES = "YES";//可用状态
-        public static String NO = "NO";//不可用状态
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 }
