@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Platform平台系统权限对象
  * Created by DarKnight on 2014/4/23 0023.
  */
 @Entity

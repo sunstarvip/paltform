@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Platform平台系统角色对象
  * Created by DarKnight on 2014/5/22 0022.
  */
 @Entity
