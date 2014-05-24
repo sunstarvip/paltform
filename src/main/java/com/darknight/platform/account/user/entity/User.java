@@ -19,6 +19,8 @@ public class User extends DefaultEntity {
     private String password;
     private String mailAddress;
     private String address;
+    private String salt;
+
     private int phoneNum;
 
     private List<Role> roleList = new ArrayList<>();
@@ -61,6 +63,14 @@ public class User extends DefaultEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public int getPhoneNum() {

@@ -11,7 +11,7 @@
     </bean>
 
     <!-- 凭证匹配器-->
-    <bean id="credentialsMatcher" class="com.darknight.platform.security.shiro.RetryLimitHashedCredentialsMatcher">
+    <bean id="credentialsMatcher" class="com.darknight.platform.security.shiro.credentialsMatcher.RetryLimitHashedCredentialsMatcher">
         <constructor-arg ref="shiroEhcacheManager"/>
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="2"/>
@@ -19,7 +19,7 @@
     </bean>
 
     <!-- 項目自定义的Realm, Realm实现-->
-    <bean id="shiroRealm" class="com.darknight.platform.security.shiro.realm.impl.DefaultCustomerRealm">
+    <bean id="shiroRealm" class="com.darknight.platform.security.shiro.realm.impl.DefaultRealm">
         <!--<property name="userService" ref="userService"/>-->
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
