@@ -21,6 +21,12 @@ public class UserManager implements UserService {
     }
 
     @Override
+    public User find(String userId) {
+        User user = userDao.findOne(userId);
+        return user;
+    }
+
+    @Override
     public User findByAccountName(String accountName) {
         User user = userDao.findByAccountName(accountName);
         return user;

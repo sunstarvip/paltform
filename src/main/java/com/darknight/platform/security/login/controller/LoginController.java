@@ -16,6 +16,6 @@ public class LoginController {
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request) {
-        return "login/login";
+        return "platform/login/login";
     }
 }

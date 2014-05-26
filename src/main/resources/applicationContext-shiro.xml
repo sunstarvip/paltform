@@ -98,7 +98,7 @@
             <value>
                 /login = authc
                 /logout = logout
-                /login.jsp = anon
+                /platform/** = anon
                 /static/** = anon
                 /** = user
             </value>

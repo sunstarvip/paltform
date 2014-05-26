@@ -27,6 +27,12 @@ public class RoleManager implements RoleService{
     }
 
     @Override
+    public Role find(String roleId) {
+        Role role = roleDao.findOne(roleId);
+        return role;
+    }
+
+    @Override
     public Set<Role> findRoles(String accountName) {
         Criteria criteria = roleDao.createCriteria();
         criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));

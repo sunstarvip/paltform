@@ -27,6 +27,12 @@ public class PermissionManager implements PermissionService {
     }
 
     @Override
+    public Permission find(String permissionId) {
+        Permission permission = permissionDao.findOne(permissionId);
+        return permission;
+    }
+
+    @Override
     public Set<Permission> findPermissions(String accountName) {
         Criteria criteria = permissionDao.createCriteria();
         criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
