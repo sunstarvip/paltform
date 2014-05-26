@@ -1,15 +1,18 @@
 package com.darknight.platform.security.shiro.realm.impl;
 
+import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.permission.service.PermissionService;
 import com.darknight.platform.account.role.service.RoleService;
 import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by DarKnight on 2014/5/22 0022.
@@ -19,14 +22,17 @@ public class DefaultRealm extends AuthorizingRealm {
     private RoleService roleService;
     private PermissionService permissionService;
 
+    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    @Autowired
     public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
 
+    @Autowired
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
@@ -52,13 +58,13 @@ public class DefaultRealm extends AuthorizingRealm {
 
         String username = (String)token.getPrincipal();
 
-        User user = userService.findByUsername(username);
+        User user = userService.findByAccountName(username);
 
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
         }
 
-        if(Boolean.TRUE.equals(user.getLocked())) {
+        if(StringUtils.equals(DefaultEntity.EnableTag.NO, user.getEnableTag())) {
             throw new LockedAccountException(); //帐号锁定
         }
 

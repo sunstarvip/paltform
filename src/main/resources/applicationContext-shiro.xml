@@ -21,6 +21,9 @@
     <!-- 項目自定义的Realm, Realm实现-->
     <bean id="shiroRealm" class="com.darknight.platform.security.shiro.realm.impl.DefaultRealm">
         <!--<property name="userService" ref="userService"/>-->
+        <!--<property name="roleService" ref="roleService"/>-->
+        <!--<property name="permissionService" ref="permissionService"/>-->
+
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
         <property name="authenticationCachingEnabled" value="true"/>

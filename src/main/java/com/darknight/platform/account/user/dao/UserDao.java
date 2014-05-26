@@ -7,4 +7,5 @@ import com.darknight.platform.account.user.entity.User;
  * Created by DarKnight on 2014/5/22 0022.
  */
 public interface UserDao extends BaseJpaRepository<User, String> {
+    public User findByAccountName(String accountName);
 }
