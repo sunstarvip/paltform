@@ -21,7 +21,7 @@ public class User extends DefaultEntity {
     private String address;
     private String salt;
 
-    private int phoneNum;
+    private Integer phoneNum;
 
     private List<Role> roleList = new ArrayList<>();
 
@@ -73,11 +73,11 @@ public class User extends DefaultEntity {
         this.salt = salt;
     }
 
-    public int getPhoneNum() {
+    public Integer getPhoneNum() {
         return phoneNum;
     }
 
-    public void setPhoneNum(int phoneNum) {
+    public void setPhoneNum(Integer phoneNum) {
         this.phoneNum = phoneNum;
     }
 

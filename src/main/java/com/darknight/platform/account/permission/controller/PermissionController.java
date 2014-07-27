@@ -4,16 +4,21 @@ import com.darknight.platform.account.permission.entity.Permission;
 import com.darknight.platform.account.permission.service.PermissionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by DarKnight on 2014/5/26 0026.
  */
 @Controller
-@RequestMapping(value = "permission")
+@RequestMapping(value = "/platform/account/permission")
 public class PermissionController {
     private PermissionService permissionService;
 
@@ -29,5 +34,10 @@ public class PermissionController {
         }
         Permission permission = new Permission();
         return permission;
+    }
+
+    @ModelAttribute("list")
+    public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
+        return "platform/permission/permissionList";
     }
 }

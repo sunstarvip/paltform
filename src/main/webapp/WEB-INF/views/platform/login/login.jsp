@@ -11,6 +11,12 @@
     <title>login</title>
 </head>
 <body>
-Login Form!!!
+Login Form!!!123
+    <form action="" method="post">
+        <br />用户帐号：<input type="text" name="username" id="username" value="" />
+        <br />登录密码：<input type="password" name="password" id="password" value="" />
+        <br /> <input type="hidden" name="rememberMe" value="true" />
+        <input value="登录" type="submit">
+    </form>
 </body>
 </html>
