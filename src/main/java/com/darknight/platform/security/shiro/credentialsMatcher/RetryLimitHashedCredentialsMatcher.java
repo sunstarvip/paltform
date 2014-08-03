@@ -34,6 +34,13 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
             throw new ExcessiveAttemptsException();
         }
 
+        Object tokenHashedCredentials = hashProvidedCredentials(token, info);
+        Object accountCredentials = getCredentials(info);
+        boolean tis = isByteSource(tokenHashedCredentials);
+        boolean ais = isByteSource(accountCredentials);
+        byte[] tokenBytes = toBytes(tokenHashedCredentials);
+        byte[] accountBytes = toBytes(accountCredentials);
+
         boolean matches = super.doCredentialsMatch(token, info);
         if(matches) {
             //clear retry count

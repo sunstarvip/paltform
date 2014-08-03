@@ -36,7 +36,7 @@ public class PermissionController {
         return permission;
     }
 
-    @ModelAttribute("list")
+    @RequestMapping("list")
     public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
         return "platform/permission/permissionList";
     }

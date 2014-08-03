@@ -21,9 +21,9 @@
 
     <!-- 項目自定义的Realm, Realm实现-->
     <bean id="shiroRealm" class="com.darknight.platform.security.shiro.realm.impl.DefaultRealm">
-        <!--<property name="userService" ref="userService"/>-->
-        <!--<property name="roleService" ref="roleService"/>-->
-        <!--<property name="permissionService" ref="permissionService"/>-->
+        <!--<property name="userService" ref="userService"/>
+        <property name="roleService" ref="roleService"/>
+        <property name="permissionService" ref="permissionService"/>-->
 
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
@@ -78,17 +78,25 @@
     </bean>
 
     <!-- 基于Form表单的身份验证过滤器 -->
-    <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+    <!--<bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">-->
         <!--<property name="usernameParam" value="username"/>-->
         <!--<property name="passwordParam" value="password"/>-->
-        <property name="loginUrl" value="platform/login/login.jsp"/>
+        <!--<property name="loginUrl" value="/system/login.jsp" />-->
+    <!--</bean>-->
+
+    <!-- 自定义基于Form表单的身份验证过滤器 -->
+    <bean id="formAuthenticationFilter" class="com.darknight.platform.security.shiro.filters.CustomerFormAuthenticationFilter">
+        <property name="usernameParam" value="username"/>
+        <property name="passwordParam" value="password"/>
+        <property name="loginUrl" value="/system/login.jsp" />
     </bean>
 
     <!-- Shiro Filter -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
-        <property name="loginUrl" value="/platform/security/login/login" />
-        <property name="successUrl" value="/platform/index" />
+        <property name="loginUrl" value="/system/login.jsp" />
+        <property name="successUrl" value="/" />
+        <property name="unauthorizedUrl" value="/platform/security/login/login"/>
         <property name="filters">
             <map>
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
@@ -96,19 +104,15 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--/login = authc-->
-                <!--/logout = logout-->
-                <!--/platform/user/list = anon-->
-                <!--/platform/role/list = anon-->
-                <!--/platform/permission/list = anon-->
-                <!--/static/** = anon-->
-                <!--/** = user-->
-                /platform/index.jsp = anon
-                /index.jsp = anon
-                /unauthorized.jsp = anon
-                /platform/security/login/login.jsp = authc
+                <!--不拦截任何路径, 用于关闭权限测试页面-->
+                <!--/** = anon-->
+                / = anon
+                /welcome.html = anon
+                /system/error.jsp = anon
+                /system/login.jsp = authc
                 /logout = logout
                 /** = user
+                <!--/** = anon-->
             </value>
         </property>
     </bean>

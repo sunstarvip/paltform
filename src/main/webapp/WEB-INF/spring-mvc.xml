@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <!-- 自动扫描且只扫描@Controller -->
-    <context:component-scan base-package="com.darknight" use-default-filters="false">
+    <context:component-scan base-package="com.darknight.platform" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -44,7 +44,7 @@
     <mvc:default-servlet-handler/>
 
     <!-- 定义首页 -->
-    <mvc:view-controller path="/" view-name="redirect:/welcome"/>
+    <mvc:view-controller path="/" view-name="redirect:/welcome.html"/>
 
     <!-- 定义JSP -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -2,6 +2,10 @@ package com.darknight.platform.account.user.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.role.entity.Role;
+import com.darknight.platform.security.shiro.util.PasswordUtil;
+import org.apache.shiro.codec.Base64;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,7 +23,7 @@ public class User extends DefaultEntity {
     private String password;
     private String mailAddress;
     private String address;
-    private String salt;
+    private String salt = PasswordUtil.getSalt();
 
     private Integer phoneNum;
 
