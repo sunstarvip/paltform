@@ -44,4 +44,10 @@ public class LoginController {
 
         return "platform/login/index";
     }
+
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public String logout(Model model, HttpServletRequest request) {
+        System.out.print("logout sucess!");
+        return "redirect:/platform/account/user/list";
+    }
 }

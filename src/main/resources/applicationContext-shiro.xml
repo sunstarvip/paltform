@@ -11,21 +11,32 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"/>
     </bean>
 
-    <!-- 凭证匹配器-->
-    <bean id="credentialsMatcher" class="com.darknight.platform.security.shiro.credentialsMatcher.RetryLimitHashedCredentialsMatcher">
+    <!-- 自定义凭证匹配器-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!--加密方式, 必须设置-->
+        <property name="hashAlgorithmName" value="MD5"/>
+        <!--加密迭代次数, 不设置默认为1次-->
+        <property name="hashIterations" value="2"/>
+        <!--不设置默认为True-->
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
+    <!-- 自定义凭证匹配器-->
+    <bean id="customerCredentialsMatcher" class="com.darknight.platform.security.shiro.credentialsMatcher.RetryLimitHashedCredentialsMatcher">
         <constructor-arg ref="shiroEhcacheManager"/>
-        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashAlgorithmName" value="MD5"/>
         <property name="hashIterations" value="2"/>
         <property name="storedCredentialsHexEncoded" value="true"/>
     </bean>
 
-    <!-- 項目自定义的Realm, Realm实现-->
+    <!-- 由于Shiro不负责Realm的具体实现, 項目中必须实现自定义的Realm-->
     <bean id="shiroRealm" class="com.darknight.platform.security.shiro.realm.impl.DefaultRealm">
-        <!--<property name="userService" ref="userService"/>
-        <property name="roleService" ref="roleService"/>
-        <property name="permissionService" ref="permissionService"/>-->
-
+        <!--注入凭证匹配器, 用于比较用户信息-->
+        <!--Shiro提供默认的凭证匹配器-->
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <!--自定义的凭证匹配器-->
+        <!--<property name="credentialsMatcher" ref="customerCredentialsMatcher"/>-->
+        <!--配置是否启用缓存-->
         <property name="cachingEnabled" value="true"/>
         <property name="authenticationCachingEnabled" value="true"/>
         <property name="authenticationCacheName" value="authenticationCache"/>
@@ -84,6 +95,13 @@
         <property name="loginUrl" value="/system/login.jsp" />
     </bean>
 
+    <!-- 自定义基于Form表单的身份验证过滤器 -->
+    <!--<bean id="formAuthenticationFilter" class="com.darknight.platform.security.shiro.filters.CustomerAuthenticationFilter">-->
+        <!--<property name="usernameParam" value="username"/>-->
+        <!--<property name="passwordParam" value="password"/>-->
+        <!--<property name="loginUrl" value="/system/login.jsp" />-->
+    <!--</bean>-->
+
     <!-- Shiro Filter -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
@@ -103,8 +121,8 @@
                 /welcome.html = anon
                 /system/error.jsp = anon
                 /system/login.jsp = authc
-                /logout = logout
-                /** = user
+                /platform/security/login/logout = logout
+                /** = authc
                 <!--/** = anon-->
             </value>
         </property>

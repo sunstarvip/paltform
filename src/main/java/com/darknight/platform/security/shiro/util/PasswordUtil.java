@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordUtil {
     //生成随机数生成器
     private static final RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-    private static String algorithmName = "md5";
+    private static String algorithmName = "MD5";
     private static final int hashIterations = 2;
 
     //通过随机数生成器获得用户的Salt
