@@ -27,7 +27,7 @@ public class UserManager implements UserService {
 
     @Override
     public User find(String userId) {
-        User user = userDao.findOne(userId);
+        User user = userDao.getOne(userId);
         return user;
     }
 
@@ -47,15 +47,28 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public User findByAccountName(String accountName) {
-        User user = userDao.findByAccountName(accountName);
-        return user;
+    @Transactional(readOnly = false)
+    public void flush() {
+        userDao.flush();
     }
 
     @Override
+    @Transactional(readOnly = false)
     public User save(User user) {
-        user = userDao.save(user);
-        userDao.flush();
+        return userDao.saveAndFlush(user);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public List<User> save(List<User> userList) {
+        userList = userDao.save(userList);
+        flush();
+        return userList;
+    }
+
+    @Override
+    public User findByAccountName(String accountName) {
+        User user = userDao.findByAccountName(accountName);
         return user;
     }
 }

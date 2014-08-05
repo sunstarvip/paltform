@@ -29,25 +29,25 @@ public class LoginController {
         this.securityManager = securityManager;
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String login(Model model, HttpServletRequest request) {
-        String shiroLoginFailure = request.getParameter("shiroLoginFailure");
-        System.out.print("shiroLoginFailure: " + shiroLoginFailure);
-
-        return "platform/login/index";
-    }
-
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String userLogin(Model model, HttpServletRequest request) {
-        String shiroLoginFailure = request.getParameter("shiroLoginFailure");
-        System.out.print("shiroLoginFailure: " + shiroLoginFailure);
-
-        return "platform/login/index";
-    }
-
-    @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public String logout(Model model, HttpServletRequest request) {
-        System.out.print("logout sucess!");
-        return "redirect:/platform/account/user/list";
-    }
+//    @RequestMapping(value = "login", method = RequestMethod.POST)
+//    public String login(Model model, HttpServletRequest request) {
+//        String shiroLoginFailure = request.getParameter("shiroLoginFailure");
+//        System.out.print("shiroLoginFailure: " + shiroLoginFailure);
+//
+//        return "platform/login/index";
+//    }
+//
+//    @RequestMapping(value = "login", method = RequestMethod.GET)
+//    public String userLogin(Model model, HttpServletRequest request) {
+//        String shiroLoginFailure = request.getParameter("shiroLoginFailure");
+//        System.out.print("shiroLoginFailure: " + shiroLoginFailure);
+//
+//        return "platform/login/index";
+//    }
+//
+//    @RequestMapping(value = "logout", method = RequestMethod.GET)
+//    public String logout(Model model, HttpServletRequest request) {
+//        System.out.print("logout sucess!");
+//        return "redirect:/platform/account/user/list";
+//    }
 }

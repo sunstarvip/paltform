@@ -7,10 +7,14 @@ import com.darknight.platform.account.permission.service.PermissionService;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,8 +32,43 @@ public class PermissionManager implements PermissionService {
 
     @Override
     public Permission find(String permissionId) {
-        Permission permission = permissionDao.findOne(permissionId);
+        Permission permission = permissionDao.getOne(permissionId);
         return permission;
+    }
+
+    @Override
+    public List<Permission> findAll() {
+        List<Permission> permissionList = permissionDao.findAll();
+        if(permissionList == null) {
+            permissionList = new ArrayList<>();
+        }
+        return permissionList;
+    }
+
+    @Override
+    public Page<Permission> findAll(Pageable page) {
+        Page<Permission> permissionPage = permissionDao.findAll(page);
+        return permissionPage;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void flush() {
+        permissionDao.flush();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Permission save(Permission permission) {
+        return permissionDao.saveAndFlush(permission);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public List<Permission> save(List<Permission> permissionList) {
+        permissionList = permissionDao.save(permissionList);
+        flush();
+        return permissionList;
     }
 
     @Override

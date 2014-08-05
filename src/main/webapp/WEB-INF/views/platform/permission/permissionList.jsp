@@ -11,6 +11,33 @@
     <title>DarKnight支撑平台</title>
 </head>
 <body>
-Permission List!!!
+User List!!!   <a href="/platform/platform/account/user/add">新增</a><a href="/logout">注销</a>
+
+<table border="1px">
+    <%--列头--%>
+    <thead>
+    <tr>
+        <th>权限名称name</th>
+        <th>权限描述description</th>
+    </tr>
+    </thead>
+    <%--数据块--%>
+    <tbody>
+    <c:forEach var="user" items="${userPage.content}" varStatus="status">
+        <tr>
+            <td>${user.accountName}</td>
+            <td>${user.name}</td>
+            <td>${user.password}</td>
+            <td>${user.salt}</td>
+        </tr>
+    </c:forEach>
+    </tbody>
+    <%--表格尾--%>
+    <tfoot>
+    <tr>
+    </tr>
+    </tfoot>
+
+</table>
 </body>
 </html>

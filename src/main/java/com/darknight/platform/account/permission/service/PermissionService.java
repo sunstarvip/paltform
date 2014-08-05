@@ -1,7 +1,10 @@
 package com.darknight.platform.account.permission.service;
 
 import com.darknight.platform.account.permission.entity.Permission;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,6 +12,16 @@ import java.util.Set;
  */
 public interface PermissionService {
     public Permission find(String permissionId);
+
+    public List<Permission> findAll();
+
+    public Page<Permission> findAll(Pageable page);
+
+    public void flush();
+
+    public Permission save(Permission permission);
+
+    public List<Permission> save(List<Permission> permissionList);
 
     public Set<Permission> findPermissions(String accountName);
 

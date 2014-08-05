@@ -9,7 +9,7 @@
     <title>DarKnight支撑平台</title>
 </head>
 <body>
-User List!!!   <a href="/platform/platform/account/user/add">新增</a>
+User List!!!   <a href="/platform/platform/account/user/add">新增</a><a href="/logout">注销</a>
 
 <table border="1px">
     <%--列头--%>

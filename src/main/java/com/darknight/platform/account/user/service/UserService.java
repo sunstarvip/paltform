@@ -16,7 +16,11 @@ public interface UserService {
 
     public Page<User> findAll(Pageable page);
 
-    public User findByAccountName(String accountName);
+    public void flush();
 
     public User save(User user);
+
+    public List<User> save(List<User> userList);
+
+    public User findByAccountName(String accountName);
 }
