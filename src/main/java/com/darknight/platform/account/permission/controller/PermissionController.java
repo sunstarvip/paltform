@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by DarKnight on 2014/5/26 0026.
  */
 @Controller
-@RequestMapping(value = "/platform/account/permission")
+@RequestMapping(value = "platform/account/permission")
 public class PermissionController {
     private PermissionService permissionService;
 
@@ -40,8 +40,20 @@ public class PermissionController {
 
     @RequestMapping(value={"list"}, method={RequestMethod.GET})
     public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
-        Page<Permission> userPage = permissionService.findAll(pageable);
-        model.addAttribute("userPage", userPage);
-        return "platform/user/userList";
+        Page<Permission> permissionPage = permissionService.findAll(pageable);
+        model.addAttribute("permissionPage", permissionPage);
+        return "platform/permission/permissionList";
+    }
+
+    @RequestMapping(value={"add"}, method={RequestMethod.GET})
+    public String add(HttpServletRequest request, Model model) {
+        model.addAttribute("permission", new Permission());
+        return "platform/permission/permissionEdit";
+    }
+
+    @RequestMapping(value={"save"}, method={RequestMethod.POST})
+    public String save(@ModelAttribute("permission") Permission permission, HttpServletRequest request, Model model) {
+        permission = permissionService.save(permission);
+        return "redirect:/platform/account/permission/list";
     }
 }

@@ -12,7 +12,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /**
  * Created by DarKnight on 2014/5/22 0022.
@@ -22,17 +23,17 @@ public class DefaultRealm extends AuthorizingRealm {
     private RoleService roleService;
     private PermissionService permissionService;
 
-    @Autowired
+    @Resource
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    @Autowired
+    @Resource
     public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
 
-    @Autowired
+    @Resource
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>paltform</groupId>
-    <artifactId>paltform</artifactId>
+    <groupId>platform</groupId>
+    <artifactId>platform</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>DarKnight系统权限平台</name>
@@ -15,6 +15,71 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
     </properties>
+
+    <build>
+        <finalName>platform</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                    <configuration>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+
+                <!-- 打jar包时不打资源文件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/*.properties</exclude>
+                            <exclude>**/*.xml</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- 打jar包时把jsp页面也打包进来，便于发布到其他项目中 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                    <executions>
+                        <execution>
+                            <id>copy-resources</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <encoding>UTF-8</encoding>
+                                <outputDirectory>${project.build.directory}/classes/META-INF/</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/main/webapp/WEB-INF</directory>
+                                        <includes>
+                                            <include>**/*.jsp</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>2.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.darknight</groupId>
@@ -107,69 +172,6 @@
         </dependency>
         <!-- 测试 begin -->
     </dependencies>
-    <build>
-        <finalName>paltform</finalName>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>${jdk.version}</source>
-                        <target>${jdk.version}</target>
-                        <showWarnings>true</showWarnings>
-                    </configuration>
-                </plugin>
-
-                <!-- 打jar包时不打资源文件 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/*.properties</exclude>
-                            <exclude>**/*.xml</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-
-                <!-- 打jar包时把jsp页面也打包进来，便于发布到其他项目中 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
-                    <executions>
-                        <execution>
-                            <id>copy-resources</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <encoding>UTF-8</encoding>
-                                <outputDirectory>${project.build.directory}/classes/META-INF/</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>src/main/webapp/WEB-INF</directory>
-                                        <includes>
-                                            <include>**/*.jsp</include>
-                                        </includes>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <!--Maven部署配置-->
     <distributionManagement>
