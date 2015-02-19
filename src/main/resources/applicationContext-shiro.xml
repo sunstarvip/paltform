@@ -130,7 +130,7 @@
                 /system/login.jsp = authc
                 /logout = logout
                 /** = authc
-                <!--/** = anon-->
+                /** = anon
             </value>
         </property>
     </bean>
