@@ -123,14 +123,15 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--不拦截任何路径, 用于关闭权限测试页面-->
-                <!--/** = anon-->
-                / = anon
-                /welcome.html = anon
-                /system/error.jsp = anon
-                /system/login.jsp = authc
-                /logout = logout
-                /** = authc
                 /** = anon
+
+                <!-- 权限拦截配置 -->
+                <!--/ = anon-->
+                <!--/welcome.html = anon-->
+                <!--/system/error.jsp = anon-->
+                <!--/system/login.jsp = authc-->
+                <!--/logout = logout-->
+                <!--/** = authc-->
             </value>
         </property>
     </bean>

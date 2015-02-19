@@ -145,6 +145,7 @@
         <!-- 本机数据库开发使用 -->
         <context:property-placeholder ignore-unresolvable="true"
                                       location="classpath*:/application.properties,
+                                      classpath*:/application.parameter.properties,
                   classpath*:/application.house.properties" />
 
         <!-- 数据源配置, 使用DBCP数据库连接池 -->
