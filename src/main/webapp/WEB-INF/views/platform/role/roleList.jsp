@@ -11,26 +11,22 @@
     <title>DarKnight支撑平台</title>
 </head>
 <body>
-User List!!!   <a href="/platform/platform/account/user/add">新增</a><a href="/logout">注销</a>
+Role List!!!   <a href="/platform/platform/account/role/add">新增</a><a href="/logout">注销</a>
 
 <table border="1px">
     <%--列头--%>
     <thead>
     <tr>
-        <th>账号名称accountName</th>
-        <th>用户名称name</th>
-        <th>用户密码password</th>
-        <th>用户Salt</th>
+        <th>角色名称name</th>
+        <th>角色描述description</th>
     </tr>
     </thead>
     <%--数据块--%>
     <tbody>
-    <c:forEach var="user" items="${userPage.content}" varStatus="status">
+    <c:forEach var="role" items="${rolePage.content}" varStatus="status">
         <tr>
-            <td>${user.accountName}</td>
-            <td>${user.name}</td>
-            <td>${user.password}</td>
-            <td>${user.salt}</td>
+            <td>${role.name}</td>
+            <td>${role.description}</td>
         </tr>
     </c:forEach>
     </tbody>

@@ -2,10 +2,8 @@ package com.darknight.platform.account.user.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.role.entity.Role;
-import com.darknight.platform.security.shiro.util.PasswordUtil;
-import org.apache.shiro.codec.Base64;
-import org.apache.shiro.crypto.RandomNumberGenerator;
-import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,16 +16,16 @@ import java.util.List;
 @Entity
 @Table(name = "t_platform_user")
 public class User extends DefaultEntity {
-    private String name;
-    private String accountName;
-    private String password;
-    private String mailAddress;
-    private String address;
-    private String salt = PasswordUtil.getSalt();
+    private String name;  //用户昵称
+    private String accountName;  //账户名称
+    private String password;  //密码
+    private String mailAddress;  //邮箱地址
+    private String address;  //联系地址
+    private String salt = ShiroPasswordUtil.getSalt();  //加密salt
 
-    private Integer phoneNum;
+    private Integer phoneNum;  //联系电话
 
-    private List<Role> roleList = new ArrayList<>();
+    private List<Role> roleList = new ArrayList<>();  //角色列表
 
     public String getName() {
         return name;
@@ -90,6 +88,7 @@ public class User extends DefaultEntity {
         return roleList;
     }
 
+    @JsonIgnore
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
