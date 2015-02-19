@@ -6,6 +6,7 @@ import com.darknight.platform.account.user.service.UserService;
 import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "platform/account/user")
-public class UserController {
+class UserController {
+    private static final long serialVersionUID = -454150993895608956L;
     private UserService userService;
 
     @Resource
@@ -50,11 +52,23 @@ public class UserController {
         return "platform/user/userList";
     }
 
-    @RequestMapping(value={"dataGrid"}, method={RequestMethod.GET})
+    @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
     @ResponseBody
-    public String dataGrid(@PageableDefault(10) Pageable pageable) {
+    public String dataGrid(HttpServletRequest request, @PageableDefault(10) Pageable pageable) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
-        Page<User> userPage = userService.findAll(pageable);
+        String pageStr = request.getParameter("page");
+        String rowsStr = request.getParameter("rows");
+
+        PageRequest pageRequest = null;
+        if(StringUtils.isNumeric(pageStr) && StringUtils.isNumeric(rowsStr)) {
+            Integer page = Integer.valueOf(pageStr);
+            Integer rows = Integer.valueOf(rowsStr);
+            pageRequest = new PageRequest(page-1, rows);
+        }else {
+            pageRequest = new PageRequest(0, 10);
+        }
+
+        Page<User> userPage = userService.findAll(pageRequest);
         String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
         System.out.println("JSON: " + userPageJson);
         return userPageJson;
