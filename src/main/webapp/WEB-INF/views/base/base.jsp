@@ -11,17 +11,22 @@
     <inheritance:block name="title">
         <title>DarKnight支撑平台</title>
     </inheritance:block>
+
+    <%-- Meta --%>
     <inheritance:block name="meta">
     </inheritance:block>
+
+    <%-- CSS --%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/default/easyui.css" >
+    <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/icon.css" >
     <inheritance:block name="cssLink">
-        <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/default/easyui.css" >
-        <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/icon.css" >
     </inheritance:block>
+
+    <%-- JS --%>
+    <script type="text/javascript" src="${ctx}/static/plugins/jQuery/jQuery2.x/jquery-2.1.3.min.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/jquery.easyui.min.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/locale/easyui-lang-zh_CN.js" ></script>
     <inheritance:block name="scriptSrc">
-        <script type="text/javascript" src="${ctx}/static/plugins/jQuery/jQuery2.x/jquery-2.1.3.min.js" ></script>
-        <%--<script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/jquery.min.js" ></script>--%>
-        <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/jquery.easyui.min.js" ></script>
-        <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/locale/easyui-lang-zh_CN.js" ></script>
     </inheritance:block>
 
 </head>

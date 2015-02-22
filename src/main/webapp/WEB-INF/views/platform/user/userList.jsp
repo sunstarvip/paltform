@@ -3,6 +3,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.DarKnight.com.cn/jsp-extends" prefix="inheritance" %>
 <%--<c:set var="ctx" value="${pageContext.request.contextPath}"/>--%>
+
+<inheritance:override name="cssLink">
+    <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/artDialog/css/ui-dialog.css" >
+</inheritance:override>
+
+<inheritance:override name="scriptSrc">
+    <script type="text/javascript" src="${ctx}/static/plugins/artDialog/js/dialog-min.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/plugins/artDialog/js/dialog-plus-min.js" ></script>
+</inheritance:override>
+
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <table id="userTable"></table>
@@ -10,22 +20,18 @@
 
 <inheritance:override name="scriptBlock">
     <script>
-        //新增用户Dialog
-        function addUser() {
-
-        }
-
         //页面JS初始化
         $(function() {
-            $('#addUser').dialog({
-                title: '新增用户',
-                width: 400,
-                height: 200,
-                closed: true,
-                cache: false,
-                href: '${ctx}/platform/account/user/add',
-                modal: true
-            });
+            //
+            function addUser() {
+                var add_dialog = dialog({
+                    id: 'add_user',
+                    url: '${ctx}/platform/account/user/add',
+                    title: '新增用户',
+                    width: 400,
+                    height: 190
+                }).showModal();
+            }
 
             //user table初始化
             $('#userTable').datagrid({
@@ -70,7 +76,7 @@
                     handler: function(){
                         //$('#btnsave').linkbutton('enable');
 //                        addUser();
-                        var add_user_dialog = $('#addUser').dialog('open');
+                        var add_user_dialog = addUser();
                     }
                 },{
                     id: 'btncut',
@@ -84,20 +90,12 @@
 
             });
 
-            //通过函数调用设置分页控件
-//        var userPage = $('#userTable').datagrid('getPager');
-//        $(userPage).pagination({
-//            pageSize: 10,//每页显示的记录条数，默认为10
-//            pageList: [10, 15, 20],//可以设置每页记录条数的列表
-//            beforePageText: '第',//页数文本框前显示的汉字
-//            afterPageText: '页    共 {pages} 页',
-//            displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
-//            /*onBeforeRefresh:function(){
-//             $(this).pagination('loading');
-//             alert('before refresh');
-//             $(this).pagination('loaded');
-//             }*/
-//        });
+            <%--$('#btnadd').dialog.open('${ctx}/platform/account/user/add', {--%>
+                <%--id: 'add_user',--%>
+                <%--title: '新增用户',--%>
+                <%--width: 400,--%>
+                <%--height: 200--%>
+            <%--}).showModal();--%>
         });
 
     </script>
