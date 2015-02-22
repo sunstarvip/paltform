@@ -29,7 +29,14 @@
                     url: '${ctx}/platform/account/user/add',
                     title: '新增用户',
                     width: 400,
-                    height: 190
+                    height: 190,
+                    okValue: '确定',
+                    ok: function () {
+                        this.title('提交中…');
+                        return false;
+                    },
+                    cancelValue: '取消',
+                    cancel: function () {}
                 }).showModal();
             }
 
@@ -89,13 +96,6 @@
                 }]
 
             });
-
-            <%--$('#btnadd').dialog.open('${ctx}/platform/account/user/add', {--%>
-                <%--id: 'add_user',--%>
-                <%--title: '新增用户',--%>
-                <%--width: 400,--%>
-                <%--height: 200--%>
-            <%--}).showModal();--%>
         });
 
     </script>
