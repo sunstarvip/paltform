@@ -6,6 +6,7 @@
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <table id="userTable"></table>
+    <div class="easyui-dialog" id="addUser"></div>
 </inheritance:override>
 
 <inheritance:override name="scriptBlock">

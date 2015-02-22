@@ -26,8 +26,9 @@
 
 </head>
 
-<body class="easyui-layout" id="mainPanel" >
 <inheritance:block name="body">
+<body class="easyui-layout" id="mainPanel" >
+
     <%-- North Block --%>
     <inheritance:block name="north">
         <div data-options="region:'north',split:true" style="height:100px;">
@@ -76,12 +77,14 @@
         </div>
     </inheritance:block>
     <%--<div data-options="region:'center',title:'center title'" style="padding:5px;"></div>--%>
-</inheritance:block>
+
 
 <inheritance:block name="scriptBlock">
     <script>
     </script>
 </inheritance:block>
+
 </body>
+</inheritance:block>
 </html>
 

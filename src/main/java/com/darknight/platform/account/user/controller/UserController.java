@@ -32,21 +32,21 @@ class UserController {
 
     @ModelAttribute("user")
     public User getUser(@RequestParam(value = "userId", required = false) String userId) {
-        if (StringUtils.isNotEmpty(userId)) {
+        if (StringUtils.isNotBlank(userId)) {
             return userService.find(userId);
         }
         User user = new User();
         return user;
     }
 
-    @RequestMapping(value={"list"}, method={RequestMethod.GET})
+    @RequestMapping(value={"listPage"}, method={RequestMethod.GET})
     public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
         Page<User> userPage = userService.findAll(pageable);
         model.addAttribute("userPage", userPage);
         return "platform/user/userList";
     }
 
-    @RequestMapping(value={"listPage"}, method={RequestMethod.GET})
+    @RequestMapping(value={"list"}, method={RequestMethod.GET})
     public String listPage(HttpServletRequest request) {
 
         return "platform/user/userList";
@@ -75,8 +75,19 @@ class UserController {
     }
 
     @RequestMapping(value={"add"}, method={RequestMethod.GET})
-    public String add(HttpServletRequest request, Model model) {
+    public String add(Model model) {
         model.addAttribute("user", new User());
+        return "platform/user/userAdd";
+    }
+
+
+    @RequestMapping(value={"edit"}, method={RequestMethod.GET})
+    public String edit(@RequestParam(value = "userId", required = false) String userId, Model model) {
+        if(StringUtils.isNotBlank(userId)) {
+            User user = userService.find(userId);
+            model.addAttribute("user", user);
+        }
+
         return "platform/user/userEdit";
     }
 
@@ -90,8 +101,11 @@ class UserController {
 //        user.setPassword(password);
 //        user.setName(name);
         //加密密码
-        ShiroPasswordUtil.getPassword(user);
-        user = userService.save(user);
+        if(user != null) {
+            ShiroPasswordUtil.getPassword(user);
+            user = userService.save(user);
+        }
+
         return "redirect:/platform/account/user/list";
     }
 }
