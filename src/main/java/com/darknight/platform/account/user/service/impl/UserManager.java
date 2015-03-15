@@ -1,8 +1,11 @@
 package com.darknight.platform.account.user.service.impl;
 
+import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.user.dao.UserDao;
 import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +42,7 @@ public class UserManager implements UserService {
 
     /**
      * 保存User用户对象
-     * @param user
+     * @param user 用户对象
      * @return
      */
     @Override
@@ -50,7 +53,7 @@ public class UserManager implements UserService {
 
     /**
      * 批量保存User用户对象
-     * @param userList
+     * @param userList 用户对象列表
      * @return
      */
     @Override
@@ -63,22 +66,24 @@ public class UserManager implements UserService {
 
     /**
      * 删除该用户ID下的User用户对象
-     * @param userId
+     * 物理删除
+     * @param userId 用户ID
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(String userId) {
+    public void realDelete(String userId) {
         userDao.delete(userId);
         flush();
     }
 
     /**
      * 根据传入用户ID, 批量删除User用户对象
-     * @param idList
+     * 物理删除
+     * @param idList 用户ID列表
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(List<String> idList) {
+    public void realDelete(List<String> idList) {
         for(String userId : idList) {
             userDao.delete(userId);
         }
@@ -87,32 +92,35 @@ public class UserManager implements UserService {
 
     /**
      * 删除User用户对象
-     * @param user
+     * 物理删除
+     * @param user 用户对象
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(User user) {
+    public void realDelete(User user) {
         userDao.delete(user);
         flush();
     }
 
     /**
      * 批量删除User用户对象
-     * @param userList
+     * 物理删除
+     * @param userList 用户对象列表
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteInBatch(List<User> userList) {
+    public void realDeleteInBatch(List<User> userList) {
         userDao.deleteInBatch(userList);
         flush();
     }
 
     /**
      * 删除所有的User用户对象
+     * 物理删除
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteAll() {
+    public void realDeleteAll() {
         userDao.deleteAll();
         flush();
     }
@@ -128,7 +136,7 @@ public class UserManager implements UserService {
 
     /**
      * 根据传入用户ID, 判断该用户是否存在
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Override
@@ -138,7 +146,7 @@ public class UserManager implements UserService {
 
     /**
      * 根据用户ID, 查询User用户对象
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Override
@@ -148,7 +156,7 @@ public class UserManager implements UserService {
 
     /**
      * 根据传入的用户ID, 批量查询User用户对象
-     * @param idList
+     * @param idList 用户ID列表
      * @return
      */
     @Override
@@ -175,7 +183,7 @@ public class UserManager implements UserService {
 
     /**
      * 分页查询所有的User用户对象
-     * @param page
+     * @param page 分页容器
      * @return
      */
     @Override
@@ -186,7 +194,7 @@ public class UserManager implements UserService {
 
     /**
      * 查询所有的User用户对象, 并根据Sort排序规则进行排序
-     * @param sort
+     * @param sort 排序规则对象
      * @return
      */
     @Override
@@ -197,11 +205,65 @@ public class UserManager implements UserService {
         }
         return userList;
     }
+
+    @Override
+    public List<User> findAllVisible() {
+        // 创建查询对象
+        Criteria criteria = userDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        return null;
+    }
+
+    /**
+     * 删除该用户ID下的User用户对象
+     * 逻辑删除
+     * @param userId 用户ID
+     */
+    @Override
+    public void delete(String userId) {
+        if(exists(userId)) {
+            User user = find(userId);
+            user.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            save(user);
+        }
+    }
+
+    /**
+     * 根据传入用户ID, 批量删除User用户对象
+     * 逻辑删除
+     * @param idList 用户ID列表
+     */
+    @Override
+    public void delete(List<String> idList) {
+        List<User> userList = find(idList);
+        if(!userList.isEmpty()) {
+            for(User user : userList) {
+                user.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(userList);
+        }
+    }
+
+    @Override
+    public void delete(User user) {
+
+    }
+
+    @Override
+    public void deleteInBatch(List<User> userList) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
+    }
     //通用方法区域 End
 
     /**
      * 根据accountName用户登录名, 查询User用户对象
-     * @param accountName
+     * @param accountName 用户登录名
      * @return
      */
     @Override

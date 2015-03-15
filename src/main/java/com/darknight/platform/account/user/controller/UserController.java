@@ -30,6 +30,11 @@ class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 通过用户ID由Spring注入用户对象
+     * @param userId 用户ID
+     * @return
+     */
     @ModelAttribute("user")
     public User getUser(@RequestParam(value = "userId", required = false) String userId) {
         if (StringUtils.isNotBlank(userId)) {
@@ -39,19 +44,34 @@ class UserController {
         return user;
     }
 
-    @RequestMapping(value={"listPage"}, method={RequestMethod.GET})
-    public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
-        Page<User> userPage = userService.findAll(pageable);
-        model.addAttribute("userPage", userPage);
-        return "platform/user/userList";
-    }
-
+    /**
+     * 列表页面
+     * @param request
+     * @return
+     */
     @RequestMapping(value={"list"}, method={RequestMethod.GET})
-    public String listPage(HttpServletRequest request) {
+    public String list(HttpServletRequest request) {
 
         return "platform/user/userList";
     }
 
+    /**
+     * esayUI列表页面
+     * @param request
+     * @return
+     */
+    @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
+    public String esayuiPage(HttpServletRequest request) {
+//        return "platform/user/userList_easyui";
+        return "platform/user/userAdd_easyui";
+    }
+
+    /**
+     * 分页查询用户列表数据
+     * @param request
+     * @param pageable 分页容器
+     * @return
+     */
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
     @ResponseBody
     public String dataGrid(HttpServletRequest request, @PageableDefault(10) Pageable pageable) {
@@ -70,17 +90,27 @@ class UserController {
 
         Page<User> userPage = userService.findAll(pageRequest);
         String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
-        System.out.println("JSON: " + userPageJson);
+//        System.out.println("JSON: " + userPageJson);
         return userPageJson;
     }
 
+    /**
+     * 新增用户
+     * @param model
+     * @return
+     */
     @RequestMapping(value={"add"}, method={RequestMethod.GET})
     public String add(Model model) {
         model.addAttribute("user", new User());
         return "platform/user/userAdd";
     }
 
-
+    /**
+     * 编辑用户
+     * @param userId 用户ID
+     * @param model
+     * @return
+     */
     @RequestMapping(value={"edit"}, method={RequestMethod.GET})
     public String edit(@RequestParam(value = "userId", required = false) String userId, Model model) {
         if(StringUtils.isNotBlank(userId)) {
@@ -91,21 +121,65 @@ class UserController {
         return "platform/user/userEdit";
     }
 
+    /**
+     * 保存用户
+     * @param user 用户对象
+     * @return
+     */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("user") User user, HttpServletRequest request, Model model) {
-//        User user = new User();
-//        String accountName = request.getParameter("accountName");
-//        String password = request.getParameter("password");
-//        String name = request.getParameter("name");
-//        user.setAccountName(accountName);
-//        user.setPassword(password);
-//        user.setName(name);
+    @ResponseBody
+    public String save(@ModelAttribute("user") User user) {
+        //保存操作状态
+        String status = "sucess";
         //加密密码
         if(user != null) {
             ShiroPasswordUtil.getPassword(user);
             user = userService.save(user);
+        }else {
+            status = "fail";
         }
 
-        return "redirect:/platform/account/user/list";
+        return status;
+    }
+
+    /**
+     * 更新用户
+     * @param user 用户对象
+     * @return
+     */
+    @RequestMapping(value={"update"}, method={RequestMethod.POST})
+    @ResponseBody
+    public String update(@ModelAttribute("user") User user) {
+        //保存操作状态
+        String status = "sucess";
+        //加密密码
+        if(user != null) {
+            user = userService.save(user);
+        }else {
+            status = "fail";
+        }
+
+        return status;
+    }
+
+    /**
+     * 删除用户
+     * 逻辑删除，若需物理删除建议使用SQL脚本
+     * @param userId 用户ID
+     * @return
+     */
+    @RequestMapping(value={"delete"}, method={RequestMethod.POST})
+    @ResponseBody
+    public String delete(@RequestParam("userId") String userId) {
+        //保存操作状态
+        String status = "sucess";
+        //加密密码
+        if(StringUtils.isNotBlank(userId)) {
+            userService.delete(userId);
+        }else {
+            status = "fail";
+        }
+
+        return status;
     }
 }

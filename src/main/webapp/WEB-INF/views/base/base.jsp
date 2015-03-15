@@ -19,6 +19,8 @@
     <%-- CSS --%>
     <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/default/easyui.css" >
     <link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/themes/icon.css" >
+    <%-- Validform --%>
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/static/plugins/Validform/css/style.css" >--%>
     <inheritance:block name="cssLink">
     </inheritance:block>
 
@@ -26,6 +28,9 @@
     <script type="text/javascript" src="${ctx}/static/plugins/jQuery/jQuery2.x/jquery-2.1.3.min.js" ></script>
     <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/jquery.easyui.min.js" ></script>
     <script type="text/javascript" src="${ctx}/static/plugins/EasyUI/EasyUI1.4.1/locale/easyui-lang-zh_CN.js" ></script>
+    <%-- Validform --%>
+    <%--<script type="text/javascript" src="${ctx}/static/plugins/Validform/js/Validform_v5.3.2_min.js" ></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/static/plugins/Validform/js/Validform_Datatype.js" ></script>--%>
     <inheritance:block name="scriptSrc">
     </inheritance:block>
 
@@ -84,10 +89,10 @@
     <%--<div data-options="region:'center',title:'center title'" style="padding:5px;"></div>--%>
 
 
-<inheritance:block name="scriptBlock">
-    <script>
-    </script>
-</inheritance:block>
+    <inheritance:block name="scriptBlock">
+        <script>
+        </script>
+    </inheritance:block>
 
 </body>
 </inheritance:block>
