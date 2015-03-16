@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DarKnight on 2014/5/22 0022.
@@ -114,6 +115,10 @@ public interface UserService {
      */
     public List<User> findAll(Sort sort);
 
+    /**
+     * 查询所有未逻辑删除的User用户对象
+     * @return
+     */
     public List<User> findAllVisible();
 
     /**
@@ -157,4 +162,12 @@ public interface UserService {
      * @return
      */
     public User findByAccountName(String accountName);
+
+    /**
+     * 通过条件分页查询用户列表
+     * @param searchMap 条件Map
+     * @param page 分页对象
+     * @return
+     */
+    public Page<User> findSearchPage(Map<String, Object> searchMap, Pageable page);
 }

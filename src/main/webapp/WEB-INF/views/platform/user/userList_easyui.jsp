@@ -52,17 +52,9 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteUser()"></a>
         </span>
         <span id="searchBlock" align="right">
-            Date From: <input class="easyui-datebox" style="width:110px">
-            To: <input class="easyui-datebox" style="width:110px">
-            Language:
-            <select class="easyui-combobox" panelHeight="auto" style="width:100px">
-                <option value="java">Java</option>
-                <option value="c">C</option>
-                <option value="basic">Basic</option>
-                <option value="perl">Perl</option>
-                <option value="python">Python</option>
-            </select>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+            账户名称: <input id="searchAccountName" name="searchAccountName" style="width:110px">
+            联系电话: <input id="searchPhoneNum" name="searchPhoneNum" style="width:110px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
         </span>
     </div>
     <%-- 用户新增对话框 --%>
@@ -77,10 +69,16 @@
 
     <script>
 
+        function doSearch(){
+            $('#userTable').datagrid('load',{
+                accountName: $('#searchAccountName').val(),
+                phoneNum: $('#searchPhoneNum').val()
+            });
+        }
+
         //页面JS初始化
         $(function() {
-
-            //user table初始化
+        //user table初始化
             <%--$('#userTable').datagrid({--%>
                 <%--title: '用户列表',--%>
                 <%--iconCls: 'icon-save',--%>

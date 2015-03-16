@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by DarKnight on 2014/5/26 0026.
@@ -78,6 +80,13 @@ class UserController {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");
         String rowsStr = request.getParameter("rows");
+        //获取查询条件
+        String accountName = request.getParameter("accountName");
+        String phoneNum = request.getParameter("phoneNum");
+        //封装查询条件
+        Map<String, Object> searchMap = new HashMap<String, Object>();
+        searchMap.put("like_accountName", accountName);
+        searchMap.put("phoneNum", phoneNum);
 
         PageRequest pageRequest = null;
         if(StringUtils.isNumeric(pageStr) && StringUtils.isNumeric(rowsStr)) {
@@ -88,7 +97,9 @@ class UserController {
             pageRequest = new PageRequest(0, 10);
         }
 
-        Page<User> userPage = userService.findAll(pageRequest);
+//        Page<User> userPage = userService.findAll(pageRequest);
+        Page<User> userPage = userService.findSearchPage(searchMap, pageRequest);
+
         String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
 //        System.out.println("JSON: " + userPageJson);
         return userPageJson;

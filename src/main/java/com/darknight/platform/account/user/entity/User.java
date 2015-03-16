@@ -23,7 +23,7 @@ public class User extends DefaultEntity {
     private String address;  //联系地址
     private String salt = ShiroPasswordUtil.getSalt();  //加密salt
 
-    private Integer phoneNum;  //联系电话
+    private String phoneNum;  //联系电话
 
     private List<Role> roleList = new ArrayList<>();  //角色列表
 
@@ -75,11 +75,11 @@ public class User extends DefaultEntity {
         this.salt = salt;
     }
 
-    public Integer getPhoneNum() {
+    public String getPhoneNum() {
         return phoneNum;
     }
 
-    public void setPhoneNum(Integer phoneNum) {
+    public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
 

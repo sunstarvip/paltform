@@ -4,9 +4,12 @@ import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.user.dao.UserDao;
 import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -206,13 +210,18 @@ public class UserManager implements UserService {
         return userList;
     }
 
+    /**
+     * 查询所有未逻辑删除的User用户对象
+     * @return
+     */
     @Override
     public List<User> findAllVisible() {
         // 创建查询对象
         Criteria criteria = userDao.createCriteria();
         // 添加查询规则
         criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
-        return null;
+        List<User> userList = criteria.list();
+        return userList;
     }
 
     /**
@@ -221,6 +230,7 @@ public class UserManager implements UserService {
      * @param userId 用户ID
      */
     @Override
+    @Transactional(readOnly = false)
     public void delete(String userId) {
         if(exists(userId)) {
             User user = find(userId);
@@ -235,6 +245,7 @@ public class UserManager implements UserService {
      * @param idList 用户ID列表
      */
     @Override
+    @Transactional(readOnly = false)
     public void delete(List<String> idList) {
         List<User> userList = find(idList);
         if(!userList.isEmpty()) {
@@ -246,18 +257,33 @@ public class UserManager implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void delete(User user) {
-
+        user.setVisibleTag(DefaultEntity.VisibleTag.NO);
+        save(user);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteInBatch(List<User> userList) {
-
+        if(!userList.isEmpty()) {
+            for(User user : userList) {
+                user.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(userList);
+        }
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteAll() {
-
+        List<User> userList = findAllVisible();
+        if(!userList.isEmpty()) {
+            for(User user : userList) {
+                user.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(userList);
+        }
     }
     //通用方法区域 End
 
@@ -270,5 +296,43 @@ public class UserManager implements UserService {
     public User findByAccountName(String accountName) {
         User user = userDao.findByAccountName(accountName);
         return user;
+    }
+
+    /**
+     * 通过条件分页查询未逻辑删除的用户列表
+     * @param searchMap 条件Map
+     * @param page 分页对象
+     * @return
+     */
+    @Override
+    public Page<User> findSearchPage(Map<String, Object> searchMap, Pageable page) {
+        // 创建查询对象
+        Criteria criteria = userDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
+            if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
+                if(StringUtils.contains(searchEntry.getKey(), "like_")) {
+                    criteria.add(Restrictions.like(
+                            StringUtils.replace(searchEntry.getKey(), "like_", ""),
+                            "%" + searchEntry.getValue() + "%"
+                    ));
+                }else {
+                    criteria.add(Restrictions.eq(searchEntry.getKey(), searchEntry.getValue()));
+                }
+            }
+        }
+        //统计数据总数
+        criteria.setProjection(Projections.rowCount());
+        Object result = (criteria.uniqueResult() != null)?criteria.uniqueResult():0;
+        Long totalNum = Long.valueOf(result.toString());
+        criteria.setProjection(null);
+
+        //设定查询起始值
+        criteria.setFirstResult(page.getOffset());
+        //设定查询分页大小
+        criteria.setMaxResults(page.getPageSize());
+        Page<User> userPage = new PageImpl(criteria.list(), page, totalNum);
+        return userPage;
     }
 }

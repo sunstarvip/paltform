@@ -14,30 +14,6 @@
             <%-- 用户ID --%>
             <input name="id" type="hidden">
             <%-- Hidden属性 end--%>
-            <%--<div>--%>
-                <%--<label>账户名称:</label>--%>
-                <%--<input class="easyui-validatebox" name="accountName" required="true">--%>
-            <%--</div>--%>
-            <%--<div id="passwordDiv">--%>
-                <%--<label>密码:</label>--%>
-                <%--<input class="easyui-validatebox" id="password" name="password" required="true">--%>
-            <%--</div>--%>
-            <%--<div>--%>
-                <%--<label>用户昵称:</label>--%>
-                <%--<input class="easyui-validatebox" name="name" required="true">--%>
-            <%--</div>--%>
-            <%--<div>--%>
-                <%--<label>联系电话:</label>--%>
-                <%--<input name="phoneNum">--%>
-            <%--</div>--%>
-            <%--<div>--%>
-                <%--<label>邮箱地址:</label>--%>
-                <%--<input class="easyui-validatebox" name="mailAddress" validType="email">--%>
-            <%--</div>--%>
-            <%--<div>--%>
-                <%--<label>联系地址:</label>--%>
-                <%--<input name="address" >--%>
-            <%--</div>--%>
 
             <table cellpadding="5">
                 <tr>
