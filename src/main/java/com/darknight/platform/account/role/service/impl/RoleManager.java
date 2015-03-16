@@ -4,21 +4,19 @@ import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.role.dao.RoleDao;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DarKnight on 2014/5/22 0022.
@@ -73,7 +71,7 @@ public class RoleManager implements RoleService{
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(String roleId) {
+    public void realDelete(String roleId) {
         roleDao.delete(roleId);
         flush();
     }
@@ -84,7 +82,7 @@ public class RoleManager implements RoleService{
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(List<String> idList) {
+    public void realDelete(List<String> idList) {
         for(String roleId : idList) {
             roleDao.delete(roleId);
         }
@@ -97,7 +95,7 @@ public class RoleManager implements RoleService{
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(Role role) {
+    public void realDelete(Role role) {
         roleDao.delete(role);
         flush();
     }
@@ -108,7 +106,7 @@ public class RoleManager implements RoleService{
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteInBatch(List<Role> roleList) {
+    public void realDeleteInBatch(List<Role> roleList) {
         roleDao.deleteInBatch(roleList);
         flush();
     }
@@ -118,7 +116,7 @@ public class RoleManager implements RoleService{
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteAll() {
+    public void realDeleteAll() {
         roleDao.deleteAll();
         flush();
     }
@@ -203,6 +201,69 @@ public class RoleManager implements RoleService{
         }
         return roleList;
     }
+
+    @Override
+    public List<Role> findAllVisible() {
+        // 创建查询对象
+        Criteria criteria = roleDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        List<Role> roleList = criteria.list();
+        return roleList;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(String roleId) {
+        if(exists(roleId)) {
+            Role role = find(roleId);
+            role.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            save(role);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(List<String> idList) {
+        List<Role> roleList = find(idList);
+        if(!roleList.isEmpty()) {
+            for(Role role : roleList) {
+                role.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(roleList);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(Role role) {
+        role.setVisibleTag(DefaultEntity.VisibleTag.NO);
+        save(role);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteInBatch(List<Role> roleList) {
+        if(!roleList.isEmpty()) {
+            for(Role role : roleList) {
+                role.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(roleList);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteAll() {
+        List<Role> roleList = findAllVisible();
+        if(!roleList.isEmpty()) {
+            for(Role role : roleList) {
+                role.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(roleList);
+        }
+    }
+
     //通用方法区域 End
 
     /**
@@ -244,5 +305,37 @@ public class RoleManager implements RoleService{
         Set<Role> roleSet = findRoles(accountName);
         Set<String> roleIdSet = findRoleIds(roleSet);
         return roleIdSet;
+    }
+
+    @Override
+    public Page<Role> findSearchPage(Map<String, Object> searchMap, Pageable page) {
+        // 创建查询对象
+        Criteria criteria = roleDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
+            if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
+                if(StringUtils.contains(searchEntry.getKey(), "like_")) {
+                    criteria.add(Restrictions.like(
+                            StringUtils.replace(searchEntry.getKey(), "like_", ""),
+                            "%" + searchEntry.getValue() + "%"
+                    ));
+                }else {
+                    criteria.add(Restrictions.eq(searchEntry.getKey(), searchEntry.getValue()));
+                }
+            }
+        }
+        //统计数据总数
+        criteria.setProjection(Projections.rowCount());
+        Object result = (criteria.uniqueResult() != null)?criteria.uniqueResult():0;
+        Long totalNum = Long.valueOf(result.toString());
+        criteria.setProjection(null);
+
+        //设定查询起始值
+        criteria.setFirstResult(page.getOffset());
+        //设定查询分页大小
+        criteria.setMaxResults(page.getPageSize());
+        Page<Role> rolePage = new PageImpl(criteria.list(), page, totalNum);
+        return rolePage;
     }
 }

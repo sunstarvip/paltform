@@ -14,7 +14,6 @@ import java.util.Map;
 public interface UserService {
 
     //通用方法区域 Begin
-
     /**
      * 推送缓存中的数据操作至数据库
      */

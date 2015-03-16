@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "t_platform_role")
 public class Role extends DefaultEntity {
     private String name;
-    private String description; // 权限描述
+    private String description; // 角色描述
 
     private List<User> userList = new ArrayList<>();
     private List<Permission> permissionList = new ArrayList<>();

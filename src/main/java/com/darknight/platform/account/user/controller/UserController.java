@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 用户管理类
  * Created by DarKnight on 2014/5/26 0026.
  */
 @Controller
@@ -58,7 +59,7 @@ class UserController {
     }
 
     /**
-     * esayUI列表页面
+     * esayUI页面
      * @param request
      * @return
      */
@@ -97,11 +98,9 @@ class UserController {
             pageRequest = new PageRequest(0, 10);
         }
 
-//        Page<User> userPage = userService.findAll(pageRequest);
         Page<User> userPage = userService.findSearchPage(searchMap, pageRequest);
 
         String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
-//        System.out.println("JSON: " + userPageJson);
         return userPageJson;
     }
 
