@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -234,6 +235,7 @@ public class UserManager implements UserService {
     public void delete(String userId) {
         if(exists(userId)) {
             User user = find(userId);
+            user.setUpdateTime(new Date());
             user.setVisibleTag(DefaultEntity.VisibleTag.NO);
             save(user);
         }
@@ -250,6 +252,7 @@ public class UserManager implements UserService {
         List<User> userList = find(idList);
         if(!userList.isEmpty()) {
             for(User user : userList) {
+                user.setUpdateTime(new Date());
                 user.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(userList);
@@ -259,6 +262,7 @@ public class UserManager implements UserService {
     @Override
     @Transactional(readOnly = false)
     public void delete(User user) {
+        user.setUpdateTime(new Date());
         user.setVisibleTag(DefaultEntity.VisibleTag.NO);
         save(user);
     }
@@ -268,6 +272,7 @@ public class UserManager implements UserService {
     public void deleteInBatch(List<User> userList) {
         if(!userList.isEmpty()) {
             for(User user : userList) {
+                user.setUpdateTime(new Date());
                 user.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(userList);
@@ -280,6 +285,7 @@ public class UserManager implements UserService {
         List<User> userList = findAllVisible();
         if(!userList.isEmpty()) {
             for(User user : userList) {
+                user.setUpdateTime(new Date());
                 user.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(userList);

@@ -217,6 +217,7 @@ public class RoleManager implements RoleService{
     public void delete(String roleId) {
         if(exists(roleId)) {
             Role role = find(roleId);
+            role.setUpdateTime(new Date());
             role.setVisibleTag(DefaultEntity.VisibleTag.NO);
             save(role);
         }
@@ -228,6 +229,7 @@ public class RoleManager implements RoleService{
         List<Role> roleList = find(idList);
         if(!roleList.isEmpty()) {
             for(Role role : roleList) {
+                role.setUpdateTime(new Date());
                 role.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(roleList);
@@ -237,6 +239,7 @@ public class RoleManager implements RoleService{
     @Override
     @Transactional(readOnly = false)
     public void delete(Role role) {
+        role.setUpdateTime(new Date());
         role.setVisibleTag(DefaultEntity.VisibleTag.NO);
         save(role);
     }
@@ -246,6 +249,7 @@ public class RoleManager implements RoleService{
     public void deleteInBatch(List<Role> roleList) {
         if(!roleList.isEmpty()) {
             for(Role role : roleList) {
+                role.setUpdateTime(new Date());
                 role.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(roleList);
@@ -258,6 +262,7 @@ public class RoleManager implements RoleService{
         List<Role> roleList = findAllVisible();
         if(!roleList.isEmpty()) {
             for(Role role : roleList) {
+                role.setUpdateTime(new Date());
                 role.setVisibleTag(DefaultEntity.VisibleTag.NO);
             }
             save(roleList);

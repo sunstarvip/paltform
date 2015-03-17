@@ -3,6 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.DarKnight.com.cn/jsp-extends" prefix="inheritance" %>
 <%--<c:set var="ctx" value="${pageContext.request.contextPath}"/>--%>
+
+<%--重定义父页面name=scriptSrc的内容--%>
+<inheritance:override name="scriptSrc">
+    <script type="text/javascript" src="${ctx}/static/plugins/Moment/moment.js" ></script>
+</inheritance:override>
+
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <%--<table id="userTable"></table>--%>
@@ -17,7 +23,7 @@
         <%-- 第一行 --%>
         <thead>
             <tr>
-                <th colspan="4" data-options="align:'center'">基本信息</th>
+                <th colspan="3" data-options="align:'center'">基本信息</th>
                 <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
             </tr>
         </thead>
@@ -32,7 +38,9 @@
         <%-- 非冻结行 --%>
         <thead>
             <tr>
-                <th field="description" width="120" align="center">角色描述</th>
+                <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
+                <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
+                <th field="description" width="240" align="center">角色描述</th>
             </tr>
         </thead>
     </table>
@@ -62,6 +70,14 @@
     </inheritance:block>
 
     <script>
+        // 时间格式化JS
+        function formatterDate(val,row) {
+            if(!!val) {
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            }else {
+                return "无";
+            }
+        }
 
         function doSearch(){
             $('#roleTable').datagrid('load',{

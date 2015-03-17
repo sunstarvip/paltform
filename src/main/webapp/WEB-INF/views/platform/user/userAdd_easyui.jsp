@@ -93,17 +93,16 @@
                     return $(this).form('validate');
                 },
                 success: function(result){
-//                    var result = eval('('+result+')');
-                    if (result=='fail'){
-                        $.messager.show({
-                            title: 'Error',
-                            msg: result
-                        });
-                    }else {
+                    if (result['status']=='success'){
                         // 关闭对话框
                         $('#userDialog').dialog('close');
                         // 重载用户信息列表
                         $('#userTable').datagrid('reload');
+                    }else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result
+                        });
                     }
                 }
             });
@@ -116,10 +115,10 @@
                 $.messager.confirm('删除用户','是否确认删除选中用户？',
                     function(e) {
                         if(e) {
-                            $.post('delete',
+                            $.post('${ctx}/platform/account/user/delete',
                                 {userId: row.id},
                                 function(result) {
-                                    if (result=='sucess') {
+                                    if (result['status']=='success') {
                                         // 重载用户信息列表
                                         $('#userTable').datagrid('reload');
                                     }else {

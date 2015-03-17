@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.DarKnight.com.cn/jsp-extends" prefix="inheritance" %>
 <%--<c:set var="ctx" value="${pageContext.request.contextPath}"/>--%>
+
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <%--<table id="userTable"></table>--%>

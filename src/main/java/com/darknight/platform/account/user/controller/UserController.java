@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,7 +141,7 @@ class UserController {
     @ResponseBody
     public String save(@ModelAttribute("user") User user) {
         //保存操作状态
-        String status = "sucess";
+        String status = "success";
         //加密密码
         if(user != null) {
             ShiroPasswordUtil.getPassword(user);
@@ -149,7 +150,10 @@ class UserController {
             status = "fail";
         }
 
-        return status;
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
     }
 
     /**
@@ -161,15 +165,19 @@ class UserController {
     @ResponseBody
     public String update(@ModelAttribute("user") User user) {
         //保存操作状态
-        String status = "sucess";
+        String status = "success";
         //加密密码
         if(user != null) {
+            user.setUpdateTime(new Date());
             user = userService.save(user);
         }else {
             status = "fail";
         }
 
-        return status;
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
     }
 
     /**
@@ -182,14 +190,16 @@ class UserController {
     @ResponseBody
     public String delete(@RequestParam("userId") String userId) {
         //保存操作状态
-        String status = "sucess";
-        //加密密码
+        String status = "success";
         if(StringUtils.isNotBlank(userId)) {
             userService.delete(userId);
         }else {
             status = "fail";
         }
 
-        return status;
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
     }
 }

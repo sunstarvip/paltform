@@ -3,18 +3,15 @@ package com.darknight.platform.account.role.controller;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
-import com.darknight.platform.account.user.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,28 +73,78 @@ public class RoleController {
             pageRequest = new PageRequest(0, 10);
         }
 
-        Page<User> userPage = roleService.findSearchPage(searchMap, pageRequest);
+        Page<Role> rolePage = roleService.findSearchPage(searchMap, pageRequest);
 
-        String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
-        return userPageJson;
+        String rolePageJson = JsonUtil.objToJsonString(rolePage.getContent());
+        return rolePageJson;
     }
 
-    @RequestMapping("list")
-    public String list(HttpServletRequest request, Model model, @PageableDefault(10) Pageable pageable) {
-        Page<Role> rolePage = roleService.findAll(pageable);
-        model.addAttribute("rolePage", rolePage);
-        return "platform/role/roleList";
-    }
-
-    @RequestMapping(value={"add"}, method={RequestMethod.GET})
-    public String add(HttpServletRequest request, Model model) {
-        model.addAttribute("role", new Role());
-        return "platform/role/roleEdit";
-    }
-
+    /**
+     * 保存角色
+     * @param role 角色对象
+     * @return
+     */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("role") Role role, HttpServletRequest request, Model model) {
-        role = roleService.save(role);
-        return "redirect:/platform/account/role/list";
+    @ResponseBody
+    public String save(@ModelAttribute("role") Role role) {
+        //保存操作状态
+        String status = "success";
+        if(role != null) {
+            role = roleService.save(role);
+        }else {
+            status = "fail";
+        }
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
     }
+
+    /**
+     * 更新角色
+     * @param role 角色对象
+     * @return
+     */
+    @RequestMapping(value={"update"}, method={RequestMethod.POST})
+    @ResponseBody
+    public String update(@ModelAttribute("role") Role role) {
+        //保存操作状态
+        String status = "success";
+        if(role != null) {
+            role.setUpdateTime(new Date());
+            role = roleService.save(role);
+        }else {
+            status = "fail";
+        }
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
+    }
+
+    /**
+     * 删除角色
+     * 逻辑删除，若需物理删除建议使用SQL脚本
+     * @param roleId 角色ID
+     * @return
+     */
+    @RequestMapping(value={"delete"}, method={RequestMethod.POST})
+    @ResponseBody
+    public String delete(@RequestParam("roleId") String roleId) {
+        //保存操作状态
+        String status = "success";
+        if(StringUtils.isNotBlank(roleId)) {
+            roleService.delete(roleId);
+        }else {
+            status = "fail";
+        }
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
+    }
+
 }
