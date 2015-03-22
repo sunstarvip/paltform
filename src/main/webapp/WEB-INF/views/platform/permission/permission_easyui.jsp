@@ -5,10 +5,10 @@
 
 <%-- 用户新增对话框 --%>
 <inheritance:override name="addDialog">
-    <div class="easyui-dialog" id="roleDialog"
+    <div class="easyui-dialog" id="permissionDialog"
          closed="true" buttons="#dlg-buttons"
          style="padding:10px 20px">
-        <form id="roleForm" method="post">
+        <form id="permissionForm" method="post">
             <%-- Hidden属性 begin--%>
             <%-- 角色ID --%>
             <input name="id" type="hidden">
@@ -16,13 +16,13 @@
 
             <table cellpadding="5">
                 <tr>
-                    <td>角色名称:</td>
+                    <td>权限名称:</td>
                     <td>
                         <input class="easyui-validatebox" name="name" type="text" required="true">
                     </td>
                 </tr>
                 <tr>
-                    <td>角色描述:</td>
+                    <td>权限描述:</td>
                     <td>
                         <textarea name="description"></textarea>
                     </td>
@@ -31,10 +31,11 @@
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="Role.save()">保存</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="Role.cancel()">取消</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="Permission.save()">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="Permission.cancel()">取消</a>
     </div>
 </inheritance:override>
 
+
 <!-- 继承父类 base.jsp -->
-<%@ include file="/WEB-INF/views/platform/role/roleList_easyui.jsp" %>
+<%@ include file="/WEB-INF/views/platform/permission/permissionList_easyui.jsp" %>

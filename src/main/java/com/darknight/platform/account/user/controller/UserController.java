@@ -66,7 +66,7 @@ class UserController {
     @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
     public String esayuiPage(HttpServletRequest request) {
 //        return "platform/user/userList_easyui";
-        return "platform/user/userAdd_easyui";
+        return "platform/user/user_easyui";
     }
 
     /**

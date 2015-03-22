@@ -4,6 +4,11 @@
 <%@ taglib uri="http://www.DarKnight.com.cn/jsp-extends" prefix="inheritance" %>
 <%--<c:set var="ctx" value="${pageContext.request.contextPath}"/>--%>
 
+<%--重定义父页面name=scriptSrc的内容--%>
+<inheritance:override name="scriptSrc">
+    <script type="text/javascript" src="${ctx}/static/project/platform/user/user.js" ></script>
+</inheritance:override>
+
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <%--<table id="userTable"></table>--%>
@@ -44,18 +49,19 @@
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="User.add('新增用户')"></a>
             <%-- 编辑 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="User.edit('编辑用户')"></a>
             <%-- 保存 --%>
             <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
             <%-- 删除 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteUser()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="User.delete()"></a>
         </span>
         <span id="searchBlock" align="right">
             账户名称: <input id="searchAccountName" name="searchAccountName" style="width:110px">
             联系电话: <input id="searchPhoneNum" name="searchPhoneNum" style="width:110px">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search"
+               onclick="doSearch()">查询</a>
         </span>
     </div>
     <%-- 用户新增对话框 --%>
@@ -64,21 +70,20 @@
 </inheritance:override>
 
 <inheritance:override name="scriptBlock">
-    <%-- 用户新增对话框对应JS --%>
-    <inheritance:block name="addScript">
-    </inheritance:block>
 
     <script>
 
         function doSearch(){
-            $('#userTable').datagrid('load',{
-                accountName: $('#searchAccountName').val(),
-                phoneNum: $('#searchPhoneNum').val()
-            });
+            var searchKeyMap= {
+                accountName: 'searchAccountName',
+                phoneNum: 'searchPhoneNum'
+            }
+            User.doSearch(searchKeyMap);
         }
 
         //页面JS初始化
         $(function() {
+            User.init('${ctx}', 'userTable', 'userDialog', 'userForm');
         //user table初始化
             <%--$('#userTable').datagrid({--%>
                 <%--title: '用户列表',--%>

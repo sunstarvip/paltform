@@ -48,7 +48,7 @@ public class PermissionController {
      */
     @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
     public String esayuiPage() {
-        return "platform/role/role_easyui";
+        return "platform/permission/permission_easyui";
     }
 
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})

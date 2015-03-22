@@ -7,16 +7,16 @@
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
     <script type="text/javascript" src="${ctx}/static/plugins/Moment/moment.js" ></script>
-    <script type="text/javascript" src="${ctx}/static/project/platform/role/role.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/platform/permission/permission.js" ></script>
 </inheritance:override>
 
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="centerContent">
     <%--<table id="userTable"></table>--%>
-    <table class="easyui-datagrid" id="roleTable" title="角色列表"
+    <table class="easyui-datagrid" id="permissionTable" title="权限列表"
            iconCls='icon-save' rownumbers="true" fitColumns="true"
            pagination="true" datapagesize="10"
-           url="${ctx}/platform/account/role/dataGrid"
+           url="${ctx}/platform/account/permission/dataGrid"
            toolbar="#toolbar"
            data-options="singleSelect: true,
            collapsible: true, nowrap: false, striped: true,
@@ -33,7 +33,7 @@
         <thead data-options="frozen:true">
             <tr>
                 <th field="id" align="center" data-options="checkbox: true">ID</th>
-                <th field="name" width="80" align="center">角色名称</th>
+                <th field="name" width="80" align="center">权限名称</th>
             </tr>
         </thead>
         <%-- 非冻结行 --%>
@@ -41,7 +41,7 @@
             <tr>
                 <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
                 <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="description" width="240" align="center">角色描述</th>
+                <th field="description" width="240" align="center">权限描述</th>
             </tr>
         </thead>
     </table>
@@ -49,15 +49,15 @@
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Role.add('新增角色')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Permission.add('新增权限')"></a>
             <%-- 编辑 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="Role.edit('编辑角色')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="Permission.edit('编辑权限')"></a>
             <%-- 删除 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="Role.delete()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="Permission.delete()"></a>
         </span>
         <span id="searchBlock" align="right">
-            角色名称: <input id="searchName" name="searchName" style="width:110px">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="Role.doSearch('searchName')">查询</a>
+            权限名称: <input id="searchName" name="searchName" style="width:110px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="Permission.doSearch('searchName')">查询</a>
         </span>
     </div>
     <%-- 用户新增对话框 --%>
@@ -79,7 +79,10 @@
 
         //页面JS初始化
         $(function() {
-            Role.init('${ctx}', 'roleTable', 'roleDialog', 'roleForm');
+            Permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
+            <%--var permission = new Permission();--%>
+            <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionform');--%>
+
         });
 
     </script>
