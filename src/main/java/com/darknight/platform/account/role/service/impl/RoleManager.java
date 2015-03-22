@@ -202,6 +202,10 @@ public class RoleManager implements RoleService{
         return roleList;
     }
 
+    /**
+     * 查询所有未逻辑删除的Role角色对象
+     * @return
+     */
     @Override
     public List<Role> findAllVisible() {
         // 创建查询对象
@@ -212,6 +216,11 @@ public class RoleManager implements RoleService{
         return roleList;
     }
 
+    /**
+     * 删除该角色ID下的Role角色对象
+     * 逻辑删除
+     * @param roleId 角色ID
+     */
     @Override
     @Transactional(readOnly = false)
     public void delete(String roleId) {
@@ -223,6 +232,11 @@ public class RoleManager implements RoleService{
         }
     }
 
+    /**
+     * 根据传入角色ID, 批量删除Role角色对象
+     * 逻辑删除
+     * @param idList 角色ID列表
+     */
     @Override
     @Transactional(readOnly = false)
     public void delete(List<String> idList) {
@@ -236,6 +250,11 @@ public class RoleManager implements RoleService{
         }
     }
 
+    /**
+     * 删除Role角色对象
+     * 逻辑删除
+     * @param role 角色对象
+     */
     @Override
     @Transactional(readOnly = false)
     public void delete(Role role) {
@@ -244,6 +263,11 @@ public class RoleManager implements RoleService{
         save(role);
     }
 
+    /**
+     * 批量删除Role角色对象
+     * 逻辑删除
+     * @param roleList 角色对象列表
+     */
     @Override
     @Transactional(readOnly = false)
     public void deleteInBatch(List<Role> roleList) {
@@ -256,6 +280,10 @@ public class RoleManager implements RoleService{
         }
     }
 
+    /**
+     * 删除所有的Role角色对象
+     * 逻辑删除
+     */
     @Override
     @Transactional(readOnly = false)
     public void deleteAll() {

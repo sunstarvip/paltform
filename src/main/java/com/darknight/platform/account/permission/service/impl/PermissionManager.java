@@ -4,19 +4,19 @@ import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.permission.dao.PermissionDao;
 import com.darknight.platform.account.permission.entity.Permission;
 import com.darknight.platform.account.permission.service.PermissionService;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DarKnight on 2014/4/26 0026.
@@ -71,7 +71,7 @@ public class PermissionManager implements PermissionService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(String permissionId) {
+    public void realDelete(String permissionId) {
         permissionDao.delete(permissionId);
         flush();
     }
@@ -82,7 +82,7 @@ public class PermissionManager implements PermissionService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(List<String> idList) {
+    public void realDelete(List<String> idList) {
         for(String permissionId : idList) {
             permissionDao.delete(permissionId);
         }
@@ -95,7 +95,7 @@ public class PermissionManager implements PermissionService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(Permission permission) {
+    public void realDelete(Permission permission) {
         permissionDao.delete(permission);
         flush();
     }
@@ -106,7 +106,7 @@ public class PermissionManager implements PermissionService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteInBatch(List<Permission> permissionList) {
+    public void realDeleteInBatch(List<Permission> permissionList) {
         permissionDao.deleteInBatch(permissionList);
         flush();
     }
@@ -116,7 +116,7 @@ public class PermissionManager implements PermissionService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void deleteAll() {
+    public void realDeleteAll() {
         permissionDao.deleteAll();
         flush();
     }
@@ -201,6 +201,101 @@ public class PermissionManager implements PermissionService {
         }
         return permissionList;
     }
+
+    /**
+     * 查询所有未逻辑删除的Permission权限对象
+     * @return
+     */
+    @Override
+    public List<Permission> findAllVisible() {
+        // 创建查询对象
+        Criteria criteria = permissionDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        List<Permission> permissionList = criteria.list();
+        return permissionList;
+    }
+
+    /**
+     * 删除该权限ID下的Permission权限对象
+     * 逻辑删除
+     * @param permissionId 权限ID
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(String permissionId) {
+        if(exists(permissionId)) {
+            Permission permission = find(permissionId);
+            permission.setUpdateTime(new Date());
+            permission.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            save(permission);
+        }
+    }
+
+    /**
+     * 根据传入权限ID, 批量删除Permission权限对象
+     * 逻辑删除
+     * @param idList 权限ID列表
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(List<String> idList) {
+        List<Permission> permissionList = find(idList);
+        if(!permissionList.isEmpty()) {
+            for(Permission permission : permissionList) {
+                permission.setUpdateTime(new Date());
+                permission.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(permissionList);
+        }
+    }
+
+    /**
+     * 删除Permission权限对象
+     * 逻辑删除
+     * @param permission 权限对象
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(Permission permission) {
+        permission.setUpdateTime(new Date());
+        permission.setVisibleTag(DefaultEntity.VisibleTag.NO);
+        save(permission);
+    }
+
+    /**
+     * 批量删除Permission权限对象
+     * 逻辑删除
+     * @param permissionList 权限对象列表
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteInBatch(List<Permission> permissionList) {
+        if(!permissionList.isEmpty()) {
+            for(Permission permission : permissionList) {
+                permission.setUpdateTime(new Date());
+                permission.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(permissionList);
+        }
+    }
+
+    /**
+     * 删除所有的Permission权限对象
+     * 逻辑删除
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteAll() {
+        List<Permission> permissionList = findAllVisible();
+        if(!permissionList.isEmpty()) {
+            for(Permission permission : permissionList) {
+                permission.setUpdateTime(new Date());
+                permission.setVisibleTag(DefaultEntity.VisibleTag.NO);
+            }
+            save(permissionList);
+        }
+    }
     //通用方法区域 End
 
     /**
@@ -243,5 +338,43 @@ public class PermissionManager implements PermissionService {
         Set<Permission> permissionSet = findPermissions(accountName);
         Set<String> permissionIdSet = findPermissionIds(permissionSet);
         return permissionIdSet;
+    }
+
+    /**
+     * 通过条件分页查询未逻辑删除的权限列表
+     * @param searchMap 条件Map
+     * @param page 分页对象
+     * @return
+     */
+    @Override
+    public Page<Permission> findSearchPage(Map<String, Object> searchMap, Pageable page) {
+        // 创建查询对象
+        Criteria criteria = permissionDao.createCriteria();
+        // 添加查询规则
+        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
+            if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
+                if(StringUtils.contains(searchEntry.getKey(), "like_")) {
+                    criteria.add(Restrictions.like(
+                            StringUtils.replace(searchEntry.getKey(), "like_", ""),
+                            "%" + searchEntry.getValue() + "%"
+                    ));
+                }else {
+                    criteria.add(Restrictions.eq(searchEntry.getKey(), searchEntry.getValue()));
+                }
+            }
+        }
+        //统计数据总数
+        criteria.setProjection(Projections.rowCount());
+        Object result = (criteria.uniqueResult() != null)?criteria.uniqueResult():0;
+        Long totalNum = Long.valueOf(result.toString());
+        criteria.setProjection(null);
+
+        //设定查询起始值
+        criteria.setFirstResult(page.getOffset());
+        //设定查询分页大小
+        criteria.setMaxResults(page.getPageSize());
+        Page<Permission> permissionPage = new PageImpl(criteria.list(), page, totalNum);
+        return permissionPage;
     }
 }

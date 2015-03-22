@@ -75,8 +75,8 @@ public class RoleController {
 
         Page<Role> rolePage = roleService.findSearchPage(searchMap, pageRequest);
 
-        String rolePageJson = JsonUtil.objToJsonString(rolePage.getContent());
-        return rolePageJson;
+        String pageJson = JsonUtil.objToJsonString(rolePage.getContent());
+        return pageJson;
     }
 
     /**

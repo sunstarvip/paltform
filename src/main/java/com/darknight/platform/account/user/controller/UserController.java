@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -101,35 +100,8 @@ class UserController {
 
         Page<User> userPage = userService.findSearchPage(searchMap, pageRequest);
 
-        String userPageJson = JsonUtil.objToJsonString(userPage.getContent());
-        return userPageJson;
-    }
-
-    /**
-     * 新增用户
-     * @param model
-     * @return
-     */
-    @RequestMapping(value={"add"}, method={RequestMethod.GET})
-    public String add(Model model) {
-        model.addAttribute("user", new User());
-        return "platform/user/userAdd";
-    }
-
-    /**
-     * 编辑用户
-     * @param userId 用户ID
-     * @param model
-     * @return
-     */
-    @RequestMapping(value={"edit"}, method={RequestMethod.GET})
-    public String edit(@RequestParam(value = "userId", required = false) String userId, Model model) {
-        if(StringUtils.isNotBlank(userId)) {
-            User user = userService.find(userId);
-            model.addAttribute("user", user);
-        }
-
-        return "platform/user/userEdit";
+        String pageJson = JsonUtil.objToJsonString(userPage.getContent());
+        return pageJson;
     }
 
     /**
