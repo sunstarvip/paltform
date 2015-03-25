@@ -131,7 +131,7 @@ public class PermissionController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     @ResponseBody
-    public String delete(@RequestParam("permissionId") String permissionId) {
+    public String delete(@RequestParam("id") String permissionId) {
         //保存操作状态
         String status = "success";
         if(StringUtils.isNotBlank(permissionId)) {

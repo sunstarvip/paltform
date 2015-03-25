@@ -6,6 +6,7 @@
 
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
+    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
     <script type="text/javascript" src="${ctx}/static/project/platform/user/user.js" ></script>
 </inheritance:override>
 
@@ -49,13 +50,13 @@
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="User.add('新增用户')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="user.add('新增用户')"></a>
             <%-- 编辑 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="User.edit('编辑用户')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="user.edit('编辑用户')"></a>
             <%-- 保存 --%>
             <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
             <%-- 删除 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="User.delete()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="user.delete()"></a>
         </span>
         <span id="searchBlock" align="right">
             账户名称: <input id="searchAccountName" name="searchAccountName" style="width:110px">
@@ -78,12 +79,14 @@
                 accountName: 'searchAccountName',
                 phoneNum: 'searchPhoneNum'
             }
-            User.doSearch(searchKeyMap);
+            user.doSearch(searchKeyMap);
         }
+
+        // 定义全局JS对象
+        var user = new User('${ctx}', 'userTable', 'userDialog', 'userForm');
 
         //页面JS初始化
         $(function() {
-            User.init('${ctx}', 'userTable', 'userDialog', 'userForm');
         //user table初始化
             <%--$('#userTable').datagrid({--%>
                 <%--title: '用户列表',--%>

@@ -160,7 +160,7 @@ class UserController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     @ResponseBody
-    public String delete(@RequestParam("userId") String userId) {
+    public String delete(@RequestParam("id") String userId) {
         //保存操作状态
         String status = "success";
         if(StringUtils.isNotBlank(userId)) {

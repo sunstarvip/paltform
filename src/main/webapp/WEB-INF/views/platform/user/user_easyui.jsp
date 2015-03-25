@@ -56,8 +56,8 @@
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="User.save()">保存</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="User.cancel()">取消</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="user.save()">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="user.cancel()">取消</a>
     </div>
 </inheritance:override>
 

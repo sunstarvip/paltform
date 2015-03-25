@@ -132,7 +132,7 @@ public class RoleController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     @ResponseBody
-    public String delete(@RequestParam("roleId") String roleId) {
+    public String delete(@RequestParam("id") String roleId) {
         //保存操作状态
         String status = "success";
         if(StringUtils.isNotBlank(roleId)) {

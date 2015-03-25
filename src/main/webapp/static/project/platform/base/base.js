@@ -1,89 +1,80 @@
 // 定义构造函数
-function Permission() {
-    this.ctx = '';
-    this.tableId = '';
-    this.dialogId = '';
-    this.formId = '';
+function Base(ctx, tableId, dialogId, formId) {
+    this.ctx = ctx;
+    this.tableId = tableId;
+    this.dialogId = dialogId;
+    this.formId = formId;
     this.urlPath = '';
+};
 
-    this.init = function(ctx, tableId, dialogId, formId) {
-        this.ctx = ctx;
-        this.tableId = tableId;
-        this.dialogId = dialogId;
-        this.formId = formId;
-    };
-
-    this.add = function(dialogTitle) {
+Base.prototype = {
+    add: function(dialogTitle, urlPath) {
         $('#'+this.dialogId).dialog('open').dialog('setTitle', dialogTitle);
         $('#'+this.formId).form('clear');
-        this.urlPath = this.ctx+'/platform/account/permission/save';
-    };
-
-    this.save = function() {
+        this.urlPath = this.ctx + urlPath;
+    },
+    save: function() {
+        var dialogId = this.dialogId;
+        var tableId = this.tableId;
         $('#'+this.formId).form('submit',{
-            url: this.url,
+            url: this.urlPath,
             onSubmit: function(){
                 return $(this).form('validate');
             },
             success: function(result){
+                var result = eval('('+result+')');
                 if (result['status']=='success'){
                     // 关闭对话框
-                    $('#'+this.dialogId).dialog('close');
+                    $('#'+dialogId).dialog('close');
                     // 重载权限信息列表
-                    $('#'+this.tableId).datagrid('reload');
+                    $('#'+tableId).datagrid('reload');
                 }else {
                     $.messager.show({
-                        title: 'Error',
+                        title: '错误信息',
                         msg: result
                     });
                 }
             }
         });
-    };
-
-    this.edit = function(dialogTitle) {
+    },
+    edit: function(dialogTitle, urlPath) {
         var row = $('#'+this.tableId).datagrid('getSelected');
         if(row) {
             $('#'+this.dialogId).dialog('open').dialog('setTitle', dialogTitle);
             $('#'+this.formId).form('load', row);
-            this.url = this.ctx+'/platform/account/permission/update';
+            this.urlPath = this.ctx + urlPath;
         }
-    };
-
-    this.delete = function() {
-        var row = $('#'+this.tableId).datagrid('getSelected');
+    },
+    delete: function(title, content, urlPath) {
+        var tableId = this.tableId;
+        var ctx = this.ctx;
+        var row = $('#'+tableId).datagrid('getSelected');
         if (row){
-            $.messager.confirm('删除权限','是否确认删除选中权限？',
+            $.messager.confirm(title, content,
                 function(e) {
                     if(e) {
-                        $.post(this.ctx+'/platform/account/permission/delete',
-                            {roleId: row.id},
+                        $.post(ctx + urlPath,
+                            {id: row.id},
                             function(result) {
+                                var result = eval('('+result+')');
                                 if (result['status']=='success') {
                                     // 重载角色信息列表
-                                    $('#'+this.tableId).datagrid('reload');
+                                    $('#'+tableId).datagrid('reload');
                                 }else {
                                     // 展示错误信息
                                     $.messager.show({
-                                        title: 'Error',
+                                        title: '错误信息',
                                         msg: result
                                     });
                                 }
                             },
-                            'json');
+                            'text');
                     }
                 }
             );
         }
-    };
-
-    this.cancel = function() {
+    },
+    cancel: function() {
         $('#'+this.dialogId).dialog('close');
-    };
-
-    this.doSearch = function(searchKey) {
-        $('#'+this.tableId).datagrid('load',{
-            name: $('#'+searchKey).val()
-        });
-    };
+    }
 }

@@ -7,6 +7,7 @@
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
     <script type="text/javascript" src="${ctx}/static/plugins/Moment/moment.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
     <script type="text/javascript" src="${ctx}/static/project/platform/role/role.js" ></script>
 </inheritance:override>
 
@@ -49,15 +50,15 @@
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Role.add('新增角色')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="role.add('新增角色')"></a>
             <%-- 编辑 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="Role.edit('编辑角色')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="role.edit('编辑角色')"></a>
             <%-- 删除 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="Role.delete()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="role.delete()"></a>
         </span>
         <span id="searchBlock" align="right">
             角色名称: <input id="searchName" name="searchName" style="width:110px">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="Role.doSearch('searchName')">查询</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="role.doSearch('searchName')">查询</a>
         </span>
     </div>
     <%-- 用户新增对话框 --%>
@@ -77,9 +78,12 @@
             }
         }
 
+        // 定义全局JS对象
+        var role = new Role('${ctx}', 'roleTable', 'roleDialog', 'roleForm');
+
         //页面JS初始化
         $(function() {
-            Role.init('${ctx}', 'roleTable', 'roleDialog', 'roleForm');
+
         });
 
     </script>

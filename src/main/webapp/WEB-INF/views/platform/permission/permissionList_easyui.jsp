@@ -7,6 +7,7 @@
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
     <script type="text/javascript" src="${ctx}/static/plugins/Moment/moment.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
     <script type="text/javascript" src="${ctx}/static/project/platform/permission/permission.js" ></script>
 </inheritance:override>
 
@@ -49,15 +50,15 @@
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Permission.add('新增权限')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="permission.add('新增权限')"></a>
             <%-- 编辑 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="Permission.edit('编辑权限')"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="permission.edit('编辑权限')"></a>
             <%-- 删除 --%>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="Permission.delete()"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="permission.delete()"></a>
         </span>
         <span id="searchBlock" align="right">
             权限名称: <input id="searchName" name="searchName" style="width:110px">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="Permission.doSearch('searchName')">查询</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="permission.doSearch('searchName')">查询</a>
         </span>
     </div>
     <%-- 用户新增对话框 --%>
@@ -77,12 +78,12 @@
             }
         }
 
+        // 定义全局JS对象
+        var permission = new Permission('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
+
         //页面JS初始化
         $(function() {
-            Permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
-            <%--var permission = new Permission();--%>
-            <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionform');--%>
-
+            <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');--%>
         });
 
     </script>
