@@ -3,6 +3,8 @@ package com.darknight.platform.account.role.entity;
 import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.permission.entity.Permission;
 import com.darknight.platform.account.user.entity.User;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.List;
  * Created by DarKnight on 2014/5/22 0022.
  */
 @Entity
+@DynamicInsert()
+@DynamicUpdate()
 @Table(name = "t_platform_role")
 public class Role extends DefaultEntity {
     private String name;

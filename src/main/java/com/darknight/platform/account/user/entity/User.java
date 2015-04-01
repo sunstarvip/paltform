@@ -4,6 +4,8 @@ import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
  * Created by DarKnight on 2014/5/22 0022.
  */
 @Entity
+@DynamicInsert()
+@DynamicUpdate()
 @Table(name = "t_platform_user")
 public class User extends DefaultEntity {
     private String name;  //用户昵称

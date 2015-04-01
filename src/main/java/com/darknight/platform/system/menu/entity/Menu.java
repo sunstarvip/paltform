@@ -1,6 +1,8 @@
 package com.darknight.platform.system.menu.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,6 +12,8 @@ import javax.persistence.Table;
  * Created by DarKnight on 2015/3/17.
  */
 @Entity
+@DynamicInsert()
+@DynamicUpdate()
 @Table(name = "t_platform_menu")
 public class Menu extends DefaultEntity {
     private String name;  //菜单名称
