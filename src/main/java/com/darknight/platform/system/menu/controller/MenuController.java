@@ -1,8 +1,8 @@
-package com.darknight.platform.account.permission.controller;
+package com.darknight.platform.system.menu.controller;
 
 import com.darknight.core.util.JsonUtil;
-import com.darknight.platform.account.permission.entity.Permission;
-import com.darknight.platform.account.permission.service.PermissionService;
+import com.darknight.platform.system.menu.entity.Menu;
+import com.darknight.platform.system.menu.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,30 +16,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by DarKnight on 2014/5/26 0026.
+ * 菜单实体控制层
+ * Created by DarKnight on 2015/4/1.
  */
 @Controller
-@RequestMapping(value = "platform/account/permission")
-public class PermissionController {
-    private PermissionService permissionService;
+@RequestMapping(value = "platform/system/menu")
+public class MenuController {
+    private MenuService menuService;
 
     @Resource
-    public void setPermissionService(PermissionService permissionService) {
-        this.permissionService = permissionService;
+    public void setMenuService(MenuService menuService) {
+        this.menuService = menuService;
     }
 
     /**
-     * 通过权限ID由Spring注入角色对象
-     * @param permissionId 权限ID
+     * 通过系统菜单ID由Spring注入系统菜单对象
+     * @param menuId 系统菜单ID
      * @return
      */
-    @ModelAttribute("permission")
-    public Permission getPermission(@RequestParam(value = "permissionId", required = false) String permissionId) {
-        if (StringUtils.isNotEmpty(permissionId)) {
-            return permissionService.find(permissionId);
+    @ModelAttribute("menu")
+    public Menu getMenu(@RequestParam(value = "menuId", required = false) String menuId) {
+        if (StringUtils.isNotBlank(menuId)) {
+            return menuService.find(menuId);
         }
-        Permission permission = new Permission();
-        return permission;
+        Menu menu = new Menu();
+        return menu;
     }
 
     /**
@@ -48,9 +49,14 @@ public class PermissionController {
      */
     @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
     public String esayuiPage() {
-        return "platform/permission/permission_easyui";
+        return "platform/menu/menu_easyui";
     }
 
+    /**
+     * 查询列表数据
+     * @param request
+     * @return
+     */
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
     @ResponseBody
     public String dataGrid(HttpServletRequest request) {
@@ -59,9 +65,11 @@ public class PermissionController {
         String rowsStr = request.getParameter("rows");
         //获取查询条件
         String name = request.getParameter("name");
+        String type = request.getParameter("type");
         //封装查询条件
         Map<String, Object> searchMap = new HashMap<String, Object>();
         searchMap.put("like_name", name);
+        searchMap.put("like_type", type);
 
         PageRequest pageRequest = null;
         if(StringUtils.isNumeric(pageStr) && StringUtils.isNumeric(rowsStr)) {
@@ -72,24 +80,24 @@ public class PermissionController {
             pageRequest = new PageRequest(0, 10);
         }
 
-        Page<Permission> permissionPage = permissionService.findSearchPage(searchMap, pageRequest);
+        Page<Menu> menuPage = menuService.findSearchPage(searchMap, pageRequest);
 
-        String pageJson = JsonUtil.objToJsonString(permissionPage.getContent());
+        String pageJson = JsonUtil.objToJsonString(menuPage.getContent());
         return pageJson;
     }
 
     /**
-     * 保存权限
-     * @param permission 权限对象
+     * 保存系统菜单
+     * @param menu 系统菜单对象
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
     @ResponseBody
-    public String save(@ModelAttribute("permission") Permission permission) {
+    public String save(@ModelAttribute("menu") Menu menu) {
         //保存操作状态
         String status = "success";
-        if(permission != null) {
-            permission = permissionService.save(permission);
+        if(menu != null) {
+            menu = menuService.save(menu);
         }else {
             status = "fail";
         }
@@ -101,18 +109,18 @@ public class PermissionController {
     }
 
     /**
-     * 更新权限
-     * @param permission 权限对象
+     * 更新系统菜单
+     * @param menu 系统菜单对象
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
     @ResponseBody
-    public String update(@ModelAttribute("permission") Permission permission) {
+    public String update(@ModelAttribute("menu") Menu menu) {
         //保存操作状态
         String status = "success";
-        if(permission != null) {
-            permission.setUpdateTime(new Date());
-            permission = permissionService.save(permission);
+        if(menu != null) {
+            menu.setUpdateTime(new Date());
+            menu = menuService.save(menu);
         }else {
             status = "fail";
         }
@@ -124,18 +132,18 @@ public class PermissionController {
     }
 
     /**
-     * 删除权限
+     * 删除系统菜单
      * 逻辑删除，若需物理删除建议使用SQL脚本
-     * @param permissionId 权限ID
+     * @param menuId 系统菜单ID
      * @return
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     @ResponseBody
-    public String delete(@RequestParam("id") String permissionId) {
+    public String delete(@RequestParam("id") String menuId) {
         //保存操作状态
         String status = "success";
-        if(StringUtils.isNotBlank(permissionId)) {
-            permissionService.delete(permissionId);
+        if(StringUtils.isNotBlank(menuId)) {
+            menuService.delete(menuId);
         }else {
             status = "fail";
         }

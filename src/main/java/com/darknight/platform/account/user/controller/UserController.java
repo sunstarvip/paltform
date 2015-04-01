@@ -25,7 +25,6 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "platform/account/user")
 class UserController {
-    private static final long serialVersionUID = -454150993895608956L;
     private UserService userService;
 
     @Resource
