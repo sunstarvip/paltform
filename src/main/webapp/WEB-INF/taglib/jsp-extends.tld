@@ -15,7 +15,7 @@
 		block tag
     </description>
     <name>block</name>
-    <tag-class>com.darknight.core.web.tags.BlockTag</tag-class>
+    <tag-class>com.darknight.core.web.tags.jsp.BlockTag</tag-class>
     <body-content>JSP</body-content>
 
     <attribute>
@@ -33,7 +33,7 @@
 		override desc
     </description>
     <name>override</name>
-    <tag-class>com.darknight.core.web.tags.OverrideTag</tag-class>
+    <tag-class>com.darknight.core.web.tags.jsp.OverrideTag</tag-class>
     <body-content>JSP</body-content>
 
     <attribute>
