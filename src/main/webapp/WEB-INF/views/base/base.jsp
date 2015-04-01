@@ -72,7 +72,7 @@
     <inheritance:block name="west">
         <div data-options="region:'west',title:'West',split:true" style="width:200px;">
             <inheritance:block name="westContent">
-
+                <ul id="menuTree" class="easyui-tree" url="${ctx}/platform/system/menu/menuTree" data-options="method: 'post'"></ul>
             </inheritance:block>
         </div>
     </inheritance:block>
@@ -90,8 +90,20 @@
 
 
     <inheritance:block name="scriptBlock">
-        <script>
-        </script>
+        <inheritance:block name="northScript">
+        </inheritance:block>
+
+        <inheritance:block name="southScript">
+        </inheritance:block>
+
+        <inheritance:block name="eastScript">
+        </inheritance:block>
+
+        <inheritance:block name="westScript">
+        </inheritance:block>
+
+        <inheritance:block name="centerScript">
+        </inheritance:block>
     </inheritance:block>
 
 </body>

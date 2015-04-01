@@ -67,7 +67,7 @@
     </inheritance:block>
 </inheritance:override>
 
-<inheritance:override name="scriptBlock">
+<inheritance:override name="centerScript">
 
     <script>
         // 时间格式化JS
