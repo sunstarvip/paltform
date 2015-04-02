@@ -1,6 +1,7 @@
 package com.darknight.platform.system.menu.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -22,9 +23,9 @@ public class Menu extends DefaultEntity {
      */
     private String name;  // 菜单名称
     /**
-     * 菜单类型
+     * 菜单URL
      */
-    private String type;  // 菜单类型
+    private String urlPath;  // 菜单URL
 
     private Menu parent;  // 父级菜单
     private List<Menu> children = new ArrayList<>();  // 子级菜单
@@ -37,12 +38,12 @@ public class Menu extends DefaultEntity {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getUrlPath() {
+        return urlPath;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUrlPath(String urlPath) {
+        this.urlPath = urlPath;
     }
 
     @ManyToOne
@@ -60,6 +61,7 @@ public class Menu extends DefaultEntity {
         return children;
     }
 
+    @JsonIgnore
     public void setChildren(List<Menu> children) {
         this.children = children;
     }

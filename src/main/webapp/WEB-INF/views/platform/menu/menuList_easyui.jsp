@@ -42,7 +42,7 @@
             <tr>
                 <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
                 <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="type" width="240" align="center">菜单类型</th>
+                <th field="urlPath" width="240" align="center">菜单URL</th>
             </tr>
         </thead>
     </table>
@@ -58,7 +58,7 @@
         </span>
         <span id="searchBlock" align="right">
             菜单名称: <input id="searchName" name="searchName" style="width:110px">
-            菜单类型: <input id="searchType" name="searchType" style="width:110px">
+            <%--菜单类型: <input id="searchType" name="searchType" style="width:110px">--%>
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
         </span>
     </div>
@@ -81,8 +81,7 @@
 
         function doSearch() {
             var searchKeyMap= {
-                name: 'searchName',
-                type: 'searchType'
+                name: 'searchName'
             }
             menu.doSearch(searchKeyMap)
         }

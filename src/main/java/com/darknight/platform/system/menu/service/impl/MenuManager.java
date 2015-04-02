@@ -1,7 +1,6 @@
 package com.darknight.platform.system.menu.service.impl;
 
 import com.darknight.core.base.dao.BaseJpaDao;
-import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.core.base.service.impl.BaseManager;
 import com.darknight.platform.system.menu.dao.MenuDao;
 import com.darknight.platform.system.menu.entity.Menu;
@@ -47,10 +46,8 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
      */
     @Override
     public Page<Menu> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 创建查询对象
-        Criteria criteria = menuDao.createCriteria();
-        // 添加查询规则
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {
@@ -75,6 +72,19 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
         criteria.setMaxResults(page.getPageSize());
         Page<Menu> menuPage = new PageImpl(criteria.list(), page, totalNum);
         return menuPage;
+    }
+
+    /**
+     * 查询所有未逻辑删除的顶级系统菜单列表
+     * @return
+     */
+    @Override
+    public List<Menu> findAllVisibleTopMenu() {
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
+        criteria.add(Restrictions.isNull("parent"));
+        List<Menu> menuList = criteria.list();
+        return menuList;
     }
 
     /**
@@ -103,7 +113,7 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
                 menuNode.setChildren(children);
             }
 
-            menuNode.setType(menu.getType());
+            menuNode.setUrlPath(menu.getUrlPath());
 
             return menuNode;
         }else {

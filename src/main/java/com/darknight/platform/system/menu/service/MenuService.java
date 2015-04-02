@@ -23,6 +23,12 @@ public interface MenuService extends BaseService<Menu, String> {
     public Page<Menu> findSearchPage(Map<String, Object> searchMap, Pageable page);
 
     /**
+     * 查询所有未逻辑删除的顶级系统菜单列表
+     * @return
+     */
+    public List<Menu> findAllVisibleTopMenu();
+
+    /**
      * 通过系统菜单对象生成对应树型对象
      * @param menu 系统菜单对象
      * @return

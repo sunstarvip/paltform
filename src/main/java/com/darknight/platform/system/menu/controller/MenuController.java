@@ -96,7 +96,7 @@ public class MenuController {
     @RequestMapping(value={"menuTree"}, method={RequestMethod.POST})
     @ResponseBody
     public String menuTree(HttpServletRequest request) {
-        List<Menu> menuList = menuService.findAllVisible();
+        List<Menu> menuList = menuService.findAllVisibleTopMenu();
         List<MenuNode> menuNodeList = menuService.makeNode(menuList);
 
         String listJson = JsonUtil.objToJsonString(menuNodeList);

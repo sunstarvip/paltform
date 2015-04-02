@@ -11,15 +11,15 @@ import com.darknight.core.base.entity.TreeEntity;
 public class MenuNode extends TreeEntity {
 
     /**
-     * 菜单类型
+     * 菜单URL
      */
-    private String type;  // 菜单类型
+    private String urlPath;  // 菜单URL
 
-    public String getType() {
-        return type;
+    public String getUrlPath() {
+        return urlPath;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUrlPath(String urlPath) {
+        this.urlPath = urlPath;
     }
 }

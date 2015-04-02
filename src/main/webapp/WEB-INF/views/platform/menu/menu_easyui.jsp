@@ -22,9 +22,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>菜单类型:</td>
+                    <td>菜单URL:</td>
                     <td>
-                        <input class="easyui-validatebox" name="type" type="text" >
+                        <input class="easyui-validatebox" name="urlPath" type="url" >
+                    </td>
+                </tr>
+                <tr>
+                    <td>父级菜单:</td>
+                    <td>
+                        <select class="easyui-combotree" name="parent.id" url="${ctx}/platform/system/menu/menuTree"
+                                data-options="method: 'post'" style="width:156px;"/>
                     </td>
                 </tr>
             </table>

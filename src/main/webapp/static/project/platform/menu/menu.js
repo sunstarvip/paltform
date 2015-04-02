@@ -16,8 +16,7 @@ var menuExtend = {
     },
     doSearch: function(searchKeyMap) {
         $('#'+this.tableId).datagrid('load',{
-            name: $('#'+searchKeyMap['name']).val(),
-            type: $('#'+searchKeyMap['type']).val()
+            name: $('#'+searchKeyMap['name']).val()
         });
     }
 }
