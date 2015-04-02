@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,11 +17,17 @@ import java.util.List;
 @DynamicUpdate()
 @Table(name = "t_platform_menu")
 public class Menu extends DefaultEntity {
+    /**
+     * 菜单名称
+     */
     private String name;  // 菜单名称
+    /**
+     * 菜单类型
+     */
     private String type;  // 菜单类型
 
     private Menu parent;  // 父级菜单
-    private List<Menu> children;  // 子级菜单
+    private List<Menu> children = new ArrayList<>();  // 子级菜单
 
     public String getName() {
         return name;

@@ -2,6 +2,7 @@ package com.darknight.platform.system.menu.controller;
 
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.system.menu.entity.Menu;
+import com.darknight.platform.system.menu.entity.MenuNode;
 import com.darknight.platform.system.menu.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,6 +86,21 @@ public class MenuController {
 
         String pageJson = JsonUtil.objToJsonString(menuPage.getContent());
         return pageJson;
+    }
+
+    /**
+     * 查询菜单树
+     * @param request
+     * @return
+     */
+    @RequestMapping(value={"menuTree"}, method={RequestMethod.POST})
+    @ResponseBody
+    public String menuTree(HttpServletRequest request) {
+        List<Menu> menuList = menuService.findAllVisible();
+        List<MenuNode> menuNodeList = menuService.makeNode(menuList);
+
+        String listJson = JsonUtil.objToJsonString(menuNodeList);
+        return listJson;
     }
 
     /**

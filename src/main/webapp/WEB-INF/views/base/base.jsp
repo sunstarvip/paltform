@@ -72,7 +72,10 @@
     <inheritance:block name="west">
         <div data-options="region:'west',title:'West',split:true" style="width:200px;">
             <inheritance:block name="westContent">
-                <ul id="menuTree" class="easyui-tree" url="${ctx}/platform/system/menu/menuTree" data-options="method: 'post'"></ul>
+                <ul id="menuTree" class="easyui-tree" url="${ctx}/platform/system/menu/menuTree"
+                    data-options="method: 'post'" >
+
+                </ul>
             </inheritance:block>
         </div>
     </inheritance:block>
@@ -100,6 +103,28 @@
         </inheritance:block>
 
         <inheritance:block name="westScript">
+            <script>
+                function buildTree(rows) {
+                    function exists(rows, parentId) {
+                        for(var i=0; i<rows.length; i++) {
+                            if (rows[i].id == parentId) return true;
+                        }
+                        if (rows[i].id == parentId) return true;
+                    }
+
+                    var nodes = [];
+                    // 找出顶层节点
+                    for(var i=0; i<rows.length; i++){
+                        var row = rows[i];
+                        if (!exists(rows, row.parentId)) {
+                            nodes.push({
+                                id:row.id,
+                                text:row.name
+                            });
+                        }
+                    }
+                }
+            </script>
         </inheritance:block>
 
         <inheritance:block name="centerScript">
