@@ -1,4 +1,11 @@
-// 定义构造函数
+/**
+ * 定义构造函数
+ * @param ctx WEB运行环境
+ * @param tableId 展示列表数据的表格ID
+ * @param dialogId 增改实体的窗口ID
+ * @param formId 增改实体的表单ID
+ * @constructor
+ */
 function Base(ctx, tableId, dialogId, formId) {
     this.ctx = ctx;
     this.tableId = tableId;
@@ -7,12 +14,24 @@ function Base(ctx, tableId, dialogId, formId) {
     this.urlPath = '';
 };
 
+/**
+ * 定义通用CURD方法
+ * @type {{add: Function, save: Function, edit: Function, delete: Function, cancel: Function}}
+ */
 Base.prototype = {
+    /**
+     * 通用新增方法
+     * @param dialogTitle 增改实体的弹窗标题
+     * @param urlPath 保存实体时的请求路径
+     */
     add: function(dialogTitle, urlPath) {
         $('#'+this.dialogId).dialog('open').dialog('setTitle', dialogTitle);
         $('#'+this.formId).form('clear');
         this.urlPath = this.ctx + urlPath;
     },
+    /**
+     * 通用保存方法
+     */
     save: function() {
         var dialogId = this.dialogId;
         var tableId = this.tableId;
@@ -37,6 +56,11 @@ Base.prototype = {
             }
         });
     },
+    /**
+     * 通用编辑方法
+     * @param dialogTitle 增改实体的弹窗标题
+     * @param urlPath 更新实体时的请求路径
+     */
     edit: function(dialogTitle, urlPath) {
         var row = $('#'+this.tableId).datagrid('getSelected');
         if(row) {
@@ -45,6 +69,12 @@ Base.prototype = {
             this.urlPath = this.ctx + urlPath;
         }
     },
+    /**
+     * 通用删除方法
+     * @param title 删除确认时的弹窗标题
+     * @param content 删除确认时的弹窗提示语
+     * @param urlPath 删除实体时的请求路径
+     */
     delete: function(title, content, urlPath) {
         var tableId = this.tableId;
         var ctx = this.ctx;
@@ -74,6 +104,10 @@ Base.prototype = {
             );
         }
     },
+    /**
+     * 通用取消方法
+     * 用于放弃增改实体操作时，关闭弹窗
+     */
     cancel: function() {
         $('#'+this.dialogId).dialog('close');
     }
