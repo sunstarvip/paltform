@@ -87,7 +87,7 @@
         }
 
         // 定义全局JS对象
-        var menu = new Menu('${ctx}', 'menuTable', 'menuDialog', 'menuForm');
+        var menu = new Menu('${ctx}', 'menuTable', 'menuDialog', 'menuForm', 'menuTree');
 
         //页面JS初始化
         $(function() {

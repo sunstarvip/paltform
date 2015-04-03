@@ -1,6 +1,8 @@
 package com.darknight.platform.system.menu.service.impl;
 
 import com.darknight.core.base.dao.BaseJpaDao;
+import com.darknight.core.base.entity.DefaultEntity;
+import com.darknight.core.base.entity.TreeEntity;
 import com.darknight.core.base.service.impl.BaseManager;
 import com.darknight.platform.system.menu.dao.MenuDao;
 import com.darknight.platform.system.menu.entity.Menu;
@@ -88,6 +90,26 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
     }
 
     /**
+     * 根据当前系统菜单实体查询所有未逻辑删除的子级系统菜单列表
+     * @param menu 系统菜单实体
+     * @return
+     */
+    @Override
+    public List<Menu> findVisibleChildren(Menu menu) {
+        List<Menu> children = menu.getChildren();
+        if(children != null && !children.isEmpty()) {
+            List<Menu> visibleChildren = new ArrayList<>();
+            for(Menu child : children) {
+                if(StringUtils.equals(DefaultEntity.VisibleTag.YES, child.getVisibleTag())) {
+                    visibleChildren.add(child);
+                }
+            }
+            return visibleChildren;
+        }
+        return null;
+    }
+
+    /**
      * 通过系统菜单对象生成对应树型对象
      * @param menu 系统菜单对象
      * @return
@@ -103,14 +125,20 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
             if(menu.getParent() != null) {
                 menuNode.setParentId(menu.getParent().getId());
             }
-            // 判断是否存在子级菜单
-            if(menu.getChildren() != null && !menu.getChildren().isEmpty()) {
-                List<MenuNode> children = new ArrayList<>();
-                for(Menu child : menu.getChildren()) {
+            // 判断是否存在未逻辑删除的子级菜单
+            List<Menu> children = findVisibleChildren(menu);
+            if(children != null && !children.isEmpty()) {
+                // 存在子级菜单时才设定该菜单状态，并设定默认为展开
+                menuNode.setState(TreeEntity.State.OPEN);
+                // 生成子菜单列表
+                List<MenuNode> childrenNode = new ArrayList<>();
+                for(Menu child : children) {
                     MenuNode childNode = makeNode(child);
-                    children.add(childNode);
+                    childrenNode.add(childNode);
                 }
-                menuNode.setChildren(children);
+                menuNode.setChildren(childrenNode);
+            }else {
+
             }
 
             menuNode.setUrlPath(menu.getUrlPath());

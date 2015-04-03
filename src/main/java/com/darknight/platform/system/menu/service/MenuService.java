@@ -29,6 +29,13 @@ public interface MenuService extends BaseService<Menu, String> {
     public List<Menu> findAllVisibleTopMenu();
 
     /**
+     * 根据当前系统菜单实体查询所有未逻辑删除的子级系统菜单列表
+     * @param menu 系统菜单实体
+     * @return
+     */
+    public List<Menu> findVisibleChildren(Menu menu);
+
+    /**
      * 通过系统菜单对象生成对应树型对象
      * @param menu 系统菜单对象
      * @return
