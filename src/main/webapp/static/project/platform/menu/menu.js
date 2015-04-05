@@ -61,6 +61,10 @@ var menuExtend = {
      */
     edit: function(dialogTitle) {
         Base.prototype.edit.call(this, dialogTitle, '/platform/system/menu/update');
+        var row = $('#'+this.tableId).datagrid('getSelected');
+        if(!!row && !!row['parent']) {
+            $('#parentId').combotree('setValue', row['parent']['id']);
+        }
     },
     /**
      * 重载删除方法
