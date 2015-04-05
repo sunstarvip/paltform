@@ -80,6 +80,26 @@ class UserController {
     }
 
     /**
+     * 查询用户账户名是否存在
+     * @param accountName 用户账户名
+     * @return
+     */
+    @RequestMapping(value={"checkAccountName"})
+    public String checkAccountName(@RequestParam("accountName") String accountName) {
+        // 操作状态
+        boolean status = false;
+        // 查询用户账户名是否已经存在对应用户
+        if(StringUtils.isNotBlank(accountName)) {
+            User user = userService.findByAccountName(accountName);
+            if(user == null) {
+                status = true;
+            }
+        }
+
+        return JsonUtil.objToJsonString(status);
+    }
+
+    /**
      * 保存用户
      * @param user 用户对象
      * @return

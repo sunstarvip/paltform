@@ -19,7 +19,8 @@
                 <tr>
                     <td>账户名称:</td>
                     <td>
-                        <input class="easyui-validatebox" name="accountName" type="text" required="true">
+                        <input class="easyui-validatebox" name="accountName" type="text"
+                               required="true" validType="remote['${ctx}/platform/account/user/checkAccountName', 'accountName']">
                     </td>
                 </tr>
                 <tr id="passwordRow">
