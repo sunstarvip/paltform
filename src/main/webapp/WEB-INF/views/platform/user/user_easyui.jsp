@@ -17,38 +17,40 @@
 
             <table cellpadding="5">
                 <tr>
-                    <td>账户名称:</td>
+                    <td>账户名称: </td>
                     <td>
-                        <input class="easyui-validatebox" name="accountName" type="text"
-                               required="true" validType="remote['${ctx}/platform/account/user/checkAccountName', 'accountName']">
+                        <input class="easyui-validatebox" name="accountName" type="text" required="true"
+                               validType="remote['${ctx}/platform/account/user/checkAccountName', 'accountName']"
+                               missingMessage="请输入账户名称" invalidMessage="该账户名称已存在！" >
                     </td>
                 </tr>
                 <tr id="passwordRow">
-                    <td>密码:</td>
+                    <td>密码: </td>
                     <td>
                         <input class="easyui-validatebox" name="password" type="text" required="true">
                     </td>
                 </tr>
                 <tr>
-                    <td>用户昵称:</td>
+                    <td>用户昵称: </td>
                     <td>
                         <input class="easyui-validatebox" name="name" type="text">
                     </td>
                 </tr>
                 <tr>
-                    <td>联系电话:</td>
+                    <td>手机号码: </td>
                     <td>
-                        <input name="phoneNum" type="text">
+                        <input class="easyui-numberbox easyui-validatebox" name="phoneNum" type="text" validType="length[11, 11]"
+                               invalidMessage="请输入正确的手机号码！" >
                     </td>
                 </tr>
                 <tr>
-                    <td>邮箱地址:</td>
+                    <td>邮箱地址: </td>
                     <td>
                         <input class="easyui-validatebox" name="mailAddress" validType="email" type="text">
                     </td>
                 </tr>
                 <tr>
-                    <td>联系地址:</td>
+                    <td>联系地址: </td>
                     <td>
                         <input class="easyui-validatebox" name="address" type="text">
                     </td>

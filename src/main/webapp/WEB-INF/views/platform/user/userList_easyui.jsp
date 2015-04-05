@@ -40,7 +40,7 @@
         <thead>
             <tr>
                 <th field="name" width="120" align="center">用户昵称</th>
-                <th field="phoneNum" width="80" align="center">联系电话</th>
+                <th field="phoneNum" width="80" align="center">手机号码</th>
                 <th field="mailAddress" width="150" align="center">邮箱地址</th>
                 <th field="address" width="100" align="center">联系地址</th>
             </tr>
@@ -60,7 +60,7 @@
         </span>
         <span id="searchBlock" align="right">
             账户名称: <input id="searchAccountName" name="searchAccountName" style="width:110px">
-            联系电话: <input id="searchPhoneNum" name="searchPhoneNum" style="width:110px">
+            手机号码: <input id="searchPhoneNum" name="searchPhoneNum" style="width:110px">
             <a href="#" class="easyui-linkbutton" iconCls="icon-search"
                onclick="doSearch()">查询</a>
         </span>

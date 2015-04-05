@@ -27,7 +27,7 @@ public class User extends DefaultEntity {
     private String address;  //联系地址
     private String salt = ShiroPasswordUtil.getSalt();  //加密salt
 
-    private String phoneNum;  //联系电话
+    private String phoneNum;  //手机号码
 
     private List<Role> roleList = new ArrayList<>();  //角色列表
 
