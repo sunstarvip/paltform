@@ -24,7 +24,7 @@
                 <tr>
                     <td>菜单URL:</td>
                     <td>
-                        <input class="easyui-validatebox" name="urlPath" type="url" >
+                        <input class="easyui-validatebox" name="urlPath" type="text" validType="url" >
                     </td>
                 </tr>
                 <tr>
