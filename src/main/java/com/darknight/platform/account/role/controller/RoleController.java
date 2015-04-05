@@ -6,7 +6,6 @@ import com.darknight.platform.account.role.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,7 +18,7 @@ import java.util.Map;
  * 角色管理类
  * Created by DarKnight on 2014/5/26 0026.
  */
-@Controller
+@RestController
 @RequestMapping(value = "platform/account/role")
 public class RoleController {
     private RoleService roleService;
@@ -43,17 +42,7 @@ public class RoleController {
         return role;
     }
 
-    /**
-     * esayUI页面
-     * @return
-     */
-    @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
-    public String esayuiPage() {
-        return "platform/role/role_easyui";
-    }
-
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
-    @ResponseBody
     public String dataGrid(HttpServletRequest request) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");
@@ -85,7 +74,6 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    @ResponseBody
     public String save(@ModelAttribute("role") Role role) {
         //保存操作状态
         String status = "success";
@@ -107,7 +95,6 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    @ResponseBody
     public String update(@ModelAttribute("role") Role role) {
         //保存操作状态
         String status = "success";
@@ -131,7 +118,6 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
-    @ResponseBody
     public String delete(@RequestParam("id") String roleId) {
         //保存操作状态
         String status = "success";

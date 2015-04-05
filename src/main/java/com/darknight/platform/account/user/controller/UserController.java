@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,7 +21,7 @@ import java.util.Map;
  * 用户管理类
  * Created by DarKnight on 2014/5/26 0026.
  */
-@Controller
+@RestController
 @RequestMapping(value = "platform/account/user")
 class UserController {
     private UserService userService;
@@ -47,35 +46,12 @@ class UserController {
     }
 
     /**
-     * 列表页面
-     * @param request
-     * @return
-     */
-    @RequestMapping(value={"list"}, method={RequestMethod.GET})
-    public String list(HttpServletRequest request) {
-
-        return "platform/user/userList";
-    }
-
-    /**
-     * esayUI页面
-     * @param request
-     * @return
-     */
-    @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
-    public String esayuiPage(HttpServletRequest request) {
-//        return "platform/user/userList_easyui";
-        return "platform/user/user_easyui";
-    }
-
-    /**
      * 分页查询用户列表数据
      * @param request
      * @param pageable 分页容器
      * @return
      */
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
-    @ResponseBody
     public String dataGrid(HttpServletRequest request, @PageableDefault(10) Pageable pageable) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");
@@ -109,7 +85,6 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    @ResponseBody
     public String save(@ModelAttribute("user") User user) {
         //保存操作状态
         String status = "success";
@@ -133,7 +108,6 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    @ResponseBody
     public String update(@ModelAttribute("user") User user) {
         //保存操作状态
         String status = "success";
@@ -158,7 +132,6 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
-    @ResponseBody
     public String delete(@RequestParam("id") String userId) {
         //保存操作状态
         String status = "success";

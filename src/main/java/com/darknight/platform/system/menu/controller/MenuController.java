@@ -7,7 +7,6 @@ import com.darknight.platform.system.menu.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,7 +20,7 @@ import java.util.Map;
  * 菜单实体控制层
  * Created by DarKnight on 2015/4/1.
  */
-@Controller
+@RestController
 @RequestMapping(value = "platform/system/menu")
 public class MenuController {
     private MenuService menuService;
@@ -43,15 +42,6 @@ public class MenuController {
         }
         Menu menu = new Menu();
         return menu;
-    }
-
-    /**
-     * esayUI页面
-     * @return
-     */
-    @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
-    public String esayuiPage() {
-        return "platform/menu/menu_easyui";
     }
 
     /**

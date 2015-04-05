@@ -6,7 +6,6 @@ import com.darknight.platform.account.permission.service.PermissionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,7 +17,7 @@ import java.util.Map;
 /**
  * Created by DarKnight on 2014/5/26 0026.
  */
-@Controller
+@RestController
 @RequestMapping(value = "platform/account/permission")
 public class PermissionController {
     private PermissionService permissionService;
@@ -42,17 +41,7 @@ public class PermissionController {
         return permission;
     }
 
-    /**
-     * esayUI页面
-     * @return
-     */
-    @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
-    public String esayuiPage() {
-        return "platform/permission/permission_easyui";
-    }
-
     @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
-    @ResponseBody
     public String dataGrid(HttpServletRequest request) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");
@@ -84,7 +73,6 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    @ResponseBody
     public String save(@ModelAttribute("permission") Permission permission) {
         //保存操作状态
         String status = "success";
@@ -106,7 +94,6 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    @ResponseBody
     public String update(@ModelAttribute("permission") Permission permission) {
         //保存操作状态
         String status = "success";
@@ -130,7 +117,6 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
-    @ResponseBody
     public String delete(@RequestParam("id") String permissionId) {
         //保存操作状态
         String status = "success";
