@@ -95,6 +95,10 @@
         });
 
     </script>
+
+    <%-- 用户新增对话框对应脚本 --%>
+    <inheritance:block name="dialogScript">
+    </inheritance:block>
 </inheritance:override>
 <!-- 继承父类 base.jsp -->
 <%@ include file="/WEB-INF/views/base/base.jsp" %>

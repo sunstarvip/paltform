@@ -110,5 +110,20 @@ Base.prototype = {
      */
     cancel: function() {
         $('#'+this.dialogId).dialog('close');
+    },
+    /**
+     * 清除树型下拉列表数据
+     * @param combotreeId 树型下拉列表
+     * @param iconCls 图表样式
+     */
+    combotreeClear: function(combotreeId, iconCls) {
+        $('#'+combotreeId).combotree({
+            icons: [{
+                iconCls: iconCls,
+                handler: function(e){
+                    $(e.data.target).combotree('clear');
+                }
+            }]
+        })
     }
 }

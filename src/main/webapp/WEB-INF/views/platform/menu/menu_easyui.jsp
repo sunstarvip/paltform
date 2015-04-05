@@ -31,7 +31,7 @@
                     <td>父级菜单:</td>
                     <td>
                         <select class="easyui-combotree" id="parentId" name="parent.id"
-                                url="${ctx}/platform/system/menu/menuTree" style="width:156px;"/>
+                                url="${ctx}/platform/system/menu/menuTree" style="width:156px;" />
                     </td>
                 </tr>
             </table>
@@ -41,6 +41,18 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="menu.save()">保存</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="menu.cancel()">取消</a>
     </div>
+</inheritance:override>
+
+<%-- 用户新增对话框对应脚本 --%>
+<inheritance:override name="dialogScript">
+    <script>
+        // 页面JS初始化
+        $(function() {
+            // 未系统菜单弹窗中下拉列表添加清除图标
+            menu.combotreeClear('parentId', 'icon-clear');
+
+        });
+    </script>
 </inheritance:override>
 
 <!-- 继承父类 base.jsp -->
