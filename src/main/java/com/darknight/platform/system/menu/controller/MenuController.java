@@ -49,8 +49,7 @@ public class MenuController {
      * @param request
      * @return
      */
-    @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
-    @ResponseBody
+    @RequestMapping(value={"dataGrid"})
     public String dataGrid(HttpServletRequest request) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");
@@ -83,8 +82,7 @@ public class MenuController {
      * @param request
      * @return
      */
-    @RequestMapping(value={"menuTree"}, method={RequestMethod.POST})
-    @ResponseBody
+    @RequestMapping(value={"menuTree"})
     public String menuTree(HttpServletRequest request) {
         List<Menu> menuList = menuService.findAllVisibleTopMenu();
         List<MenuNode> menuNodeList = menuService.makeNode(menuList);
@@ -99,11 +97,14 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    @ResponseBody
     public String save(@ModelAttribute("menu") Menu menu) {
         //保存操作状态
         String status = "success";
         if(menu != null) {
+            // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
+            if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
+                menu.setParent(null);
+            }
             menu = menuService.save(menu);
         }else {
             status = "fail";
@@ -121,11 +122,14 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    @ResponseBody
     public String update(@ModelAttribute("menu") Menu menu) {
         //保存操作状态
         String status = "success";
         if(menu != null) {
+            // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
+            if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
+                menu.setParent(null);
+            }
             menu.setUpdateTime(new Date());
             menu = menuService.save(menu);
         }else {
@@ -145,7 +149,6 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
-    @ResponseBody
     public String delete(@RequestParam("id") String menuId) {
         //保存操作状态
         String status = "success";

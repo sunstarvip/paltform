@@ -21,7 +21,7 @@
            toolbar="#toolbar"
            data-options="singleSelect: true,
            collapsible: true, nowrap: false, striped: true,
-           idField: 'id', method: 'post'">
+           idField: 'id'">
         <%-- 第一行 --%>
         <thead>
             <tr>

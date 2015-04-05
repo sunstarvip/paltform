@@ -42,7 +42,7 @@ public class RoleController {
         return role;
     }
 
-    @RequestMapping(value={"dataGrid"}, method={RequestMethod.POST})
+    @RequestMapping(value={"dataGrid"})
     public String dataGrid(HttpServletRequest request) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
         String pageStr = request.getParameter("page");

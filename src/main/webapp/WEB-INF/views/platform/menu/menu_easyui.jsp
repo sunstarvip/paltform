@@ -30,8 +30,8 @@
                 <tr>
                     <td>父级菜单:</td>
                     <td>
-                        <select class="easyui-combotree" id="parentId" name="parent.id" url="${ctx}/platform/system/menu/menuTree"
-                                data-options="method: 'post'" style="width:156px;"/>
+                        <select class="easyui-combotree" id="parentId" name="parent.id"
+                                url="${ctx}/platform/system/menu/menuTree" style="width:156px;"/>
                     </td>
                 </tr>
             </table>
