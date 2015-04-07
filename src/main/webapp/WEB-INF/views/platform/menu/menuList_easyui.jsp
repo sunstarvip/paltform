@@ -12,7 +12,8 @@
 </inheritance:override>
 
 <%--重定义父页面name=centerContent的内容--%>
-<inheritance:override name="centerContent">
+<inheritance:override name="body">
+    <body>
     <%--<table id="userTable"></table>--%>
     <table class="easyui-datagrid" id="menuTable" title="系统菜单列表"
            iconCls='icon-save' rownumbers="true" fitColumns="true"
@@ -65,9 +66,6 @@
     <%-- 用户新增对话框 --%>
     <inheritance:block name="addDialog">
     </inheritance:block>
-</inheritance:override>
-
-<inheritance:override name="centerScript">
 
     <script>
         // 时间格式化JS
@@ -99,6 +97,8 @@
     <%-- 用户新增对话框对应脚本 --%>
     <inheritance:block name="dialogScript">
     </inheritance:block>
+    </body>
 </inheritance:override>
+
 <!-- 继承父类 base.jsp -->
 <%@ include file="/WEB-INF/views/base/base.jsp" %>

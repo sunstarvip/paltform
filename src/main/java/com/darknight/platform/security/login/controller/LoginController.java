@@ -50,4 +50,13 @@ public class LoginController {
     public String index(HttpServletRequest request) {
         return "platform/system/index";
     }
+
+    /**
+     * esayUI页面
+     * @return
+     */
+    @RequestMapping(value={"indexPage"}, method={RequestMethod.GET})
+    public String indexPage() {
+        return "platform/system/index_easyui";
+    }
 }

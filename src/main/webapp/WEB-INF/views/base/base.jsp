@@ -70,7 +70,7 @@
 
     <%-- West Block --%>
     <inheritance:block name="west">
-        <div data-options="region:'west',title:'West',split:true" style="width:200px;">
+        <div data-options="region:'west',title:'系统菜单',split:true" style="width:200px;">
             <inheritance:block name="westContent">
                 <ul id="menuTree" class="easyui-tree" url="${ctx}/platform/system/menu/menuTree"
                     data-options="method: 'post'" >
@@ -83,7 +83,7 @@
 
     <%-- Center Block --%>
     <inheritance:block name="center">
-        <div data-options="region:'center',title:'center title'" style="padding:5px;">
+        <div id="centerBlock" class="easyui-tabs" data-options="region:'center'" style="padding:5px;">
             <inheritance:block name="centerContent">
 
             </inheritance:block>
@@ -104,26 +104,37 @@
 
         <inheritance:block name="westScript">
             <script>
-                function buildTree(rows) {
-                    function exists(rows, parentId) {
-                        for(var i=0; i<rows.length; i++) {
-                            if (rows[i].id == parentId) return true;
+                // 打开系统菜单对应的tab页面
+                function addTab(title, url){
+                    if ($('#centerBlock').tabs('exists', title)) {
+                        $('#centerBlock').tabs('select', title);
+                    } else {
+                        // 处理内部url与外部url之间的关系
+                        if(url.indexOf("http://") == -1) {
+                            url = '${ctx}' + url;
                         }
-                        if (rows[i].id == parentId) return true;
-                    }
-
-                    var nodes = [];
-                    // 找出顶层节点
-                    for(var i=0; i<rows.length; i++){
-                        var row = rows[i];
-                        if (!exists(rows, row.parentId)) {
-                            nodes.push({
-                                id:row.id,
-                                text:row.name
-                            });
-                        }
+                        var content = '<iframe scrolling="auto" frameborder="0" src="'+url+'" style="width:100%;height:100%;"></iframe>';
+                        $('#centerBlock').tabs('add', {
+                            title:title,
+                            content:content,
+                            closable:true
+                        });
                     }
                 }
+
+                //页面JS初始化
+                $(function() {
+                    // 添加点击左侧系统菜单在右侧tab标签中打开页面的效果
+                    $('#menuTree').tree({
+                        onSelect: function(node){
+                            addTab(node['text'], node['urlPath']);
+                            console.log(node);
+                            console.log(node['text']);
+                            console.log(node['urlPath']);
+                        }
+                    });
+
+                });
             </script>
         </inheritance:block>
 
