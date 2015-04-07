@@ -12,8 +12,9 @@
 </inheritance:override>
 
 <%--重定义父页面name=centerContent的内容--%>
-<inheritance:override name="centerContent">
-    <%--<table id="userTable"></table>--%>
+<inheritance:override name="body">
+    <body>
+        <%--<table id="userTable"></table>--%>
     <table class="easyui-datagrid" id="permissionTable" title="权限列表"
            iconCls='icon-save' rownumbers="true" fitColumns="true"
            pagination="true" datapagesize="10"
@@ -22,31 +23,31 @@
            data-options="singleSelect: true,
            collapsible: true, nowrap: false, striped: true,
            idField: 'id'">
-        <%-- 第一行 --%>
+            <%-- 第一行 --%>
         <thead>
-            <tr>
-                <th colspan="3" data-options="align:'center'">基本信息</th>
-                <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
-            </tr>
+        <tr>
+            <th colspan="3" data-options="align:'center'">基本信息</th>
+            <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
+        </tr>
         </thead>
-        <%-- 第二行 --%>
-        <%-- 冻结行 --%>
+            <%-- 第二行 --%>
+            <%-- 冻结行 --%>
         <thead data-options="frozen:true">
-            <tr>
-                <th field="id" align="center" data-options="checkbox: true">ID</th>
-                <th field="name" width="80" align="center">权限名称</th>
-            </tr>
+        <tr>
+            <th field="id" align="center" data-options="checkbox: true">ID</th>
+            <th field="name" width="80" align="center">权限名称</th>
+        </tr>
         </thead>
-        <%-- 非冻结行 --%>
+            <%-- 非冻结行 --%>
         <thead>
-            <tr>
-                <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
-                <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="description" width="240" align="center">权限描述</th>
-            </tr>
+        <tr>
+            <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
+            <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
+            <th field="description" width="240" align="center">权限描述</th>
+        </tr>
         </thead>
     </table>
-    <%-- 搜索区域 --%>
+        <%-- 搜索区域 --%>
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
@@ -61,32 +62,31 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="permission.doSearch('searchName')">查询</a>
         </span>
     </div>
-    <%-- 用户新增对话框 --%>
+        <%-- 用户新增对话框 --%>
     <inheritance:block name="addDialog">
     </inheritance:block>
-</inheritance:override>
 
-<inheritance:override name="centerScript">
-
-    <script>
-        // 时间格式化JS
-        function formatterDate(val,row) {
-            if(!!val) {
-                return moment(val).format('YYYY-MM-DD HH:mm:ss');
-            }else {
-                return "无";
+        <script>
+            // 时间格式化JS
+            function formatterDate(val,row) {
+                if(!!val) {
+                    return moment(val).format('YYYY-MM-DD HH:mm:ss');
+                }else {
+                    return "无";
+                }
             }
-        }
 
-        // 定义全局JS对象
-        var permission = new Permission('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
+            // 定义全局JS对象
+            var permission = new Permission('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
 
-        //页面JS初始化
-        $(function() {
-            <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');--%>
-        });
+            //页面JS初始化
+            $(function() {
+                <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');--%>
+            });
 
-    </script>
+        </script>
+    </body>
 </inheritance:override>
+
 <!-- 继承父类 base.jsp -->
 <%@ include file="/WEB-INF/views/base/base.jsp" %>

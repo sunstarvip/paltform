@@ -43,7 +43,7 @@
             <tr>
                 <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
                 <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="urlPath" width="240" align="center">菜单URL</th>
+                <th field="urlPath" width="240" align="left">菜单URL</th>
             </tr>
         </thead>
     </table>

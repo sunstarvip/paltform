@@ -11,8 +11,9 @@
 </inheritance:override>
 
 <%--重定义父页面name=centerContent的内容--%>
-<inheritance:override name="centerContent">
-    <%--<table id="userTable"></table>--%>
+<inheritance:override name="body">
+    <body>
+        <%--<table id="userTable"></table>--%>
     <table class="easyui-datagrid" id="userTable" title="用户列表"
            iconCls='icon-save' rownumbers="true" fitColumns="true"
            pagination="true" datapagesize="10"
@@ -21,32 +22,32 @@
            data-options="singleSelect: true,
            collapsible: true, nowrap: false, striped: true,
            idField: 'id'">
-        <%-- 第一行 --%>
+            <%-- 第一行 --%>
         <thead>
-            <tr>
-                <th colspan="4" data-options="align:'center'">基本信息</th>
-                <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
-            </tr>
+        <tr>
+            <th colspan="4" data-options="align:'center'">基本信息</th>
+            <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
+        </tr>
         </thead>
-        <%-- 第二行 --%>
-        <%-- 冻结行 --%>
+            <%-- 第二行 --%>
+            <%-- 冻结行 --%>
         <thead data-options="frozen:true">
-            <tr>
-                <th field="id" align="center" data-options="checkbox: true">ID</th>
-                <th field="accountName" width="80" align="center">账户名称</th>
-            </tr>
+        <tr>
+            <th field="id" align="center" data-options="checkbox: true">ID</th>
+            <th field="accountName" width="80" align="center">账户名称</th>
+        </tr>
         </thead>
-        <%-- 非冻结行 --%>
+            <%-- 非冻结行 --%>
         <thead>
-            <tr>
-                <th field="name" width="120" align="center">用户昵称</th>
-                <th field="phoneNum" width="80" align="center">手机号码</th>
-                <th field="mailAddress" width="150" align="center">邮箱地址</th>
-                <th field="address" width="100" align="center">联系地址</th>
-            </tr>
+        <tr>
+            <th field="name" width="120" align="center">用户昵称</th>
+            <th field="phoneNum" width="80" align="center">手机号码</th>
+            <th field="mailAddress" width="150" align="center">邮箱地址</th>
+            <th field="address" width="100" align="center">联系地址</th>
+        </tr>
         </thead>
     </table>
-    <%-- 搜索区域 --%>
+        <%-- 搜索区域 --%>
     <div id="toolbar" style="padding:2px 5px;">
         <span id="buttonBlock" align="left">
             <%-- 新增 --%>
@@ -65,30 +66,27 @@
                onclick="doSearch()">查询</a>
         </span>
     </div>
-    <%-- 用户新增对话框 --%>
+        <%-- 用户新增对话框 --%>
     <inheritance:block name="addDialog">
     </inheritance:block>
-</inheritance:override>
 
-<inheritance:override name="centerScript">
+        <script>
 
-    <script>
-
-        function doSearch(){
-            var searchKeyMap= {
-                accountName: 'searchAccountName',
-                phoneNum: 'searchPhoneNum'
+            function doSearch(){
+                var searchKeyMap= {
+                    accountName: 'searchAccountName',
+                    phoneNum: 'searchPhoneNum'
+                }
+                user.doSearch(searchKeyMap);
             }
-            user.doSearch(searchKeyMap);
-        }
 
-        // 定义全局JS对象
-        var user = new User('${ctx}', 'userTable', 'userDialog', 'userForm');
+            // 定义全局JS对象
+            var user = new User('${ctx}', 'userTable', 'userDialog', 'userForm');
 
-        //页面JS初始化
-        $(function() {
-        //user table初始化
-            <%--$('#userTable').datagrid({--%>
+            //页面JS初始化
+            $(function() {
+                //user table初始化
+                <%--$('#userTable').datagrid({--%>
                 <%--title: '用户列表',--%>
                 <%--iconCls: 'icon-save',--%>
                 <%--//是否截取超长字符串--%>
@@ -101,17 +99,17 @@
                 <%--//主键属性--%>
                 <%--idField: 'id',--%>
                 <%--frozenColumns: [[--%>
-                    <%--{field: 'id',checkbox: true},--%>
-                    <%--{title: '账户名称',field: 'accountName',width: 80}--%>
+                <%--{field: 'id',checkbox: true},--%>
+                <%--{title: '账户名称',field: 'accountName',width: 80}--%>
                 <%--]],--%>
                 <%--columns: [[--%>
-                    <%--{title: '基本信息',colspan: 4},--%>
-                    <%--{title: '操作',field: 'opt',width: 100,align: 'center', rowspan: 2}--%>
+                <%--{title: '基本信息',colspan: 4},--%>
+                <%--{title: '操作',field: 'opt',width: 100,align: 'center', rowspan: 2}--%>
                 <%--],[--%>
-                    <%--{title: '用户昵称',field: 'name',width: 120},--%>
-                    <%--{title: '联系电话',field: 'phoneNum',width: 220},--%>
-                    <%--{title: '邮箱地址',field: 'mailAddress',width: 150},--%>
-                    <%--{title: '联系地址',field: 'address',width: 100}--%>
+                <%--{title: '用户昵称',field: 'name',width: 120},--%>
+                <%--{title: '联系电话',field: 'phoneNum',width: 220},--%>
+                <%--{title: '邮箱地址',field: 'mailAddress',width: 150},--%>
+                <%--{title: '联系地址',field: 'address',width: 100}--%>
                 <%--]],--%>
                 <%--//是否分页--%>
                 <%--pagination: true,--%>
@@ -124,27 +122,27 @@
                 <%--//加载数据时显示的文字--%>
                 <%--//loadMsg: '正在加载数据…',--%>
                 <%--toolbar: [{--%>
-                    <%--id: 'btnadd',--%>
-                    <%--text: '新增',--%>
-                    <%--iconCls: 'icon-add',--%>
-                    <%--handler: function(){--%>
-                        <%--//$('#btnsave').linkbutton('enable');--%>
-<%--//                        addUser();--%>
-<%--//                        var add_user_dialog = $('#addUser').dialog('open');--%>
-                    <%--}--%>
+                <%--id: 'btnadd',--%>
+                <%--text: '新增',--%>
+                <%--iconCls: 'icon-add',--%>
+                <%--handler: function(){--%>
+                <%--//$('#btnsave').linkbutton('enable');--%>
+                <%--//                        addUser();--%>
+                <%--//                        var add_user_dialog = $('#addUser').dialog('open');--%>
+                <%--}--%>
                 <%--},{--%>
-                    <%--id: 'btncut',--%>
-                    <%--text: '删除',--%>
-                    <%--iconCls: 'icon-cancel',--%>
-                    <%--handler: function(){--%>
-<%--//                        $('#btnsave').linkbutton('enable');--%>
-<%--//                        alert('cut')--%>
-                    <%--}--%>
+                <%--id: 'btncut',--%>
+                <%--text: '删除',--%>
+                <%--iconCls: 'icon-cancel',--%>
+                <%--handler: function(){--%>
+                <%--//                        $('#btnsave').linkbutton('enable');--%>
+                <%--//                        alert('cut')--%>
+                <%--}--%>
                 <%--}]--%>
 
-            <%--});--%>
+                <%--});--%>
 
-            //通过函数调用设置分页控件
+                //通过函数调用设置分页控件
 //        var userPage = $('#userTable').datagrid('getPager');
 //        $(userPage).pagination({
 //            pageSize: 10,//每页显示的记录条数，默认为10
@@ -158,9 +156,11 @@
 //             $(this).pagination('loaded');
 //             }*/
 //        });
-        });
+            });
 
-    </script>
+        </script>
+    </body>
 </inheritance:override>
+
 <!-- 继承父类 base.jsp -->
 <%@ include file="/WEB-INF/views/base/base.jsp" %>
