@@ -1,5 +1,6 @@
 package com.darknight.platform.account.permission.controller;
 
+import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.permission.entity.Permission;
 import com.darknight.platform.account.permission.service.PermissionService;
@@ -61,10 +62,13 @@ public class PermissionController {
             pageRequest = new PageRequest(0, 10);
         }
 
+        // 生成分页数据
         Page<Permission> permissionPage = permissionService.findSearchPage(searchMap, pageRequest);
+        // 利用分页查询出来的数据生成数据表格，并JSON化
+        DataGridEntity<Permission> permissionDataGrid = permissionService.makeDataGrid(permissionPage);
 
-        String pageJson = JsonUtil.objToJsonString(permissionPage.getContent());
-        return pageJson;
+        String dataGridJson = JsonUtil.objToJsonString(permissionDataGrid);
+        return dataGridJson;
     }
 
     /**

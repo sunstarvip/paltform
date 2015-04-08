@@ -1,5 +1,6 @@
 package com.darknight.platform.account.user.controller;
 
+import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
@@ -73,10 +74,13 @@ class UserController {
             pageRequest = new PageRequest(0, 10);
         }
 
+        // 生成分页数据
         Page<User> userPage = userService.findSearchPage(searchMap, pageRequest);
+        // 利用分页查询出来的数据生成数据表格，并JSON化
+        DataGridEntity<User> userDataGrid = userService.makeDataGrid(userPage);
 
-        String pageJson = JsonUtil.objToJsonString(userPage.getContent());
-        return pageJson;
+        String dataGridJson = JsonUtil.objToJsonString(userDataGrid);
+        return dataGridJson;
     }
 
     /**

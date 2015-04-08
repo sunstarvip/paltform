@@ -14,7 +14,6 @@ import java.util.List;
  * Created by DarKnight on 2015/3/17.
  */
 @Entity
-@DynamicInsert()
 @DynamicUpdate()
 @Table(name = "t_platform_menu")
 public class Menu extends DefaultEntity {

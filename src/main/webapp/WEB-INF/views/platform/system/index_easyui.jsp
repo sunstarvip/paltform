@@ -88,9 +88,9 @@
                         }
                         var content = '<iframe scrolling="auto" frameborder="0" src="'+url+'" style="width:100%;height:100%;"></iframe>';
                         $('#centerBlock').tabs('add', {
-                            title:title,
-                            content:content,
-                            closable:true
+                            title: title,
+                            content: content,
+                            closable: true  // 是否可关闭
                         });
                     }
                 }
@@ -101,9 +101,6 @@
                     $('#menuTree').tree({
                         onSelect: function(node){
                             addTab(node['text'], node['urlPath']);
-                            console.log(node);
-                            console.log(node['text']);
-                            console.log(node['urlPath']);
                         }
                     });
 

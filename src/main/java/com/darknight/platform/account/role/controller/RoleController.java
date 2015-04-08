@@ -1,5 +1,6 @@
 package com.darknight.platform.account.role.controller;
 
+import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
@@ -62,10 +63,13 @@ public class RoleController {
             pageRequest = new PageRequest(0, 10);
         }
 
+        // 生成分页数据
         Page<Role> rolePage = roleService.findSearchPage(searchMap, pageRequest);
+        // 利用分页查询出来的数据生成数据表格，并JSON化
+        DataGridEntity<Role> roleDataGrid = roleService.makeDataGrid(rolePage);
 
-        String pageJson = JsonUtil.objToJsonString(rolePage.getContent());
-        return pageJson;
+        String dataGridJson = JsonUtil.objToJsonString(roleDataGrid);
+        return dataGridJson;
     }
 
     /**

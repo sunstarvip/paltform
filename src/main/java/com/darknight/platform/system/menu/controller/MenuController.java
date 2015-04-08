@@ -1,5 +1,6 @@
 package com.darknight.platform.system.menu.controller;
 
+import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.system.menu.entity.Menu;
 import com.darknight.platform.system.menu.entity.MenuNode;
@@ -71,10 +72,13 @@ public class MenuController {
             pageRequest = new PageRequest(0, 10);
         }
 
+        // 生成分页数据
         Page<Menu> menuPage = menuService.findSearchPage(searchMap, pageRequest);
+        // 利用分页查询出来的数据生成数据表格，并JSON化
+        DataGridEntity<Menu> menuDataGrid = menuService.makeDataGrid(menuPage);
 
-        String pageJson = JsonUtil.objToJsonString(menuPage.getContent());
-        return pageJson;
+        String dataGridJson = JsonUtil.objToJsonString(menuDataGrid);
+        return dataGridJson;
     }
 
     /**
