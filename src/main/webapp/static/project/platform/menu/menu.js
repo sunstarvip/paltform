@@ -36,16 +36,8 @@ var menuExtend = {
 
         defaultOption = $.extend({}, defaultOption, option);
 
-        Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
-    },
-    openDialog: function(option) {
-
-        var dialogObj = Base.prototype.openDialog.call(this);
-        if(!dialogObj) {
-            this.initDialog(option);
-            //dialogObj = parent.$('#menuDialog').dialog('open');
-        }
-        //return dialogObj;
+        var dialogObj = Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+        return dialogObj;
     },
 
     /**

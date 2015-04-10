@@ -5,11 +5,40 @@ function Role(ctx, tableId, dialogId, formId) {
 
 // 定义重载方法与拓展方法
 var roleExtend = {
+    initDialog: function(option) {
+        var buttons = [{
+            id: 'roleSave',
+            text: '保存',
+            iconCls: 'icon-ok'
+        },{
+            id: 'roleCancel',
+            text: '取消',
+            iconCls: 'icon-cancel'
+        }];
+
+        var defaultOption = {
+            buttons: buttons,
+
+            width: 350
+        }
+
+        defaultOption = $.extend({}, defaultOption, option);
+
+        var dialogObj = Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+        return dialogObj;
+    },
     add: function(dialogTitle) {
-        Base.prototype.add.call(this, dialogTitle, '/platform/account/role/save');
+        var dialogPath = '/platform/account/role/dialogPage';
+        var urlPath = '/platform/account/role/save';
+        Base.prototype.add.call(this, dialogTitle, dialogPath, urlPath);
     },
     edit: function(dialogTitle) {
-        Base.prototype.edit.call(this, dialogTitle, '/platform/account/role/update');
+        var row = $('#'+this.tableId).datagrid('getSelected');
+        if(row) {
+            var dialogPath = '/platform/account/role/dialogPage?roleId='+row['id'];
+            var urlPath = '/platform/account/role/update';
+            Base.prototype.edit.call(this, dialogTitle, dialogPath, urlPath);
+        }
     },
     delete: function() {
         Base.prototype.delete.call(this, '删除角色','是否确认删除选中角色？', '/platform/account/role/delete');

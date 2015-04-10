@@ -29,16 +29,6 @@
         </table>
     </form>
 
-    <%--<script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>--%>
-    <%--<script type="text/javascript" src="${ctx}/static/project/platform/menu/menu.js" ></script>--%>
-    <%--<script>--%>
-        <%----%>
-        <%--//页面JS初始化--%>
-        <%--$(function() {--%>
-            <%----%>
-        <%--});--%>
-
-    <%--</script>--%>
     </body>
 </inheritance:override>
 

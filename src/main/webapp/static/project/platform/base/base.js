@@ -36,12 +36,15 @@ Base.prototype = {
 
         var dialogStr = '<div id="' + this.dialogId + '" ></div>';
         parent.$('#' + targetId).append(dialogStr);
-        parent.$('#' + this.dialogId).dialog(defaultOption);
+        var dialogObj = parent.$('#' + this.dialogId).dialog(defaultOption);
+        return dialogObj;
     },
-    openDialog: function() {
+    openDialog: function(option) {
         var dialogObj = null;
         if(!!parent.$('#' + this.dialogId)) {
             dialogObj = parent.$('#' + this.dialogId).dialog('open');
+        }else {
+            dialogObj = this.initDialog(option);
         }
         return dialogObj;
     },

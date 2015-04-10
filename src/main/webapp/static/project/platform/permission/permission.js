@@ -26,15 +26,6 @@ var permissionExtend = {
 
         Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
     },
-    openDialog: function(option) {
-
-        var dialogObj = Base.prototype.openDialog.call(this);
-        if(!dialogObj) {
-            this.initDialog(option);
-            //dialogObj = parent.$('#permissionDialog').dialog('open');
-        }
-        //return dialogObj;
-    },
     add: function(dialogTitle) {
         var dialogPath = '/platform/account/permission/dialogPage';
         var urlPath = '/platform/account/permission/save';
