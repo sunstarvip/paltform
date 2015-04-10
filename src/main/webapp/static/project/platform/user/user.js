@@ -5,11 +5,40 @@ function User(ctx, tableId, dialogId, formId) {
 
 // 定义重载方法与拓展方法
 var userExtend = {
+    initDialog: function(option) {
+        var buttons = [{
+            id: 'userSave',
+            text: '保存',
+            iconCls: 'icon-ok'
+        },{
+            id: 'userCancel',
+            text: '取消',
+            iconCls: 'icon-cancel'
+        }];
+
+        var defaultOption = {
+            buttons: buttons,
+
+            width: 350
+        }
+
+        defaultOption = $.extend({}, defaultOption, option);
+
+        var dialogObj = Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+        return dialogObj;
+    },
     add: function(dialogTitle) {
-        Base.prototype.add.call(this, dialogTitle, '/platform/account/user/save');
+        var dialogPath = '/platform/account/user/dialogPage';
+        var urlPath = '/platform/account/user/save';
+        Base.prototype.add.call(this, dialogTitle, dialogPath, urlPath);
     },
     edit: function(dialogTitle) {
-        Base.prototype.edit.call(this, dialogTitle, '/platform/account/user/update');
+        var row = $('#'+this.tableId).datagrid('getSelected');
+        if(row) {
+            var dialogPath = '/platform/account/user/dialogPage?userId='+row['id'];
+            var urlPath = '/platform/account/user/update';
+            Base.prototype.edit.call(this, dialogTitle, dialogPath, urlPath);
+        }
     },
     delete: function() {
         Base.prototype.delete.call(this, '删除用户','是否确认删除选中用户？', '/platform/account/user/delete');

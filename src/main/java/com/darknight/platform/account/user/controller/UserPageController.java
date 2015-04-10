@@ -1,9 +1,16 @@
 package com.darknight.platform.account.user.controller;
 
+import com.darknight.platform.account.user.entity.User;
+import com.darknight.platform.account.user.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -13,6 +20,26 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = "platform/account/user")
 class UserPageController {
+    private UserService userService;
+
+    @Resource
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    /**
+     * 通过用户ID由Spring注入用户对象
+     * @param userId 用户ID
+     * @return
+     */
+    @ModelAttribute("user")
+    public User getUser(@RequestParam(value = "userId", required = false) String userId) {
+        if (StringUtils.isNotBlank(userId)) {
+            return userService.find(userId);
+        }
+        User user = new User();
+        return user;
+    }
 
     /**
      * 列表页面
@@ -34,4 +61,9 @@ class UserPageController {
         return "platform/user/user_easyui";
     }
 
+    @RequestMapping(value={"dialogPage"}, method={RequestMethod.GET})
+    public String dialogPage(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("user", user);
+        return "platform/user/userDialog_easyui";
+    }
 }

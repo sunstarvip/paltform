@@ -89,7 +89,7 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"checkAccountName"})
-    public String checkAccountName(@RequestParam("accountName") String accountName) {
+    public String checkAccountName(@RequestParam("accountName") String accountName, @RequestParam(value="id", required=false) String id) {
         // 操作状态
         boolean status = false;
         // 查询用户账户名是否已经存在对应用户
@@ -97,6 +97,11 @@ class UserController {
             User user = userService.findByAccountName(accountName);
             if(user == null) {
                 status = true;
+            }else {
+                // 编辑用户时当前用户ID与账户名称查询出的用户ID相同
+                if(StringUtils.isNotBlank(id) && StringUtils.equals(id, user.getId())) {
+                    status = true;
+                }
             }
         }
 
