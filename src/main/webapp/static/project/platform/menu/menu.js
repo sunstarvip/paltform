@@ -17,35 +17,70 @@ function Menu(ctx, tableId, dialogId, formId, treeId) {
  * @type {{add: Function, save: Function, edit: Function, delete: Function, doSearch: Function}}
  */
 var menuExtend = {
+    initDialog: function(option) {
+        var buttons = [{
+            id: 'menuSave',
+            text: '保存',
+            iconCls: 'icon-ok'
+        },{
+            id: 'menuCancel',
+            text: '取消',
+            iconCls: 'icon-cancel'
+        }];
+
+        var defaultOption = {
+            buttons: buttons,
+
+            width: 320
+        }
+
+        defaultOption = $.extend({}, defaultOption, option);
+
+        Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+    },
+    openDialog: function(option) {
+
+        var dialogObj = Base.prototype.openDialog.call(this);
+        if(!dialogObj) {
+            this.initDialog(option);
+            //dialogObj = parent.$('#menuDialog').dialog('open');
+        }
+        //return dialogObj;
+    },
+
     /**
      * 重载新增方法
      * @param dialogTitle 增改菜单的弹窗标题
      */
     add: function(dialogTitle) {
-        Base.prototype.add.call(this, dialogTitle, '/platform/system/menu/save');
+        var dialogPath = '/platform/system/menu/dialogPage';
+        var urlPath = '/platform/system/menu/save';
+        Base.prototype.add.call(this, dialogTitle, dialogPath, urlPath);
     },
     /**
      * 重载保存方法
      * @param treeId 菜单保存后需要重新加载的菜单树ID
      */
-    save: function() {
-        var dialogId = this.dialogId;
-        var tableId = this.tableId;
-        var treeId = this.treeId;
-        $('#'+this.formId).form('submit',{
-            url: this.urlPath,
+    save: function(obj) {
+        var dialogId = obj.dialogId;
+        var tableId = obj.tableId;
+        var formId = obj.formId;
+        var treeId = obj.treeId;
+        var urlPath = obj.urlPath;
+        parent.$('#' + formId).form('submit',{
+            url: urlPath,
             onSubmit: function(){
-                return $(this).form('validate');
+                return parent.$(this).form('validate');
             },
             success: function(result){
                 var result = eval('('+result+')');
                 if (result['status']=='success'){
                     // 关闭对话框
-                    $('#'+dialogId).dialog('close');
+                    parent.$('#'+dialogId).dialog('close');
                     // 重载权限信息列表
                     $('#'+tableId).datagrid('reload');
                     // 重载左侧系统菜单树
-                    $('#'+treeId).tree('reload');
+                    parent.$('#'+treeId).tree('reload');
                 }else {
                     $.messager.show({
                         title: '错误信息',
@@ -60,11 +95,13 @@ var menuExtend = {
      * @param dialogTitle 增改菜单的弹窗标题
      */
     edit: function(dialogTitle) {
-        Base.prototype.edit.call(this, dialogTitle, '/platform/system/menu/update');
         var row = $('#'+this.tableId).datagrid('getSelected');
-        if(!!row && !!row['parent']) {
-            $('#parentId').combotree('setValue', row['parent']['id']);
+        if(row) {
+            var dialogPath = '/platform/system/menu/dialogPage?menuId='+row['id'];
+            var urlPath = '/platform/system/menu/update';
+            Base.prototype.edit.call(this, dialogTitle, dialogPath, urlPath);
         }
+
     },
     /**
      * 重载删除方法
@@ -75,7 +112,7 @@ var menuExtend = {
         var treeId = this.treeId;
         var row = $('#'+tableId).datagrid('getSelected');
         if (row){
-            $.messager.confirm('删除系统菜单', '是否确认删除选中系统菜单？',
+            parent.$.messager.confirm('删除系统菜单', '是否确认删除选中系统菜单？',
                 function(e) {
                     if(e) {
                         $.post(ctx + '/platform/system/menu/delete',
@@ -86,7 +123,7 @@ var menuExtend = {
                                     // 重载角色信息列表
                                     $('#'+tableId).datagrid('reload');
                                     // 重载左侧系统菜单树
-                                    $('#'+treeId).tree('reload');
+                                    parent.$('#'+treeId).tree('reload');
                                 }else {
                                     // 展示错误信息
                                     $.messager.show({

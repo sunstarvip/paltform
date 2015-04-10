@@ -7,6 +7,7 @@
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
     <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+    <%--<script type="text/javascript" src="${ctx}/static/project/platform/menu/menu.js" ></script>--%>
 </inheritance:override>
 
 <inheritance:override name="body">
@@ -64,6 +65,11 @@
     </inheritance:block>
         <%--<div data-options="region:'center',title:'center title'" style="padding:5px;"></div>--%>
 
+        <div id="dialogBlock" ></div>
+        <%--<div id="dlg-buttons">--%>
+            <%--<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="menu.save()">保存</a>--%>
+            <%--<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="menu.cancel()">取消</a>--%>
+        <%--</div>--%>
 
     <inheritance:block name="scriptBlock">
         <inheritance:block name="northScript">

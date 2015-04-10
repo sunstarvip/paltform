@@ -19,32 +19,61 @@ function Base(ctx, tableId, dialogId, formId) {
  * @type {{add: Function, save: Function, edit: Function, delete: Function, cancel: Function}}
  */
 Base.prototype = {
+    initDialog: function(targetId, option) {
+
+        var style = {
+            padding: '10px 20px'
+        }
+
+        var defaultOption = {
+            width: 320,
+            style: style,
+            closed: true,
+            cache: false
+        }
+
+        defaultOption = $.extend({}, defaultOption, option);
+
+        var dialogStr = '<div id="' + this.dialogId + '" ></div>';
+        parent.$('#' + targetId).append(dialogStr);
+        parent.$('#' + this.dialogId).dialog(defaultOption);
+    },
+    openDialog: function() {
+        var dialogObj = null;
+        if(!!parent.$('#' + this.dialogId)) {
+            dialogObj = parent.$('#' + this.dialogId).dialog('open');
+        }
+        return dialogObj;
+    },
     /**
      * 通用新增方法
      * @param dialogTitle 增改实体的弹窗标题
      * @param urlPath 保存实体时的请求路径
      */
-    add: function(dialogTitle, urlPath) {
-        $('#'+this.dialogId).dialog('open').dialog('setTitle', dialogTitle);
-        $('#'+this.formId).form('clear');
+    add: function(dialogTitle, dialogPath, urlPath) {
+        this.openDialog();
+        parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('refresh', this.ctx + dialogPath);
         this.urlPath = this.ctx + urlPath;
+        parent.$('#'+this.formId).form('clear');
     },
     /**
      * 通用保存方法
      */
-    save: function() {
-        var dialogId = this.dialogId;
-        var tableId = this.tableId;
-        $('#'+this.formId).form('submit',{
-            url: this.urlPath,
+    save: function(obj) {
+        var dialogId = obj.dialogId;
+        var tableId = obj.tableId;
+        var formId = obj.formId;
+        var urlPath = obj.urlPath;
+        parent.$('#' + formId).form('submit',{
+            url: urlPath,
             onSubmit: function(){
-                return $(this).form('validate');
+                return parent.$(this).form('validate');
             },
             success: function(result){
                 var result = eval('('+result+')');
                 if (result['status']=='success'){
                     // 关闭对话框
-                    $('#'+dialogId).dialog('close');
+                    parent.$('#'+dialogId).dialog('close');
                     // 重载权限信息列表
                     $('#'+tableId).datagrid('reload');
                 }else {
@@ -61,11 +90,11 @@ Base.prototype = {
      * @param dialogTitle 增改实体的弹窗标题
      * @param urlPath 更新实体时的请求路径
      */
-    edit: function(dialogTitle, urlPath) {
+    edit: function(dialogTitle, dialogPath, urlPath) {
         var row = $('#'+this.tableId).datagrid('getSelected');
         if(row) {
-            $('#'+this.dialogId).dialog('open').dialog('setTitle', dialogTitle);
-            $('#'+this.formId).form('load', row);
+            this.openDialog();
+            parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('refresh', this.ctx + dialogPath);
             this.urlPath = this.ctx + urlPath;
         }
     },
@@ -80,7 +109,7 @@ Base.prototype = {
         var ctx = this.ctx;
         var row = $('#'+tableId).datagrid('getSelected');
         if (row){
-            $.messager.confirm(title, content,
+            parent.$.messager.confirm(title, content,
                 function(e) {
                     if(e) {
                         $.post(ctx + urlPath,
@@ -108,22 +137,7 @@ Base.prototype = {
      * 通用取消方法
      * 用于放弃增改实体操作时，关闭弹窗
      */
-    cancel: function() {
-        $('#'+this.dialogId).dialog('close');
-    },
-    /**
-     * 清除树型下拉列表数据
-     * @param combotreeId 树型下拉列表
-     * @param iconCls 图表样式
-     */
-    combotreeClear: function(combotreeId, iconCls) {
-        $('#'+combotreeId).combotree({
-            icons: [{
-                iconCls: iconCls,
-                handler: function(e){
-                    $(e.data.target).combotree('clear');
-                }
-            }]
-        })
+    cancel: function(obj) {
+        parent.$('#' + obj.dialogId).dialog('close');
     }
 }
