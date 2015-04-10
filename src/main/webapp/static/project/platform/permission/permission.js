@@ -5,11 +5,48 @@ function Permission(ctx, tableId, dialogId, formId) {
 
 // 定义重载方法与拓展方法
 var permissionExtend = {
+    initDialog: function(option) {
+        var buttons = [{
+            id: 'permissionSave',
+            text: '保存',
+            iconCls: 'icon-ok'
+        },{
+            id: 'permissionCancel',
+            text: '取消',
+            iconCls: 'icon-cancel'
+        }];
+
+        var defaultOption = {
+            buttons: buttons,
+
+            width: 350
+        }
+
+        defaultOption = $.extend({}, defaultOption, option);
+
+        Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+    },
+    openDialog: function(option) {
+
+        var dialogObj = Base.prototype.openDialog.call(this);
+        if(!dialogObj) {
+            this.initDialog(option);
+            //dialogObj = parent.$('#permissionDialog').dialog('open');
+        }
+        //return dialogObj;
+    },
     add: function(dialogTitle) {
-        Base.prototype.add.call(this, dialogTitle, '/platform/account/permission/save');
+        var dialogPath = '/platform/account/permission/dialogPage';
+        var urlPath = '/platform/account/permission/save';
+        Base.prototype.add.call(this, dialogTitle, dialogPath, urlPath);
     },
     edit: function(dialogTitle) {
-        Base.prototype.edit.call(this, dialogTitle, '/platform/account/permission/update');
+        var row = $('#'+this.tableId).datagrid('getSelected');
+        if(row) {
+            var dialogPath = '/platform/account/permission/dialogPage?permissionId='+row['id'];
+            var urlPath = '/platform/account/permission/update';
+            Base.prototype.edit.call(this, dialogTitle, dialogPath, urlPath);
+        }
     },
     delete: function() {
         Base.prototype.delete.call(this, '删除权限', '是否确认删除选中权限？', '/platform/account/permission/delete');

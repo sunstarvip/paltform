@@ -46,7 +46,7 @@ public class MenuPageController {
      */
     @RequestMapping(value={"esayuiPage"}, method={RequestMethod.GET})
     public String esayuiPage() {
-        return "platform/menu/menu_easyui_old";
+        return "platform/menu/menu_easyui";
     }
 
     @RequestMapping(value={"dialogPage"}, method={RequestMethod.GET})

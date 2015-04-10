@@ -74,7 +74,7 @@ Base.prototype = {
                 if (result['status']=='success'){
                     // 关闭对话框
                     parent.$('#'+dialogId).dialog('close');
-                    // 重载权限信息列表
+                    // 重载数据列表
                     $('#'+tableId).datagrid('reload');
                 }else {
                     $.messager.show({
