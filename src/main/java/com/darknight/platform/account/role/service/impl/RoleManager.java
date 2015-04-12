@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +30,7 @@ import java.util.Set;
 @Service
 @Transactional(readOnly = true)
 public class RoleManager extends BaseManager<Role, String> implements RoleService{
+    private final Logger logger = LoggerFactory.getLogger(RoleManager.class);
     private RoleDao roleDao;
 
     @Resource
@@ -36,17 +40,31 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
     }
 
     /**
+     * 根据用户ID, 查询该用户对应的角色对象列表
+     * @param userId 用户ID
+     * @return
+     */
+    @Override
+    public List<Role> findRoleListByUserId(String userId) {
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
+        criteria.createAlias("userList", "user").add(Restrictions.eq("user.id", userId));
+        List<Role> roleList = criteria.list();
+        return roleList;
+    }
+
+    /**
      * 根据用户登录账户名称, 查询该用户对应的角色对象
      * @param accountName
      * @return
      */
     @Override
-    public Set<Role> findRoles(String accountName) {
-        Criteria criteria = roleDao.createCriteria();
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+    public Set<Role> findRoleSetByAccountName(String accountName) {
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
         criteria.add(Restrictions.eq("enableTag", DefaultEntity.EnableTag.YES));
         criteria.createAlias("RoleList", "Role").add(Restrictions.eq("Role.accountName", accountName));
-        Set<Role> roleSet = new HashSet<Role>(criteria.list());
+        Set<Role> roleSet = new HashSet<>(criteria.list());
         return roleSet;
     }
 
@@ -71,17 +89,15 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
      */
     @Override
     public Set<String> findRoleIds(String accountName) {
-        Set<Role> roleSet = findRoles(accountName);
+        Set<Role> roleSet = findRoleSetByAccountName(accountName);
         Set<String> roleIdSet = findRoleIds(roleSet);
         return roleIdSet;
     }
 
     @Override
     public Page<Role> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 创建查询对象
-        Criteria criteria = roleDao.createCriteria();
-        // 添加查询规则
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {

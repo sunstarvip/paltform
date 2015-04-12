@@ -2,6 +2,8 @@ package com.darknight.platform.account.user.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
+import com.darknight.platform.account.role.entity.Role;
+import com.darknight.platform.account.role.service.RoleService;
 import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
 import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
@@ -14,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户管理类
@@ -26,10 +26,16 @@ import java.util.Map;
 @RequestMapping(value = "platform/account/user")
 class UserController {
     private UserService userService;
+    private RoleService roleService;
 
     @Resource
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Resource
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     /**
@@ -106,6 +112,30 @@ class UserController {
         }
 
         return JsonUtil.objToJsonString(status);
+    }
+
+    @RequestMapping(value={"getRoleList"})
+    public String getRoleList(@RequestParam("userId") String userId) {
+        List<Map<String, Object>> roleMapList = new ArrayList<>();
+        // 查询用户账户名是否已经存在对应用户
+        if(StringUtils.isNotBlank(userId)) {
+            List<Role> allRoleList = roleService.findAllVisible();
+            List<Role> roleList = roleService.findRoleListByUserId(userId);
+            if(roleList != null) {
+                Map<String, Object> roleMap = null;
+                for(Role role : allRoleList) {
+                    roleMap = new HashMap<>();
+                    roleMap.put("id", role.getId());
+                    roleMap.put("text", role.getName());
+                    if(roleList.contains(role)) {
+                        roleMap.put("selected", true);
+                    }
+                    roleMapList.add(roleMap);
+                }
+            }
+        }
+
+        return JsonUtil.objToJsonString(roleMapList);
     }
 
     /**

@@ -16,7 +16,7 @@
     <body>
         <table class="easyui-datagrid" id="roleTable" title="角色列表"
                iconCls='icon-save' rownumbers="true" fitColumns="true"
-               url="${ctx}/platform/account/permission/dataGrid"
+               url="${ctx}/platform/account/role/dataGrid"
                toolbar="#toolbar" collapsible="false" border="false"
                singleSelect="true" nowrap="false" striped="true"
                idField="id" pagination="true" pageNumber="1" pageSize="12"
