@@ -14,15 +14,13 @@
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="body">
     <body>
-        <%--<table id="userTable"></table>--%>
         <table class="easyui-datagrid" id="permissionTable" title="权限列表"
                iconCls='icon-save' rownumbers="true" fitColumns="true"
-               pagination="true" datapagesize="10"
                url="${ctx}/platform/account/permission/dataGrid"
-               toolbar="#toolbar"
-               data-options="singleSelect: true,
-               collapsible: true, nowrap: false, striped: true,
-               idField: 'id'">
+               toolbar="#toolbar" collapsible="false" border="false"
+               singleSelect="true" nowrap="false" striped="true"
+               idField="id" pagination="true" pageNumber="1" pageSize="12"
+               pageList="[12,20,30,40,50]" loadMsg="数据载入中…">
                 <%-- 第一行 --%>
             <thead>
             <tr>

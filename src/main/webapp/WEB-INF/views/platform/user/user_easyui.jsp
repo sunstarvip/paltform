@@ -13,15 +13,13 @@
 <%--重定义父页面name=centerContent的内容--%>
 <inheritance:override name="body">
     <body>
-        <%--<table id="userTable"></table>--%>
         <table class="easyui-datagrid" id="userTable" title="用户列表"
                iconCls='icon-save' rownumbers="true" fitColumns="true"
-               pagination="true" datapagesize="10"
                url="${ctx}/platform/account/user/dataGrid"
-               toolbar="#toolbar"
-               data-options="singleSelect: true,
-               collapsible: true, nowrap: false, striped: true,
-               idField: 'id'">
+               toolbar="#toolbar" collapsible="false" border="false"
+               singleSelect="true" nowrap="false" striped="true"
+               idField="id" pagination="true" pageNumber="1" pageSize="12"
+               pageList="[12,20,30,40,50]" loadMsg="数据载入中…" >
                 <%-- 第一行 --%>
             <thead>
             <tr>
@@ -55,7 +53,7 @@
                 <%-- 编辑 --%>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="user.edit('编辑用户')"></a>
                 <%-- 保存 --%>
-                <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
+                <%--<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>--%>
                 <%-- 删除 --%>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="user.delete()"></a>
             </span>
