@@ -39,9 +39,9 @@ class UserController {
     }
 
     /**
-     * 通过用户ID由Spring注入用户对象
+     * 通过用户ID查询对应用户对象
      * @param userId 用户ID
-     * @return
+     * @return User 用户对象
      */
     @ModelAttribute("user")
     public User getUser(@RequestParam(value = "userId", required = false) String userId) {
@@ -52,6 +52,11 @@ class UserController {
         return user;
     }
 
+    /**
+     * 通过角色ID列表查询对应角色实体列表
+     * @param roleIdList 角色ID列表
+     * @return List<Role> 角色实体列表
+     */
     @ModelAttribute("roleList")
     public List<Role> getRoleList(@RequestParam(value = "roleList.id", required = false) List<String> roleIdList) {
         List<Role> roleList = new ArrayList<>();
@@ -132,7 +137,7 @@ class UserController {
             roleList = roleService.findRoleListByUserId(userId);
         }
         // 查询所有可用角色
-        List<Role> allRoleList = roleService.findAllVisible();
+        List<Role> allRoleList = roleService.findAllOrderedVisible();
 
         if(allRoleList != null && !allRoleList.isEmpty()) {
             Map<String, Object> roleMap = null;

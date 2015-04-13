@@ -5,6 +5,7 @@ import com.darknight.platform.account.permission.entity.Permission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,12 @@ import java.util.Set;
  */
 public interface PermissionService extends BaseService<Permission, String> {
 
-
+    /**
+     * 根据角色ID, 查询该角色对应的权限对象列表
+     * @param roleId 角色ID
+     * @return List<Permission> 权限对象列表
+     */
+    List<Permission> findPermissionListByRoleId(String roleId);
 
     public Set<Permission> findPermissions(String accountName);
 

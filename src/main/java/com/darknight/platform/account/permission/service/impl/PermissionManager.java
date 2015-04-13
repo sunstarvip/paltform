@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DarKnight on 2014/4/26 0026.
@@ -27,12 +27,31 @@ import java.util.Set;
 @Service
 @Transactional(readOnly = true)
 public class PermissionManager extends BaseManager<Permission, String> implements PermissionService {
+    private final Logger logger = LoggerFactory.getLogger(PermissionManager.class);
     private PermissionDao permissionDao;
 
     @Resource
     public void setBaseDao(BaseJpaDao<Permission, String> baseDao) {
         super.setBaseDao(baseDao);
         this.permissionDao = (PermissionDao)baseDao;
+    }
+
+    /**
+     * 根据角色ID, 查询该角色对应的权限对象列表
+     * @param roleId 角色ID
+     * @return List<Permission> 权限对象列表
+     */
+    @Override
+    public List<Permission> findPermissionListByRoleId(String roleId) {
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的权限对象
+        Criteria criteria = getOrderedVisibleCriteria();
+        criteria.createAlias("roleList", "role").add(Restrictions.eq("role.id", roleId));
+        List<Permission> permissionList = criteria.list();
+        // 处理潜在空指针异常
+        if(permissionList == null) {
+            permissionList = new ArrayList<>();
+        }
+        return permissionList;
     }
 
     /**

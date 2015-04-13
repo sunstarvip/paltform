@@ -43,10 +43,12 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
      */
     @Override
     public List<Role> findRoleListByUserId(String userId) {
-        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的角色对象
         Criteria criteria = getOrderedVisibleCriteria();
-        criteria.createAlias("userList", "user").add(Restrictions.eq("user.id", userId));
+        criteria.createAlias("userList", "user");
+        criteria.add(Restrictions.eq("user.id", userId));
         List<Role> roleList = criteria.list();
+        // 处理潜在空指针异常
         if(roleList == null) {
             roleList = new ArrayList<>();
         }

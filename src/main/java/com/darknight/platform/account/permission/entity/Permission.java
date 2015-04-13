@@ -2,6 +2,7 @@ package com.darknight.platform.account.permission.entity;
 
 import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.platform.account.role.entity.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -39,7 +40,7 @@ public class Permission extends DefaultEntity {
         this.description = description;
     }
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "t_platform_permission_role",
             joinColumns ={@JoinColumn(name = "permission_id", referencedColumnName = "id") },
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
@@ -48,6 +49,7 @@ public class Permission extends DefaultEntity {
         return roleList;
     }
 
+    @JsonIgnore
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }

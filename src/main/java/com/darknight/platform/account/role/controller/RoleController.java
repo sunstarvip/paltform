@@ -2,6 +2,8 @@ package com.darknight.platform.account.role.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
 import com.darknight.core.util.JsonUtil;
+import com.darknight.platform.account.permission.entity.Permission;
+import com.darknight.platform.account.permission.service.PermissionService;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
@@ -11,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 角色管理类
@@ -23,16 +23,22 @@ import java.util.Map;
 @RequestMapping(value = "platform/account/role")
 public class RoleController {
     private RoleService roleService;
+    private PermissionService permissionService;
 
     @Resource
     public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
 
+    @Resource
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
     /**
-     * 通过角色ID由Spring注入角色对象
+     * 通过角色ID查询对应角色对象
      * @param roleId 角色ID
-     * @return
+     * @return Role 角色对象
      */
     @ModelAttribute("role")
     public Role getRole(@RequestParam(value = "roleId", required = false) String roleId) {
@@ -43,6 +49,25 @@ public class RoleController {
         return role;
     }
 
+    /**
+     * 通过权限ID列表查询对应权限实体列表
+     * @param permissionIdList 权限ID列表
+     * @return List<Permission> 权限实体列表
+     */
+    @ModelAttribute("permissionList")
+    public List<Permission> getRoleList(@RequestParam(value = "permissionList.id", required = false) List<String> permissionIdList) {
+        List<Permission> permissionList = new ArrayList<>();
+        if (permissionIdList != null && !permissionIdList.isEmpty()) {
+            permissionList = permissionService.find(permissionIdList);
+        }
+        return permissionList;
+    }
+
+    /**
+     * 查询数据表格
+     * @param request
+     * @return
+     */
     @RequestMapping(value={"dataGrid"})
     public String dataGrid(HttpServletRequest request) {
         //由于easyUI默认页码从1开始, 分页查询时需要相应处理
@@ -73,15 +98,50 @@ public class RoleController {
     }
 
     /**
+     * 查询所有未逻辑删除的权限列表
+     * 若角色ID不为空，则选中对应角色绑定的权限列表
+     * @param roleId 角色ID，非必须
+     * @return
+     */
+    @RequestMapping(value={"getPermissionList"})
+    public String getRoleList(@RequestParam(value="roleId", required=false) String roleId) {
+        List<Map<String, Object>> permissionMapList = new ArrayList<>();
+        List<Permission> permissionList = new ArrayList<>();
+        if(StringUtils.isNotBlank(roleId)) {
+            // 查询对应角色是否已经绑定过权限
+            permissionList = permissionService.findPermissionListByRoleId(roleId);
+        }
+        // 查询所有可用角色
+        List<Permission> allPermissionList = permissionService.findAllOrderedVisible();
+
+        if(allPermissionList != null && !allPermissionList.isEmpty()) {
+            Map<String, Object> permissionMap = null;
+            for(Permission permission : allPermissionList) {
+                permissionMap = new HashMap<>();
+                permissionMap.put("id", permission.getId());
+                permissionMap.put("text", permission.getName());
+                if(permissionList.contains(permission)) {
+                    permissionMap.put("selected", true);
+                }
+                permissionMapList.add(permissionMap);
+            }
+        }
+
+        return JsonUtil.objToJsonString(permissionMapList);
+    }
+
+    /**
      * 保存角色
      * @param role 角色对象
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("role") Role role) {
+    public String save(Role role, @ModelAttribute("permissionList") List<Permission> permissionList) {
         //保存操作状态
         String status = "success";
         if(role != null) {
+            // 保存角色绑定权限
+            role.setPermissionList(permissionList);
             role = roleService.save(role);
         }else {
             status = "fail";
@@ -99,11 +159,14 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    public String update(@ModelAttribute("role") Role role) {
+    public String update(Role role, @ModelAttribute("permissionList") List<Permission> permissionList) {
         //保存操作状态
         String status = "success";
         if(role != null) {
+            // 更新修改时间
             role.setUpdateTime(new Date());
+            // 保存角色绑定权限
+            role.setPermissionList(permissionList);
             role = roleService.save(role);
         }else {
             status = "fail";
