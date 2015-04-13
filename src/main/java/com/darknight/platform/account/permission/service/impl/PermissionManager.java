@@ -42,8 +42,8 @@ public class PermissionManager extends BaseManager<Permission, String> implement
      */
     @Override
     public Set<Permission> findPermissions(String accountName) {
-        Criteria criteria = permissionDao.createCriteria();
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的权限对象
+        Criteria criteria = getVisibleCriteria();
         criteria.add(Restrictions.eq("enableTag", DefaultEntity.EnableTag.YES));
         criteria.createAlias("PermissionList", "Permission");
         criteria.createAlias("userList", "user").add(Restrictions.eq("Permission.user.accountName", accountName));
@@ -85,10 +85,8 @@ public class PermissionManager extends BaseManager<Permission, String> implement
      */
     @Override
     public Page<Permission> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 创建查询对象
-        Criteria criteria = permissionDao.createCriteria();
-        // 添加查询规则
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的权限对象
+        Criteria criteria = getOrderedVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {

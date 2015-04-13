@@ -43,8 +43,8 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
      */
     @Override
     public List<Role> findRoleListByUserId(String userId) {
-        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
-        Criteria criteria = getVisibleCriteria();
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        Criteria criteria = getOrderedVisibleCriteria();
         criteria.createAlias("userList", "user").add(Restrictions.eq("user.id", userId));
         List<Role> roleList = criteria.list();
         if(roleList == null) {
@@ -96,8 +96,8 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
 
     @Override
     public Page<Role> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
-        Criteria criteria = getVisibleCriteria();
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        Criteria criteria = getOrderedVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {

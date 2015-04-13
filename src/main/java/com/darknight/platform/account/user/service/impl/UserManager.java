@@ -55,8 +55,8 @@ public class UserManager extends BaseManager<User, String> implements UserServic
      */
     @Override
     public Page<User> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
-        Criteria criteria = getVisibleCriteria();
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的用户对象
+        Criteria criteria = getOrderedVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {

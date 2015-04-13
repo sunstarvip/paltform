@@ -48,8 +48,8 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
      */
     @Override
     public Page<Menu> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
-        Criteria criteria = getVisibleCriteria();
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        Criteria criteria = getOrderedVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {
@@ -82,8 +82,8 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
      */
     @Override
     public List<Menu> findAllVisibleTopMenu() {
-        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
-        Criteria criteria = getVisibleCriteria();
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        Criteria criteria = getOrderedVisibleCriteria();
         criteria.add(Restrictions.isNull("parent"));
         List<Menu> menuList = criteria.list();
         return menuList;
