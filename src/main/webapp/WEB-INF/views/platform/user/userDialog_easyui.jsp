@@ -66,10 +66,10 @@
               <tr>
                   <td>所属角色: </td>
                   <td>
-                      <select class="easyui-combobox" name="roleList"
+                      <select class="easyui-combobox" name="roleList.id" editable="false"
                               url="${ctx}/platform/account/user/getRoleList?userId=${user.id}"
-                              method="get" data-options="valueField:'id',textField:'text',
-                              multiple:true,panelHeight:'auto'" style="width:155px;">
+                              multiple="true" method="get" valueField="id" textField="text"
+                              data-options="panelHeight:'auto'" style="width:155px;">
                       </select>
                   </td>
               </tr>

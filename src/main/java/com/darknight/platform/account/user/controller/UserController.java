@@ -52,6 +52,15 @@ class UserController {
         return user;
     }
 
+    @ModelAttribute("roleList")
+    public List<Role> getRoleList(@RequestParam(value = "roleList.id", required = false) List<String> roleIdList) {
+        List<Role> roleList = new ArrayList<>();
+        if (roleIdList != null && !roleIdList.isEmpty()) {
+            roleList = roleService.find(roleIdList);
+        }
+        return roleList;
+    }
+
     /**
      * 分页查询用户列表数据
      * @param request
@@ -115,23 +124,26 @@ class UserController {
     }
 
     @RequestMapping(value={"getRoleList"})
-    public String getRoleList(@RequestParam("userId") String userId) {
+    public String getRoleList(@RequestParam(value="userId", required=false) String userId) {
         List<Map<String, Object>> roleMapList = new ArrayList<>();
-        // 查询用户账户名是否已经存在对应用户
+        List<Role> roleList = new ArrayList<>();
         if(StringUtils.isNotBlank(userId)) {
-            List<Role> allRoleList = roleService.findAllVisible();
-            List<Role> roleList = roleService.findRoleListByUserId(userId);
-            if(roleList != null) {
-                Map<String, Object> roleMap = null;
-                for(Role role : allRoleList) {
-                    roleMap = new HashMap<>();
-                    roleMap.put("id", role.getId());
-                    roleMap.put("text", role.getName());
-                    if(roleList.contains(role)) {
-                        roleMap.put("selected", true);
-                    }
-                    roleMapList.add(roleMap);
+            // 查询对应用户是否已经绑定过角色
+            roleList = roleService.findRoleListByUserId(userId);
+        }
+        // 查询所有可用角色
+        List<Role> allRoleList = roleService.findAllVisible();
+
+        if(allRoleList != null && !allRoleList.isEmpty()) {
+            Map<String, Object> roleMap = null;
+            for(Role role : allRoleList) {
+                roleMap = new HashMap<>();
+                roleMap.put("id", role.getId());
+                roleMap.put("text", role.getName());
+                if(roleList.contains(role)) {
+                    roleMap.put("selected", true);
                 }
+                roleMapList.add(roleMap);
             }
         }
 
@@ -144,12 +156,13 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("user") User user) {
+    public String save(User user, @ModelAttribute("roleList") List<Role> roleList) {
         //保存操作状态
         String status = "success";
         //加密密码
         if(user != null) {
             ShiroPasswordUtil.getPassword(user);
+            user.setRoleList(roleList);
             user = userService.save(user);
         }else {
             status = "fail";
@@ -167,12 +180,13 @@ class UserController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    public String update(@ModelAttribute("user") User user) {
+    public String update(User user, @ModelAttribute("roleList") List<Role> roleList) {
         //保存操作状态
         String status = "success";
         //加密密码
         if(user != null) {
             user.setUpdateTime(new Date());
+            user.setRoleList(roleList);
             user = userService.save(user);
         }else {
             status = "fail";

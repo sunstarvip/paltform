@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DarKnight on 2014/5/22 0022.
@@ -50,6 +47,9 @@ public class RoleManager extends BaseManager<Role, String> implements RoleServic
         Criteria criteria = getVisibleCriteria();
         criteria.createAlias("userList", "user").add(Restrictions.eq("user.id", userId));
         List<Role> roleList = criteria.list();
+        if(roleList == null) {
+            roleList = new ArrayList<>();
+        }
         return roleList;
     }
 

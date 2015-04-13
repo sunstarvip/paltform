@@ -1,7 +1,6 @@
 package com.darknight.platform.account.user.service.impl;
 
 import com.darknight.core.base.dao.BaseJpaDao;
-import com.darknight.core.base.entity.DefaultEntity;
 import com.darknight.core.base.service.impl.BaseManager;
 import com.darknight.platform.account.user.dao.UserDao;
 import com.darknight.platform.account.user.entity.User;
@@ -41,7 +40,10 @@ public class UserManager extends BaseManager<User, String> implements UserServic
      */
     @Override
     public User findByAccountName(String accountName) {
-        User user = userDao.findByAccountName(accountName);
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
+        criteria.add(Restrictions.eq("accountName", accountName));
+        User user = (User)criteria.uniqueResult();
         return user;
     }
 
@@ -53,10 +55,8 @@ public class UserManager extends BaseManager<User, String> implements UserServic
      */
     @Override
     public Page<User> findSearchPage(Map<String, Object> searchMap, Pageable page) {
-        // 创建查询对象
-        Criteria criteria = userDao.createCriteria();
-        // 添加查询规则
-        criteria.add(Restrictions.eq("visibleTag", DefaultEntity.VisibleTag.YES));
+        // 获取自定义查询对象，查询未逻辑删除的系统菜单对象
+        Criteria criteria = getVisibleCriteria();
         for(Map.Entry<String, Object> searchEntry: searchMap.entrySet()) {
             if(searchEntry.getValue() != null && StringUtils.isNotBlank(searchEntry.getValue().toString())) {
                 if(StringUtils.contains(searchEntry.getKey(), "like_")) {

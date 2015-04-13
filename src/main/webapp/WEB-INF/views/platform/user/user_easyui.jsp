@@ -19,6 +19,7 @@
                toolbar="#toolbar" collapsible="false" border="false"
                singleSelect="true" nowrap="false" striped="true"
                idField="id" pagination="true" pageNumber="1" pageSize="12"
+               checkOnSelect="true" selectOnCheck="true"
                pageList="[12,20,30,40,50]" loadMsg="数据载入中…" >
                 <%-- 第一行 --%>
             <thead>

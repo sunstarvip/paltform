@@ -87,7 +87,11 @@ public class User extends DefaultEntity {
         this.phoneNum = phoneNum;
     }
 
-    @ManyToMany(mappedBy = "userList")
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "t_platform_role_user",
+            joinColumns ={@JoinColumn(name = "user_id", referencedColumnName = "id") },
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
     public List<Role> getRoleList() {
         return roleList;
     }
