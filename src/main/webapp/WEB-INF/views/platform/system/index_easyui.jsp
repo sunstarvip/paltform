@@ -46,8 +46,7 @@
     <inheritance:block name="west">
         <div data-options="region:'west',title:'系统菜单',split:true" style="width:200px;">
             <inheritance:block name="westContent">
-                <ul id="menuTree" class="easyui-tree" url="${ctx}/platform/system/menu/menuTree"
-                    data-options="method: 'post'" >
+                <ul id="menuTree" class="easyui-tree">
 
                 </ul>
             </inheritance:block>
@@ -105,6 +104,7 @@
                 $(function() {
                     // 添加点击左侧系统菜单在右侧tab标签中打开页面的效果
                     $('#menuTree').tree({
+                        url: "${ctx}/platform/system/menu/menuTree",
                         onSelect: function(node){
                             addTab(node['text'], node['urlPath']);
                         }
