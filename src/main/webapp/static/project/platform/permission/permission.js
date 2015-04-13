@@ -6,18 +6,8 @@ function Permission(ctx, tableId, dialogId, formId) {
 // 定义重载方法与拓展方法
 var permissionExtend = {
     initDialog: function(option) {
-        var buttons = [{
-            id: 'permissionSave',
-            text: '保存',
-            iconCls: 'icon-ok'
-        },{
-            id: 'permissionCancel',
-            text: '取消',
-            iconCls: 'icon-cancel'
-        }];
 
         var defaultOption = {
-            buttons: buttons,
 
             width: 350
         }

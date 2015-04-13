@@ -152,9 +152,26 @@
 //             $(this).pagination('loaded');
 //             }*/
 //        });
-                user.initDialog({title: '系统角色', href: '${ctx}/platform/account/user/dialogPage'});
-                parent.$('#userSave').click(function() {user.save(user)});
-                parent.$('#userCancel').click(function() {user.cancel(user)});
+                var userBtns = [{
+                    id: 'userSave',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                    handler:function(){
+                        user.save(user);
+                    }
+                },{
+                    id: 'userCancel',
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler:function(){
+                        user.cancel(user);
+                    }
+                }];
+
+                user.initDialog({title: '系统角色', buttons: userBtns, href: '${ctx}/platform/account/user/dialogPage'});
+//                parent.$('#userSave').click(function() {alert(1111111111)});
+//                parent.$('#userSave').click(function() {user.save(user)});
+//                parent.$('#userCancel').click(function() {user.cancel(user)});
             });
 
         </script>

@@ -42,7 +42,9 @@ Base.prototype = {
     openDialog: function(option) {
         var dialogObj = null;
         if(!!parent.$('#' + this.dialogId)) {
-            dialogObj = parent.$('#' + this.dialogId).dialog('open');
+            var defaultOption = parent.$('#' + this.dialogId).dialog('options');
+            defaultOption = $.extend({}, defaultOption, option);
+            dialogObj = parent.$('#' + this.dialogId).dialog(defaultOption).dialog('open');
         }else {
             dialogObj = this.initDialog(option);
         }
@@ -54,10 +56,11 @@ Base.prototype = {
      * @param urlPath 保存实体时的请求路径
      */
     add: function(dialogTitle, dialogPath, urlPath) {
-        this.openDialog();
-        parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('refresh', this.ctx + dialogPath);
+        //parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('open');
+        this.openDialog({href: this.ctx + dialogPath});
+        parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle);
         this.urlPath = this.ctx + urlPath;
-        parent.$('#'+this.formId).form('clear');
+        //parent.$('#'+this.formId).form('clear');
     },
     /**
      * 通用保存方法
@@ -75,6 +78,8 @@ Base.prototype = {
             success: function(result){
                 var result = eval('('+result+')');
                 if (result['status']=='success'){
+                    // 清除表单数据
+                    parent.$('#'+formId).form('clear');
                     // 关闭对话框
                     parent.$('#'+dialogId).dialog('close');
                     // 重载数据列表
@@ -96,8 +101,9 @@ Base.prototype = {
     edit: function(dialogTitle, dialogPath, urlPath) {
         var row = $('#'+this.tableId).datagrid('getSelected');
         if(row) {
-            this.openDialog();
-            parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('refresh', this.ctx + dialogPath);
+            //parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle).dialog('refresh', this.ctx + dialogPath);
+            this.openDialog({href: this.ctx + dialogPath});
+            parent.$('#' + this.dialogId).dialog('setTitle', dialogTitle);
             this.urlPath = this.ctx + urlPath;
         }
     },

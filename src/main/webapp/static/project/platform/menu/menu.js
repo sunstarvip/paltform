@@ -18,19 +18,8 @@ function Menu(ctx, tableId, dialogId, formId, treeId) {
  */
 var menuExtend = {
     initDialog: function(option) {
-        var buttons = [{
-            id: 'menuSave',
-            text: '保存',
-            iconCls: 'icon-ok'
-        },{
-            id: 'menuCancel',
-            text: '取消',
-            iconCls: 'icon-cancel'
-        }];
 
         var defaultOption = {
-            buttons: buttons,
-
             width: 320
         }
 
@@ -67,6 +56,8 @@ var menuExtend = {
             success: function(result){
                 var result = eval('('+result+')');
                 if (result['status']=='success'){
+                    // 清除表单数据
+                    parent.$('#'+formId).form('clear');
                     // 关闭对话框
                     parent.$('#'+dialogId).dialog('close');
                     // 重载权限信息列表

@@ -6,18 +6,8 @@ function Role(ctx, tableId, dialogId, formId) {
 // 定义重载方法与拓展方法
 var roleExtend = {
     initDialog: function(option) {
-        var buttons = [{
-            id: 'roleSave',
-            text: '保存',
-            iconCls: 'icon-ok'
-        },{
-            id: 'roleCancel',
-            text: '取消',
-            iconCls: 'icon-cancel'
-        }];
 
         var defaultOption = {
-            buttons: buttons,
 
             width: 350
         }

@@ -76,9 +76,25 @@
 
             //页面JS初始化
             $(function() {
-                role.initDialog({title: '系统角色', href: '${ctx}/platform/account/role/dialogPage'});
-                parent.$('#roleSave').click(function() {role.save(role)});
-                parent.$('#roleCancel').click(function() {role.cancel(role)});
+                var roleBtns = [{
+                    id: 'roleSave',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                    handler:function(){
+                        role.save(role);
+                    }
+                },{
+                    id: 'roleCancel',
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler:function(){
+                        role.cancel(role);
+                    }
+                }];
+
+                role.initDialog({title: '系统角色', buttons: roleBtns, href: '${ctx}/platform/account/role/dialogPage'});
+//                parent.$('#roleSave').click(function() {role.save(role)});
+//                parent.$('#roleCancel').click(function() {role.cancel(role)});
             });
 
         </script>

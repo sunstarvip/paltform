@@ -85,9 +85,25 @@
 
         //页面JS初始化
         $(function() {
-            menu.initDialog({title: '系统菜单', href: '${ctx}/platform/system/menu/dialogPage'});
-            parent.$('#menuSave').click(function() {menu.save(menu)});
-            parent.$('#menuCancel').click(function() {menu.cancel(menu)});
+            var menuBtns = [{
+                id: 'menuSave',
+                text: '保存',
+                iconCls: 'icon-ok',
+                handler:function(){
+                    menu.save(menu);
+                }
+            },{
+                id: 'menuCancel',
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler:function(){
+                    menu.cancel(menu);
+                }
+            }];
+
+            menu.initDialog({title: '系统菜单', buttons: menuBtns, href: '${ctx}/platform/system/menu/dialogPage'});
+//            parent.$('#menuSave').click(function() {menu.save(menu)});
+//            parent.$('#menuCancel').click(function() {menu.cancel(menu)});
         });
 
     </script>

@@ -76,10 +76,26 @@
 
             //页面JS初始化
             $(function() {
+                var permissionBtns = [{
+                    id: 'permissionSave',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                    handler:function(){
+                        permission.save(permission);
+                    }
+                },{
+                    id: 'permissionCancel',
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler:function(){
+                        permission.cancel(permission);
+                    }
+                }];
+
                 <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');--%>
-                permission.initDialog({title: '系统权限', href: '${ctx}/platform/account/permission/dialogPage'});
-                parent.$('#permissionSave').click(function() {permission.save(permission)});
-                parent.$('#permissionCancel').click(function() {permission.cancel(permission)});
+                permission.initDialog({title: '系统权限', buttons: permissionBtns, href: '${ctx}/platform/account/permission/dialogPage'});
+//                parent.$('#permissionSave').click(function() {permission.save(permission)});
+//                parent.$('#permissionCancel').click(function() {permission.cancel(permission)});
             });
 
         </script>
