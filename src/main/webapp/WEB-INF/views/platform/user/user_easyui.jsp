@@ -133,6 +133,7 @@
                 $('.resetBtn').linkbutton({
                     text: '重置密码',
                     iconCls: 'icon-reload',
+                    height: 18,  // DataGrid默认行内高度为18px
                     plain: true
                 });
 
