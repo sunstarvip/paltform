@@ -20,30 +20,31 @@
                singleSelect="true" nowrap="false" striped="true"
                idField="id" pagination="true" pageNumber="1" pageSize="12"
                checkOnSelect="true" selectOnCheck="true"
-               pageList="[12,20,30,40,50]" loadMsg="数据载入中…" >
-                <%-- 第一行 --%>
+               pageList="[12,20,30,40,50]" loadMsg="数据载入中…"
+               data-options="onLoadSuccess: loadSuccessFun" >
+            <%-- 第一行 --%>
             <thead>
-            <tr>
-                <th colspan="4" data-options="align:'center'">基本信息</th>
-                <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
-            </tr>
+                <tr>
+                    <th colspan="4" align="center">基本信息</th>
+                    <th field="opt" formatter="addOptBtns" rowspan="2" width="80" align="center">操作</th>
+                </tr>
             </thead>
                 <%-- 第二行 --%>
                 <%-- 冻结行 --%>
             <thead data-options="frozen:true">
-            <tr>
-                <th field="id" align="center" data-options="checkbox: true">ID</th>
-                <th field="accountName" width="80" align="center">账户名称</th>
-            </tr>
+                <tr>
+                    <th field="id" align="center" data-options="checkbox: true">ID</th>
+                    <th field="accountName" width="80" align="center">账户名称</th>
+                </tr>
             </thead>
                 <%-- 非冻结行 --%>
             <thead>
-            <tr>
-                <th field="name" width="120" align="center">用户昵称</th>
-                <th field="phoneNum" width="80" align="center">手机号码</th>
-                <th field="mailAddress" width="150" align="center">邮箱地址</th>
-                <th field="address" width="100" align="center">联系地址</th>
-            </tr>
+                <tr>
+                    <th field="name" width="80" align="center">用户昵称</th>
+                    <th field="phoneNum" width="50" align="center">手机号码</th>
+                    <th field="mailAddress" width="100" align="center">邮箱地址</th>
+                    <th field="address" width="100" align="center">联系地址</th>
+                </tr>
             </thead>
         </table>
             <%-- 搜索区域 --%>
@@ -63,17 +64,78 @@
                 手机号码: <input id="searchPhoneNum" name="searchPhoneNum" style="width:110px">
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search"
                    onclick="doSearch()">查询</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-clear"
+                   onclick="doReset()">重置</a>
             </span>
         </div>
 
         <script>
-
+            // 定义搜索功能
             function doSearch(){
                 var searchKeyMap= {
                     accountName: 'searchAccountName',
                     phoneNum: 'searchPhoneNum'
                 }
                 user.doSearch(searchKeyMap);
+            }
+
+            // 定义重置搜索条件功能
+            function doReset(){
+                $('#searchAccountName').val('');
+                $('#searchPhoneNum').val('');
+            }
+
+            // 定义DataGrid行样式
+            function getRowStyle(index, row) {
+                // 行数为row.listprice
+                return "align:'left';";
+            }
+
+            // 定义用户密码重置为默认密码功能
+            function resetPwd(userId) {
+//                var userId = row['id'];
+                $.post(
+                        '${ctx}/platform/account/user/resetPwd',
+                        {userId: userId},
+                        function(result) {
+                            var result = eval('('+result+')');
+                            if(!!result && result['status']=='success') {
+                                var successOtp = {
+                                    title: '操作成功',
+                                    msg: result['msgInfo'],
+                                    timeout: 5000
+                                }
+                                $.messager.show(successOtp);
+                            }else {
+                                var failOtp = {
+                                    title: '操作失败',
+                                    msg: result['msgInfo'],
+                                    timeout: 5000
+                                }
+                                $.messager.show(failOtp);
+                            }
+                        },
+                        'text'
+                );
+            }
+
+
+            // 定义行内操作按钮
+            function addOptBtns(value, row, index) {
+                var userId = row['id'];
+                var resetPwdBtnStr = '<a href="#" class="resetBtn" onclick="resetPwd(\''+userId+'\');"></a>';
+//                var resetPwdBtnStr = '<a href="#" class="optBtn" onclick="alert('+row['id']+');"></a>';
+                return resetPwdBtnStr;
+            }
+
+            // 当easyui自动渲染页面成功后的操作
+            function loadSuccessFun() {
+                $('.resetBtn').linkbutton({
+                    text: '重置密码',
+                    iconCls: 'icon-reload',
+                    plain: true
+                });
+
             }
 
             // 定义全局JS对象
@@ -172,6 +234,17 @@
 //                parent.$('#userSave').click(function() {alert(1111111111)});
 //                parent.$('#userSave').click(function() {user.save(user)});
 //                parent.$('#userCancel').click(function() {user.cancel(user)});
+
+//                $('#userTable').datagrid({
+//                    columns:[[
+//                        {
+//                            field: 'opt',
+//                            formatter: function(value,row,index){
+//                                addOptBtns(value,row,index);
+//                            }
+//                        }
+//                    ]]
+//                });
             });
 
         </script>

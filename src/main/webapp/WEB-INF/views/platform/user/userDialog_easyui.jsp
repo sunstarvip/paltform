@@ -16,6 +16,7 @@
           <%-- Hidden属性 begin--%>
           <%-- 用户ID --%>
           <input name="id" type="hidden" value="${user.id}">
+          <input name="password" type="hidden" value="${user.password}">
           <%-- Hidden属性 end--%>
 
           <table cellpadding="5">
@@ -28,13 +29,13 @@
                              missingMessage="请输入账户名称" invalidMessage="该账户名称已存在！" >
                   </td>
               </tr>
-              <tr id="passwordRow">
-                  <td>密码: </td>
-                  <td>
-                      <input class="easyui-validatebox" name="password" value="${user.password}"
-                             type="text" required="true">
-                  </td>
-              </tr>
+              <%--<tr id="passwordRow">--%>
+                  <%--<td>密码: </td>--%>
+                  <%--<td>--%>
+                      <%--<input class="easyui-validatebox" name="password" value="${user.password}"--%>
+                             <%--type="text" required="true">--%>
+                  <%--</td>--%>
+              <%--</tr>--%>
               <tr>
                   <td>用户昵称: </td>
                   <td>
@@ -72,6 +73,10 @@
                               data-options="panelHeight:'auto'" style="width:155px;">
                       </select>
                   </td>
+              </tr>
+              <tr>
+                  <td>注: </td>
+                  <td>新建用户密码默认为 123456</td>
               </tr>
           </table>
       </form>

@@ -124,5 +124,6 @@
     <!--</bean>-->
     <!-- end -->
 
+    <!-- 用于获取Spring管理的Beans -->
     <bean class="com.darknight.core.web.spring.SpringApplicationContext"></bean>
 </beans>

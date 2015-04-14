@@ -8,6 +8,8 @@ import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
 import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "platform/account/user")
 class UserController {
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService;
     private RoleService roleService;
 
@@ -166,6 +169,8 @@ class UserController {
         String status = "success";
         //加密密码
         if(user != null) {
+            // 设定默认初始密码
+            user.setPassword("123456");
             ShiroPasswordUtil.getPassword(user);
             user.setRoleList(roleList);
             user = userService.save(user);
@@ -199,6 +204,41 @@ class UserController {
 
         Map<String, String> resultMap = new HashMap<String, String>();
         resultMap.put("status", status);
+
+        return JsonUtil.objToJsonString(resultMap);
+    }
+
+    @RequestMapping(value={"resetPwd"}, method={RequestMethod.POST})
+    public String resetPwd(@RequestParam(value="userId") String userId) {
+        // 操作状态
+        String status = "fail";
+        // 操作信息
+        String msgInfo = "密码重置失败";
+
+        //加密密码
+        if(StringUtils.isNotBlank(userId)) {
+            User user = userService.find(userId);
+            if(user != null && StringUtils.equals(User.VisibleTag.YES, user.getVisibleTag())) {
+                user.setUpdateTime(new Date());
+                // 设定默认初始密码
+                user.setPassword("123456");
+                ShiroPasswordUtil.getPassword(user);
+                user = userService.save(user);
+
+                // 修改操作状态为成功
+                status = "success";
+                // 修改操作信息
+                msgInfo = "密码重置成功";
+            }
+        }else {
+            // 保存错误日志
+            logger.error("UserController.restorePwd(String userId)异常");
+            logger.error("userId 用户ID 为空或空白字符");
+        }
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("status", status);
+        resultMap.put("msgInfo", msgInfo);
 
         return JsonUtil.objToJsonString(resultMap);
     }
