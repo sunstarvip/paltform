@@ -88,11 +88,24 @@
         <property name="cacheManager" ref="shiroEhcacheManager" />
     </bean>
 
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod"
+                  value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
     <!-- Shiro默认基于Form表单的身份验证过滤器 -->
     <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+        <!-- 登录账号和密码 -->
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
-        <property name="loginUrl" value="/system/login.jsp" />
+        <!--&lt;!&ndash;登录地址 &ndash;&gt;-->
+        <!--<property name="loginUrl" value="/loginFilter" />-->
+        <!--&lt;!&ndash; 登录成功后跳转页面 &ndash;&gt;-->
+        <!--<property name="successUrl" value="/indexPage" />-->
+        <!-- 登录失败时返回的错误类型 -->
+        <property name="failureKeyAttribute" value="shiroLoginFailure"/>
     </bean>
 
     <!-- 自定义基于Form表单的身份验证过滤器 -->
@@ -105,15 +118,29 @@
     <!-- Shiro默认Logout拦截器 -->
     <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
         <!-- 当用户注销后进行跳转的地址, 默认为"/" -->
-        <property name="redirectUrl" value="/system/login.jsp" />
+        <property name="redirectUrl" value="/login" />
     </bean>
 
-    <!-- Shiro Filter -->
+    <!-- Shiro Filter基于Controller来控制用户登录 -->
+    <!--<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
+        <!--<property name="securityManager" ref="securityManager" />-->
+        <!--<property name="loginUrl" value="/loginPage" />-->
+        <!--<property name="successUrl" value="/indexPage" />-->
+        <!--<property name="unauthorizedUrl" value="/system/error.jsp"/>-->
+        <!--<property name="filterChainDefinitions">-->
+            <!--<value>-->
+                <!--/indexPage = authc-->
+                <!--/** = anon-->
+            <!--</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!-- Shiro Filter基于Shiro默认实现来控制用户登录 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
-        <property name="loginUrl" value="/system/login.jsp" />
-        <property name="successUrl" value="/" />
-        <property name="unauthorizedUrl" value="/platform/security/login/login"/>
+        <property name="loginUrl" value="/login" />
+        <property name="successUrl" value="/indexPage" />
+        <property name="unauthorizedUrl" value="/system/error.jsp"/>
         <property name="filters">
             <map>
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
@@ -123,6 +150,9 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--不拦截任何路径, 用于关闭权限测试页面-->
+                /login = authc
+                /indexPage = authc
+                /logout = logout
                 /** = anon
 
                 <!-- 权限拦截配置 -->

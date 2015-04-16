@@ -4,7 +4,10 @@
     <diskStore path="java.io.tmpdir/hibernate/xqlc-safety"/>
 
     <!-- DefaultCache setting. -->
-    <defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+    <defaultCache maxEntriesLocalHeap="10000"
+                  eternal="false"
+                  timeToIdleSeconds="300"
+                  timeToLiveSeconds="600"
                   overflowToDisk="true"
                   maxEntriesLocalDisk="100000"/>
 
