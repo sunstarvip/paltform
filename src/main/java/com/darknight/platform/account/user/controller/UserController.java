@@ -1,6 +1,7 @@
 package com.darknight.platform.account.user.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
+import com.darknight.core.base.entity.ResultEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
@@ -8,6 +9,8 @@ import com.darknight.platform.account.user.entity.User;
 import com.darknight.platform.account.user.service.UserService;
 import com.darknight.platform.security.shiro.util.ShiroPasswordUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -264,4 +267,20 @@ class UserController {
 
         return JsonUtil.objToJsonString(resultMap);
     }
+
+    @RequestMapping(value={"getLoginUser"})
+    public String getLoginUser() {
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+        // 获取当前登录对象
+        Subject loginUser = SecurityUtils.getSubject();
+        if(loginUser != null && loginUser.isAuthenticated()) {
+            String dataInfo = loginUser.getPrincipal().toString();
+            resultData.setDataInfo(dataInfo);
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+        }
+
+        return JsonUtil.objToJsonString(resultData);
+    }
+
 }
