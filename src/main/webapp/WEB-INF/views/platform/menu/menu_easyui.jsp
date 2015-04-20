@@ -25,7 +25,7 @@
         <%-- 第一行 --%>
         <thead>
             <tr>
-                <th colspan="3" data-options="align:'center'">基本信息</th>
+                <th colspan="4" data-options="align:'center'">基本信息</th>
                 <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
             </tr>
         </thead>
@@ -42,7 +42,8 @@
             <tr>
                 <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
                 <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="urlPath" width="240" align="left">菜单URL</th>
+                <th field="parent" formatter="getParentName" width="80" align="left">父级菜单</th>
+                <th field="urlPath" width="160" align="left">菜单URL</th>
             </tr>
         </thead>
     </table>
@@ -68,6 +69,16 @@
         function formatterDate(val, row) {
             if(!!val) {
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            }else {
+                return "无";
+            }
+        }
+
+        // 获取父级菜单名称
+        function getParentName(val, row) {
+            if(!!val && !!val['parent']) {
+                var parent = val['parent'];
+                return parent['name'];
             }else {
                 return "无";
             }
