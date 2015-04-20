@@ -62,7 +62,7 @@ public class RoleController {
      * @return List<Permission> 权限实体列表
      */
     @ModelAttribute("permissionList")
-    public List<Permission> getRoleList(@RequestParam(value = "permissionList.id", required = false) List<String> permissionIdList) {
+    public List<Permission> getPermissionList(@RequestParam(value = "permissionList.id", required = false) List<String> permissionIdList) {
         List<Permission> permissionList = new ArrayList<>();
         if (permissionIdList != null && !permissionIdList.isEmpty()) {
             permissionList = permissionService.find(permissionIdList);
@@ -111,7 +111,7 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value={"getPermissionList"})
-    public String getRoleList(@RequestParam(value="roleId", required=false) String roleId) {
+    public String getPermissionList(@RequestParam(value="roleId", required=false) String roleId) {
         List<Map<String, Object>> permissionMapList = new ArrayList<>();
         List<Permission> permissionList = new ArrayList<>();
         if(StringUtils.isNotBlank(roleId)) {
@@ -135,6 +135,27 @@ public class RoleController {
         }
 
         return JsonUtil.objToJsonString(permissionMapList);
+    }
+
+    /**
+     * 查询所有未逻辑删除的权限树
+     * 若角色ID不为空，则选中对应角色绑定的权限列表
+     * @param roleId 角色ID，非必须
+     * @return
+     */
+    @RequestMapping(value={"getPermissionIdList"})
+    public String getPermissionIdList(@RequestParam(value="roleId") String roleId) {
+        // 查询对应角色是否已经绑定过权限
+        List<Permission> permissionList = permissionService.findPermissionListByRoleId(roleId);
+        if(permissionList != null && !permissionList.isEmpty()) {
+            List<String> permissionIdList = new ArrayList<>();
+            for(Permission permission : permissionList) {
+                permissionIdList.add(permission.getId());
+            }
+            String listJson = JsonUtil.objToJsonString(permissionIdList);
+            return listJson;
+        }
+        return null;
     }
 
     /**

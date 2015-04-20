@@ -35,16 +35,56 @@
                 <tr>
                     <td>所属权限: </td>
                     <td>
-                        <select class="easyui-combobox" name="permissionList.id" editable="false"
-                              url="${ctx}/platform/account/role/getPermissionList?roleId=${role.id}"
-                              multiple="true" method="get" valueField="id" textField="text"
-                              data-options="panelHeight:'auto'" style="width:155px;">
-                        </select>
+                        <%--<select class="easyui-combotree" name="permissionList.id" editable="false"--%>
+                                <%--url="${ctx}/platform/account/role/getPermissionTree?roleId=${role.id}"--%>
+                                <%--multiple="true" checkbox="true" method="get"--%>
+                                <%--data-options="panelHeight:'auto'" style="width:155px;">--%>
+                        <%--</select>--%>
+                        <select id="parentId" name="permissionList.id" style="width:156px;" />
                     </td>
                 </tr>
             </table>
         </form>
 
+        <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+        <script type="text/javascript" src="${ctx}/static/project/platform/role/role.js" ></script>
+        <script>
+            /**
+            * 选中权限树中当前角色ID下绑定的权限节点
+             */
+            function selectTreeNode() {
+                var roleId = "${role.id}";
+                if(!!roleId) {
+                    $.getJSON('${ctx}/platform/account/role/getPermissionIdList',
+                            {roleId: roleId},
+                            function(resultData) {
+                                if(!!resultData) {
+                                    $('#parentId').combotree('setValues', resultData);
+                                }
+                            }
+                    )
+                }
+            }
+            //页面JS初始化
+            $(function() {
+                $('#parentId').combotree({
+                    url:'${ctx}/platform/account/permission/permissionTree',
+                    method: 'get',
+                    editable: false,
+                    multiple: true,
+                    checkbox: true,
+                    panelHeight: 'auto',
+                    onLoadSuccess: selectTreeNode,
+                    icons: [{
+                        iconCls: 'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).combotree('clear');
+                        }
+                    }]
+                });
+            });
+
+        </script>
     </body>
 </inheritance:override>
 
