@@ -67,11 +67,12 @@
               <tr>
                   <td>所属角色: </td>
                   <td>
-                      <select class="easyui-combobox" name="roleList.id" editable="false"
-                              url="${ctx}/platform/account/user/getRoleList?userId=${user.id}"
-                              multiple="true" method="get" valueField="id" textField="text"
-                              data-options="panelHeight:'auto'" style="width:155px;">
-                      </select>
+                      <%--<select class="easyui-combobox" name="roleList.id" editable="false"--%>
+                              <%--url="${ctx}/platform/account/user/getRoleList?userId=${user.id}"--%>
+                              <%--multiple="true" method="get" valueField="id" textField="text"--%>
+                              <%--data-options="panelHeight:'auto'" style="width:155px;">--%>
+                      <%--</select>--%>
+                      <select id="parentId" name="roleList.id" style="width:156px;" />
                   </td>
               </tr>
               <tr>
@@ -81,6 +82,29 @@
           </table>
       </form>
 
+      <%--<script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>--%>
+      <%--<script type="text/javascript" src="${ctx}/static/project/platform/user/user.js" ></script>--%>
+      <script>
+          //页面JS初始化
+          $(function() {
+              $('#parentId').combobox({
+                  url:'${ctx}/platform/account/user/getRoleList?userId=${user.id}',
+                  method: 'get',
+                  editable: false,
+                  multiple: true,
+                  valueField: 'id',
+                  textField: 'text',
+                  panelHeight: 'auto',
+                  icons: [{
+                      iconCls: 'icon-clear',
+                      handler: function(e){
+                          $(e.data.target).combobox('clear');
+                      }
+                  }]
+              });
+          });
+
+      </script>
   </body>
 </inheritance:override>
 
