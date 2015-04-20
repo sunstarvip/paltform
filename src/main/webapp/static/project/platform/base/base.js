@@ -87,7 +87,7 @@ Base.prototype = {
                 }else {
                     $.messager.show({
                         title: '错误信息',
-                        msg: result
+                        msg: result['msgInfo']
                     });
                 }
             }
@@ -132,7 +132,7 @@ Base.prototype = {
                                     // 展示错误信息
                                     $.messager.show({
                                         title: '错误信息',
-                                        msg: result
+                                        msg: result['msgInfo']
                                     });
                                 }
                             },

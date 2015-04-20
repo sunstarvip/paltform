@@ -26,9 +26,40 @@
                     <textarea name="description" >${permission.description}</textarea>
                 </td>
             </tr>
+            <tr>
+                <td>父级权限:</td>
+                <td>
+                    <select id="parentId" name="parent.id" style="width:156px;" />
+                </td>
+            </tr>
         </table>
     </form>
 
+    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/platform/permission/permission.js" ></script>
+    <script>
+        function selectTreeNode() {
+            var parentId = "${permission.parent.id}";
+            if(!!parentId) {
+                $('#parentId').combotree('setValue', parentId);
+            }
+        }
+        //页面JS初始化
+        $(function() {
+//            selectTreeNode();
+            $('#parentId').combotree({
+                onLoadSuccess: selectTreeNode,
+                url:'${ctx}/platform/account/permission/permissionTree',
+                icons: [{
+                    iconCls: 'icon-clear',
+                    handler: function(e){
+                        $(e.data.target).combotree('clear');
+                    }
+                }]
+            });
+        });
+
+    </script>
     </body>
 </inheritance:override>
 

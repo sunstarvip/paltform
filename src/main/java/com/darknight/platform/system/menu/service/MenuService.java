@@ -20,32 +20,32 @@ public interface MenuService extends BaseService<Menu, String> {
      * @param page 分页对象
      * @return
      */
-    public Page<Menu> findSearchPage(Map<String, Object> searchMap, Pageable page);
+    Page<Menu> findSearchPage(Map<String, Object> searchMap, Pageable page);
 
     /**
      * 查询所有未逻辑删除的顶级系统菜单列表
      * @return
      */
-    public List<Menu> findAllVisibleTopMenu();
+    List<Menu> findAllVisibleTopMenu();
 
     /**
      * 根据当前系统菜单实体查询所有未逻辑删除的子级系统菜单列表
      * @param menu 系统菜单实体
      * @return
      */
-    public List<Menu> findVisibleChildren(Menu menu);
+    List<Menu> findVisibleChildren(Menu menu);
 
     /**
      * 通过系统菜单对象生成对应树型对象
      * @param menu 系统菜单对象
      * @return
      */
-    public MenuNode makeNode(Menu menu);
+    MenuNode makeNode(Menu menu);
 
     /**
      * 通过系统菜单对象列表生成对应树型对象列表
      * @param menuList 系统菜单对象列表
      * @return
      */
-    public List<MenuNode> makeNode(List<Menu> menuList);
+    List<MenuNode> makeNode(List<Menu> menuList);
 }

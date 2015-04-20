@@ -22,6 +22,8 @@ public class Permission extends DefaultEntity {
     private String name;
     private String description; // 权限描述
 
+    private Permission parent;
+    private List<Permission> children = new ArrayList<>();
     private List<Role> roleList = new ArrayList<>();
 
     public String getName() {
@@ -38,6 +40,27 @@ public class Permission extends DefaultEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    public Permission getParent() {
+        return parent;
+    }
+
+    public void setParent(Permission parent) {
+        this.parent = parent;
+    }
+
+    @OneToMany(mappedBy = "parent")
+//    @OrderBy("createTime")
+    public List<Permission> getChildren() {
+        return children;
+    }
+
+    @JsonIgnore
+    public void setChildren(List<Permission> children) {
+        this.children = children;
     }
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

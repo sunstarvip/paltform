@@ -145,7 +145,8 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
 
             return menuNode;
         }else {
-            logger.info("MenuManager.makeNode(Menu menu)方法中menu为null");
+            logger.info("MenuManager.makeNode(Menu menu)异常");
+            logger.info("其中menu为null");
         }
         return null;
     }
@@ -166,7 +167,8 @@ public class MenuManager extends BaseManager<Menu, String> implements MenuServic
                 menuNodeList.add(menuNode);
             }
         }else {
-            logger.info("MenuManager.makeNode(List<Menu> menuList)方法中menuList为null或empty");
+            logger.info("MenuManager.makeNode(List<Menu> menuList)异常");
+            logger.info("其中menuList为null或empty");
         }
         return menuNodeList;
     }

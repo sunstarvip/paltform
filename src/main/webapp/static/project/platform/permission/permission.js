@@ -6,7 +6,6 @@ function Permission(ctx, tableId, dialogId, formId) {
 // 定义重载方法与拓展方法
 var permissionExtend = {
     initDialog: function(option) {
-
         var defaultOption = {
 
             width: 350
@@ -14,7 +13,8 @@ var permissionExtend = {
 
         defaultOption = $.extend({}, defaultOption, option);
 
-        Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+        var dialogObj = Base.prototype.initDialog.call(this, 'dialogBlock', defaultOption);
+        return dialogObj;
     },
     add: function(dialogTitle) {
         var dialogPath = '/platform/account/permission/dialogPage';

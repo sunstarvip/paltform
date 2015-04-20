@@ -2,9 +2,11 @@ package com.darknight.platform.account.permission.service.impl;
 
 import com.darknight.core.base.dao.BaseJpaDao;
 import com.darknight.core.base.entity.DefaultEntity;
+import com.darknight.core.base.entity.TreeEntity;
 import com.darknight.core.base.service.impl.BaseManager;
 import com.darknight.platform.account.permission.dao.PermissionDao;
 import com.darknight.platform.account.permission.entity.Permission;
+import com.darknight.platform.account.permission.entity.PermissionNode;
 import com.darknight.platform.account.permission.service.PermissionService;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -130,5 +132,99 @@ public class PermissionManager extends BaseManager<Permission, String> implement
         criteria.setMaxResults(page.getPageSize());
         Page<Permission> permissionPage = new PageImpl(criteria.list(), page, totalNum);
         return permissionPage;
+    }
+
+    /**
+     * 查询所有未逻辑删除的顶级权限列表
+     * @return
+     */
+    @Override
+    public List<Permission> findAllVisibleTopPermission() {
+        // 获取自定义查询对象，查询未逻辑删除并默认排序的系统菜单对象
+        Criteria criteria = getOrderedVisibleCriteria();
+        criteria.add(Restrictions.isNull("parent"));
+        List<Permission> permissionList = criteria.list();
+        return permissionList;
+    }
+
+    /**
+     * 根据当前权限实体查询所有未逻辑删除的子级权限列表
+     * @param permission 权限实体
+     * @return
+     */
+    @Override
+    public List<Permission> findVisibleChildren(Permission permission) {
+        List<Permission> children = permission.getChildren();
+        if(children != null && !children.isEmpty()) {
+            List<Permission> visibleChildren = new ArrayList<>();
+            for(Permission child : children) {
+                if(StringUtils.equals(DefaultEntity.VisibleTag.YES, child.getVisibleTag())) {
+                    visibleChildren.add(child);
+                }
+            }
+            return visibleChildren;
+        }
+        return null;
+    }
+
+    /**
+     * 通过权限对象生成对应树型对象
+     * @param permission 权限对象
+     * @return
+     */
+    @Override
+    public PermissionNode makeNode(Permission permission) {
+        if(permission != null) {
+            PermissionNode permissionNode = new PermissionNode();
+            permissionNode.setId(permission.getId());
+            permissionNode.setText(permission.getName());
+            permissionNode.setSort(permission.getSort());
+            // 判断是否存在父级权限
+            if(permission.getParent() != null) {
+                permissionNode.setParentId(permission.getParent().getId());
+            }
+            // 判断是否存在未逻辑删除的子级权限
+            List<Permission> children = findVisibleChildren(permission);
+            if(children != null && !children.isEmpty()) {
+                // 存在子级菜单时才设定该菜单状态，并设定默认为展开
+                permissionNode.setState(TreeEntity.State.OPEN);
+                // 生成子菜单列表
+                List<PermissionNode> childrenNode = new ArrayList<>();
+                for(Permission child : children) {
+                    PermissionNode childNode = makeNode(child);
+                    childrenNode.add(childNode);
+                }
+                permissionNode.setChildren(childrenNode);
+            }else {
+
+            }
+
+            return permissionNode;
+        }else {
+            logger.info("PermissionManager.makeNode(Permission permission)异常");
+            logger.info("其中permission为null");
+        }
+        return null;
+    }
+
+    /**
+     * 通过权限对象列表生成对应树型对象列表
+     * @param permissionList 权限对象列表
+     * @return
+     */
+    @Override
+    public List<PermissionNode> makeNode(List<Permission> permissionList) {
+        List<PermissionNode> permissionNodeList = new ArrayList<>();
+        if(permissionList != null && !permissionList.isEmpty()) {
+            PermissionNode permissionNode = null;
+            for(Permission permission : permissionList) {
+                permissionNode = makeNode(permission);
+                permissionNodeList.add(permissionNode);
+            }
+        }else {
+            logger.info("PermissionManager.makeNode(List<Permission> permissionList)异常");
+            logger.info("其中permissionList为null或empty");
+        }
+        return permissionNodeList;
     }
 }

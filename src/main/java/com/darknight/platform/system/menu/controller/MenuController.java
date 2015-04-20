@@ -101,7 +101,7 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("menu") Menu menu) {
+    public String save(Menu menu) {
         //保存操作状态
         String status = "success";
         if(menu != null) {
@@ -126,7 +126,7 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    public String update(@ModelAttribute("menu") Menu menu) {
+    public String update(Menu menu) {
         //保存操作状态
         String status = "success";
         if(menu != null) {

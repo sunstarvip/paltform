@@ -1,19 +1,21 @@
 package com.darknight.platform.account.permission.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
+import com.darknight.core.base.entity.ResultEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.permission.entity.Permission;
+import com.darknight.platform.account.permission.entity.PermissionNode;
 import com.darknight.platform.account.permission.service.PermissionService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by DarKnight on 2014/5/26 0026.
@@ -21,6 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "platform/account/permission")
 public class PermissionController {
+    private final Logger logger = LoggerFactory.getLogger(PermissionController.class);
     private PermissionService permissionService;
 
     @Resource
@@ -72,24 +75,47 @@ public class PermissionController {
     }
 
     /**
+     * 查询权限树
+     * @param request
+     * @return
+     */
+    @RequestMapping(value={"permissionTree"})
+    public String permissionTree(HttpServletRequest request) {
+        List<Permission> permissionList = permissionService.findAllVisibleTopPermission();
+        List<PermissionNode> permissionNodeList = permissionService.makeNode(permissionList);
+
+        String listJson = JsonUtil.objToJsonString(permissionNodeList);
+        return listJson;
+    }
+
+    /**
      * 保存权限
      * @param permission 权限对象
      * @return
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
-    public String save(@ModelAttribute("permission") Permission permission) {
-        //保存操作状态
-        String status = "success";
+    public String save(Permission permission) {
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
         if(permission != null) {
+            // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
+            if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
+                permission.setParent(null);
+            }
             permission = permissionService.save(permission);
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("新增权限保存成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("PermissionController.save(Permission permission)异常");
+            logger.info("其中permission为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("新增权限保存失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -98,20 +124,29 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
-    public String update(@ModelAttribute("permission") Permission permission) {
-        //保存操作状态
-        String status = "success";
+    public String update(Permission permission) {
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
         if(permission != null) {
+            // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
+            if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
+                permission.setParent(null);
+            }
             permission.setUpdateTime(new Date());
             permission = permissionService.save(permission);
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("权限更新成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("PermissionController.update(Permission permission)异常");
+            logger.info("其中permission为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("权限更新失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -122,17 +157,22 @@ public class PermissionController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     public String delete(@RequestParam("id") String permissionId) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
         if(StringUtils.isNotBlank(permissionId)) {
             permissionService.delete(permissionId);
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("权限删除成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("PermissionController.delete(String permissionId)异常");
+            logger.info("其中permissionId为null或空白字符");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("权限删除失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 }
