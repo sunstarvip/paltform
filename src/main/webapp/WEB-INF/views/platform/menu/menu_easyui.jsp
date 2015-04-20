@@ -76,9 +76,8 @@
 
         // 获取父级菜单名称
         function getParentName(val, row) {
-            if(!!val && !!val['parent']) {
-                var parent = val['parent'];
-                return parent['name'];
+            if(!!val) {
+                return val['name'];
             }else {
                 return "无";
             }

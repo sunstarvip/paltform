@@ -24,7 +24,7 @@
                 <%-- 第一行 --%>
             <thead>
             <tr>
-                <th colspan="3" data-options="align:'center'">基本信息</th>
+                <th colspan="4" data-options="align:'center'">基本信息</th>
                 <th rowspan="2" data-options="field: 'opt', align:'center'">操作</th>
             </tr>
             </thead>
@@ -41,7 +41,8 @@
             <tr>
                 <th field="createTime" formatter="formatterDate" width="60" align="center">创建时间</th>
                 <th field="updateTime" formatter="formatterDate" width="60" align="center">更新时间</th>
-                <th field="description" width="240" align="center">权限描述</th>
+                <th field="parent" formatter="getParentName" width="80" align="left">父级权限</th>
+                <th field="description" width="160" align="center">权限描述</th>
             </tr>
             </thead>
         </table>
@@ -71,6 +72,15 @@
                 }
             }
 
+            // 获取父级菜单名称
+            function getParentName(val, row) {
+                if(!!val) {
+                    return val['name'];
+                }else {
+                    return "无";
+                }
+            }
+
             // 定义全局JS对象
             var permission = new Permission('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');
 
@@ -92,10 +102,7 @@
                     }
                 }];
 
-                <%--permission.init('${ctx}', 'permissionTable', 'permissionDialog', 'permissionForm');--%>
                 permission.initDialog({title: '系统权限', buttons: permissionBtns, href: '${ctx}/platform/account/permission/dialogPage'});
-//                parent.$('#permissionSave').click(function() {permission.save(permission)});
-//                parent.$('#permissionCancel').click(function() {permission.cancel(permission)});
             });
 
         </script>
