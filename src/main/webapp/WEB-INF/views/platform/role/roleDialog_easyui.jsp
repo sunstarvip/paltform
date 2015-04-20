@@ -55,7 +55,7 @@
             function selectTreeNode() {
                 var roleId = "${role.id}";
                 if(!!roleId) {
-                    $.getJSON('${ctx}/platform/account/role/getPermissionIdList',
+                    $.getJSON('${ctx}/platform/account/permission/getPermissionIdList',
                             {roleId: roleId},
                             function(resultData) {
                                 if(!!resultData) {

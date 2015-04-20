@@ -104,58 +104,31 @@ public class RoleController {
         return dataGridJson;
     }
 
-    /**
-     * 查询所有未逻辑删除的权限列表
-     * 若角色ID不为空，则选中对应角色绑定的权限列表
-     * @param roleId 角色ID，非必须
-     * @return
-     */
-    @RequestMapping(value={"getPermissionList"})
-    public String getPermissionList(@RequestParam(value="roleId", required=false) String roleId) {
-        List<Map<String, Object>> permissionMapList = new ArrayList<>();
-        List<Permission> permissionList = new ArrayList<>();
-        if(StringUtils.isNotBlank(roleId)) {
-            // 查询对应角色是否已经绑定过权限
-            permissionList = permissionService.findPermissionListByRoleId(roleId);
+    @RequestMapping(value={"getRoleList"})
+    public String getRoleList(@RequestParam(value="userId", required=false) String userId) {
+        List<Map<String, Object>> roleMapList = new ArrayList<>();
+        List<Role> roleList = new ArrayList<>();
+        if(StringUtils.isNotBlank(userId)) {
+            // 查询对应用户是否已经绑定过角色
+            roleList = roleService.findRoleListByUserId(userId);
         }
         // 查询所有可用角色
-        List<Permission> allPermissionList = permissionService.findAllOrderedVisible();
+        List<Role> allRoleList = roleService.findAllOrderedVisible();
 
-        if(allPermissionList != null && !allPermissionList.isEmpty()) {
-            Map<String, Object> permissionMap = null;
-            for(Permission permission : allPermissionList) {
-                permissionMap = new HashMap<>();
-                permissionMap.put("id", permission.getId());
-                permissionMap.put("text", permission.getName());
-                if(permissionList.contains(permission)) {
-                    permissionMap.put("selected", true);
+        if(allRoleList != null && !allRoleList.isEmpty()) {
+            Map<String, Object> roleMap = null;
+            for(Role role : allRoleList) {
+                roleMap = new HashMap<>();
+                roleMap.put("id", role.getId());
+                roleMap.put("text", role.getName());
+                if(roleList.contains(role)) {
+                    roleMap.put("selected", true);
                 }
-                permissionMapList.add(permissionMap);
+                roleMapList.add(roleMap);
             }
         }
 
-        return JsonUtil.objToJsonString(permissionMapList);
-    }
-
-    /**
-     * 查询所有未逻辑删除的权限树
-     * 若角色ID不为空，则选中对应角色绑定的权限列表
-     * @param roleId 角色ID，非必须
-     * @return
-     */
-    @RequestMapping(value={"getPermissionIdList"})
-    public String getPermissionIdList(@RequestParam(value="roleId") String roleId) {
-        // 查询对应角色是否已经绑定过权限
-        List<Permission> permissionList = permissionService.findPermissionListByRoleId(roleId);
-        if(permissionList != null && !permissionList.isEmpty()) {
-            List<String> permissionIdList = new ArrayList<>();
-            for(Permission permission : permissionList) {
-                permissionIdList.add(permission.getId());
-            }
-            String listJson = JsonUtil.objToJsonString(permissionIdList);
-            return listJson;
-        }
-        return null;
+        return JsonUtil.objToJsonString(roleMapList);
     }
 
     /**

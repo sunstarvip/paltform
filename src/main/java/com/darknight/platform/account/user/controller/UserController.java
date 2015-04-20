@@ -134,33 +134,6 @@ class UserController {
         return JsonUtil.objToJsonString(status);
     }
 
-    @RequestMapping(value={"getRoleList"})
-    public String getRoleList(@RequestParam(value="userId", required=false) String userId) {
-        List<Map<String, Object>> roleMapList = new ArrayList<>();
-        List<Role> roleList = new ArrayList<>();
-        if(StringUtils.isNotBlank(userId)) {
-            // 查询对应用户是否已经绑定过角色
-            roleList = roleService.findRoleListByUserId(userId);
-        }
-        // 查询所有可用角色
-        List<Role> allRoleList = roleService.findAllOrderedVisible();
-
-        if(allRoleList != null && !allRoleList.isEmpty()) {
-            Map<String, Object> roleMap = null;
-            for(Role role : allRoleList) {
-                roleMap = new HashMap<>();
-                roleMap.put("id", role.getId());
-                roleMap.put("text", role.getName());
-                if(roleList.contains(role)) {
-                    roleMap.put("selected", true);
-                }
-                roleMapList.add(roleMap);
-            }
-        }
-
-        return JsonUtil.objToJsonString(roleMapList);
-    }
-
     /**
      * 保存用户
      * @param user 用户对象

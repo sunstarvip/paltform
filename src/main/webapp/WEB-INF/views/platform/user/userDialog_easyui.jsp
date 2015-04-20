@@ -88,7 +88,7 @@
           //页面JS初始化
           $(function() {
               $('#parentId').combobox({
-                  url:'${ctx}/platform/account/user/getRoleList?userId=${user.id}',
+                  url:'${ctx}/platform/account/role/getRoleList?userId=${user.id}',
                   method: 'get',
                   editable: false,
                   multiple: true,
