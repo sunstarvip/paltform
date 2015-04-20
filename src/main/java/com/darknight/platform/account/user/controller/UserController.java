@@ -168,8 +168,9 @@ class UserController {
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
     public String save(User user, @ModelAttribute("roleList") List<Role> roleList) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         //加密密码
         if(user != null) {
             // 设定默认初始密码
@@ -177,14 +178,19 @@ class UserController {
             ShiroPasswordUtil.getPassword(user);
             user.setRoleList(roleList);
             user = userService.save(user);
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("新增用户保存成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("UserController.save(User user, List<Role> roleList)异常");
+            logger.info("其中user为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("新增用户保存失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -194,29 +200,34 @@ class UserController {
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
     public String update(User user, @ModelAttribute("roleList") List<Role> roleList) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         //加密密码
         if(user != null) {
             user.setUpdateTime(new Date());
             user.setRoleList(roleList);
             user = userService.save(user);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("用户更新成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("UserController.update(User user, List<Role> roleList)异常");
+            logger.info("其中user为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("用户更新失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     @RequestMapping(value={"resetPwd"}, method={RequestMethod.POST})
     public String resetPwd(@RequestParam(value="userId") String userId) {
-        // 操作状态
-        String status = "fail";
-        // 操作信息
-        String msgInfo = "密码重置失败";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
 
         //加密密码
         if(StringUtils.isNotBlank(userId)) {
@@ -229,21 +240,19 @@ class UserController {
                 user = userService.save(user);
 
                 // 修改操作状态为成功
-                status = "success";
-                // 修改操作信息
-                msgInfo = "密码重置成功";
+                resultData.setStatus(ResultEntity.Status.SUCCESS);
+                // 添加操作成功的返回信息
+                resultData.setMsgInfo("密码重置成功");
             }
         }else {
-            // 保存错误日志
+            // 保存异常日志
             logger.error("UserController.restorePwd(String userId)异常");
-            logger.error("userId 用户ID 为空或空白字符");
+            logger.error("userId 用户ID 为null或空白字符");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("密码重置失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-        resultMap.put("msgInfo", msgInfo);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -254,24 +263,32 @@ class UserController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     public String delete(@RequestParam("id") String userId) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(StringUtils.isNotBlank(userId)) {
             userService.delete(userId);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("用户删除成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.error("UserController.delete(String userId)异常");
+            logger.error("userId 用户ID 为null或空白字符");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("用户删除失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     @RequestMapping(value={"getLoginUser"})
     public String getLoginUser() {
         //保存操作结果
         ResultEntity resultData = new ResultEntity();
+
         // 获取当前登录对象
         Subject loginUser = SecurityUtils.getSubject();
         if(loginUser != null && loginUser.isAuthenticated()) {

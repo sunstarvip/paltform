@@ -23,6 +23,9 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "platform/account/permission")
 public class PermissionController {
+    /**
+     * 日志操作对象
+     */
     private final Logger logger = LoggerFactory.getLogger(PermissionController.class);
     private PermissionService permissionService;
 
@@ -97,12 +100,14 @@ public class PermissionController {
     public String save(Permission permission) {
         //保存操作结果
         ResultEntity resultData = new ResultEntity();
+
         if(permission != null) {
             // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
             if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
                 permission.setParent(null);
             }
             permission = permissionService.save(permission);
+
             // 修改操作状态为成功
             resultData.setStatus(ResultEntity.Status.SUCCESS);
             // 添加操作成功的返回信息
@@ -127,6 +132,7 @@ public class PermissionController {
     public String update(Permission permission) {
         //保存操作结果
         ResultEntity resultData = new ResultEntity();
+
         if(permission != null) {
             // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
             if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
@@ -134,6 +140,7 @@ public class PermissionController {
             }
             permission.setUpdateTime(new Date());
             permission = permissionService.save(permission);
+
             // 修改操作状态为成功
             resultData.setStatus(ResultEntity.Status.SUCCESS);
             // 添加操作成功的返回信息
@@ -159,8 +166,10 @@ public class PermissionController {
     public String delete(@RequestParam("id") String permissionId) {
         //保存操作结果
         ResultEntity resultData = new ResultEntity();
+
         if(StringUtils.isNotBlank(permissionId)) {
             permissionService.delete(permissionId);
+
             // 修改操作状态为成功
             resultData.setStatus(ResultEntity.Status.SUCCESS);
             // 添加操作成功的返回信息

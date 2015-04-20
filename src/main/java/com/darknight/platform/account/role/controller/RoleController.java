@@ -1,12 +1,15 @@
 package com.darknight.platform.account.role.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
+import com.darknight.core.base.entity.ResultEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.account.permission.entity.Permission;
 import com.darknight.platform.account.permission.service.PermissionService;
 import com.darknight.platform.account.role.entity.Role;
 import com.darknight.platform.account.role.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,10 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "platform/account/role")
 public class RoleController {
+    /**
+     * 日志操作对象
+     */
+    private final Logger logger = LoggerFactory.getLogger(RoleController.class);
     private RoleService roleService;
     private PermissionService permissionService;
 
@@ -137,20 +144,27 @@ public class RoleController {
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
     public String save(Role role, @ModelAttribute("permissionList") List<Permission> permissionList) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(role != null) {
             // 保存角色绑定权限
             role.setPermissionList(permissionList);
             role = roleService.save(role);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("新增角色保存成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("RoleController.save(Role role, List<Permission> permissionList)异常");
+            logger.info("其中role为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("新增角色保存失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -160,22 +174,29 @@ public class RoleController {
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
     public String update(Role role, @ModelAttribute("permissionList") List<Permission> permissionList) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(role != null) {
             // 更新修改时间
             role.setUpdateTime(new Date());
             // 保存角色绑定权限
             role.setPermissionList(permissionList);
             role = roleService.save(role);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("角色更新成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("RoleController.update(Role role, List<Permission> permissionList)异常");
+            logger.info("其中role为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("角色更新失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -186,18 +207,25 @@ public class RoleController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     public String delete(@RequestParam("id") String roleId) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(StringUtils.isNotBlank(roleId)) {
             roleService.delete(roleId);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("角色删除成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("RoleController.delete(String roleId)异常");
+            logger.info("其中roleId为null或空白字符");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("角色删除失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
 }

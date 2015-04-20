@@ -1,11 +1,14 @@
 package com.darknight.platform.system.menu.controller;
 
 import com.darknight.core.base.entity.DataGridEntity;
+import com.darknight.core.base.entity.ResultEntity;
 import com.darknight.core.util.JsonUtil;
 import com.darknight.platform.system.menu.entity.Menu;
 import com.darknight.platform.system.menu.entity.MenuNode;
 import com.darknight.platform.system.menu.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,10 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "platform/system/menu")
 public class MenuController {
+    /**
+     * 日志操作对象
+     */
+    private final Logger logger = LoggerFactory.getLogger(MenuController.class);
     private MenuService menuService;
 
     @Resource
@@ -102,22 +109,29 @@ public class MenuController {
      */
     @RequestMapping(value={"save"}, method={RequestMethod.POST})
     public String save(Menu menu) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(menu != null) {
             // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
             if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
                 menu.setParent(null);
             }
             menu = menuService.save(menu);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("新增系统菜单保存成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("MenuController.save(Menu menu)异常");
+            logger.info("其中menu为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("新增系统菜单保存失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -127,8 +141,9 @@ public class MenuController {
      */
     @RequestMapping(value={"update"}, method={RequestMethod.POST})
     public String update(Menu menu) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(menu != null) {
             // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
             if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
@@ -136,14 +151,20 @@ public class MenuController {
             }
             menu.setUpdateTime(new Date());
             menu = menuService.save(menu);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("系统菜单更新成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("MenuController.update(Menu menu)异常");
+            logger.info("其中menu为null");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("系统菜单更新失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 
     /**
@@ -154,17 +175,24 @@ public class MenuController {
      */
     @RequestMapping(value={"delete"}, method={RequestMethod.POST})
     public String delete(@RequestParam("id") String menuId) {
-        //保存操作状态
-        String status = "success";
+        //保存操作结果
+        ResultEntity resultData = new ResultEntity();
+
         if(StringUtils.isNotBlank(menuId)) {
             menuService.delete(menuId);
+
+            // 修改操作状态为成功
+            resultData.setStatus(ResultEntity.Status.SUCCESS);
+            // 添加操作成功的返回信息
+            resultData.setMsgInfo("系统菜单删除成功");
         }else {
-            status = "fail";
+            // 保存异常日志
+            logger.info("MenuController.delete(String menuId)异常");
+            logger.info("其中menuId为null或空白字符");
+            // 添加操作错误的返回信息
+            resultData.setMsgInfo("系统菜单删除失败");
         }
 
-        Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("status", status);
-
-        return JsonUtil.objToJsonString(resultMap);
+        return JsonUtil.objToJsonString(resultData);
     }
 }
