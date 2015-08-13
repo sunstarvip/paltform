@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache updateCheck="false" name="hibernateCache">
+<ehcache updateCheck="false" name="jtaCacheOne">
 
-    <diskStore path="java.io.tmpdir/hibernate/platform"/>
+    <diskStore path="java.io.tmpdir/hibernate/jtaOne"/>
 
     <!-- DefaultCache setting. -->
     <!--
