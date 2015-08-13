@@ -186,9 +186,9 @@ public class PermissionManager extends BaseManager<Permission, String> implement
             // 判断是否存在未逻辑删除的子级权限
             List<Permission> children = findVisibleChildren(permission);
             if(children != null && !children.isEmpty()) {
-                // 存在子级菜单时才设定该菜单状态，并设定默认为展开
+                // 存在子级节点时才设定该节点状态，并设定默认为展开
                 permissionNode.setState(TreeEntity.State.OPEN);
-                // 生成子菜单列表
+                // 生成子权限列表
                 List<PermissionNode> childrenNode = new ArrayList<>();
                 for(Permission child : children) {
                     PermissionNode childNode = makeNode(child);
