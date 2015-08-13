@@ -114,8 +114,11 @@ public class MenuController {
 
         if(menu != null) {
             // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
-            if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
-                menu.setParent(null);
+            if(menu.getParent() != null) {
+                // 排除父级菜单ID为空或与当前菜单ID相同的
+                if(StringUtils.isBlank(menu.getParent().getId()) || StringUtils.equals(menu.getId(), menu.getParent().getId())) {
+                    menu.setParent(null);
+                }
             }
             menu = menuService.save(menu);
 
@@ -146,8 +149,11 @@ public class MenuController {
 
         if(menu != null) {
             // 处理页面中可能为系统菜单自动添加空对象作为父级菜单，导致保存报错的BUG
-            if(menu.getParent() != null && StringUtils.isBlank(menu.getParent().getId())) {
-                menu.setParent(null);
+            if(menu.getParent() != null) {
+                // 排除父级菜单ID为空或与当前菜单ID相同的
+                if(StringUtils.isBlank(menu.getParent().getId()) || StringUtils.equals(menu.getId(), menu.getParent().getId())) {
+                    menu.setParent(null);
+                }
             }
             menu.setUpdateTime(new Date());
             menu = menuService.save(menu);

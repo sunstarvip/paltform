@@ -124,8 +124,11 @@ public class PermissionController {
 
         if(permission != null) {
             // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
-            if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
-                permission.setParent(null);
+            if(permission.getParent() != null) {
+                // 排除父级权限ID为空或与当前权限ID相同的
+                if(StringUtils.isBlank(permission.getParent().getId()) || StringUtils.equals(permission.getId(), permission.getParent().getId())) {
+                    permission.setParent(null);
+                }
             }
             permission = permissionService.save(permission);
 
@@ -156,8 +159,11 @@ public class PermissionController {
 
         if(permission != null) {
             // 处理页面中可能为权限自动添加空对象作为父级权限，导致保存报错的BUG
-            if(permission.getParent() != null && StringUtils.isBlank(permission.getParent().getId())) {
-                permission.setParent(null);
+            if(permission.getParent() != null) {
+                // 排除父级权限ID为空或与当前权限ID相同的
+                if(StringUtils.isBlank(permission.getParent().getId()) || StringUtils.equals(permission.getId(), permission.getParent().getId())) {
+                    permission.setParent(null);
+                }
             }
             permission.setUpdateTime(new Date());
             permission = permissionService.save(permission);
