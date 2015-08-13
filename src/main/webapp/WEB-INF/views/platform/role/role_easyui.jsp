@@ -7,7 +7,7 @@
 <%--重定义父页面name=scriptSrc的内容--%>
 <inheritance:override name="scriptSrc">
     <script type="text/javascript" src="${ctx}/static/plugins/Moment/moment.js" ></script>
-    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/base/base.js" ></script>
     <script type="text/javascript" src="${ctx}/static/project/platform/role/role.js" ></script>
 </inheritance:override>
 

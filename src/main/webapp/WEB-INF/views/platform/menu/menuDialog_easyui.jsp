@@ -34,7 +34,7 @@
         </table>
     </form>
 
-    <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+    <script type="text/javascript" src="${ctx}/static/project/base/base.js" ></script>
     <script type="text/javascript" src="${ctx}/static/project/platform/menu/menu.js" ></script>
     <script>
         function selectTreeNode() {
@@ -47,6 +47,13 @@
         $(function() {
 //            selectTreeNode();
             $('#parentId').combotree({
+                onBeforeSelect: function(node) {
+                    var selfNodeId = "${menu.id}";
+                    if(selfNodeId==node['id']) {
+                        alert('请勿选择自己！');
+                        return false;
+                    }
+                },
                 onLoadSuccess: selectTreeNode,
                 url:'${ctx}/platform/system/menu/menuTree',
                 icons: [{

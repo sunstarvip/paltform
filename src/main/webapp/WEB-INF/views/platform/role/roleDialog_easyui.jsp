@@ -46,7 +46,7 @@
             </table>
         </form>
 
-        <script type="text/javascript" src="${ctx}/static/project/platform/base/base.js" ></script>
+        <script type="text/javascript" src="${ctx}/static/project/base/base.js" ></script>
         <script type="text/javascript" src="${ctx}/static/project/platform/role/role.js" ></script>
         <script>
             /**
