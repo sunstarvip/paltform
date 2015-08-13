@@ -11,6 +11,8 @@
         <param-value>
             classpath*:/applicationContext.xml
             classpath*:/applicationContext-shiro.xml
+            <!--classpath*:/applicationContext-single.xml-->
+            classpath*:/applicationContext-jta.xml
         </param-value>
     </context-param>
 
@@ -65,14 +67,28 @@
     </filter-mapping>
 
     <!-- Open Entity Manager in View filter -->
+    <!--<filter>-->
+    <!--<filter-name>openEntityManagerInViewFilter</filter-name>-->
+    <!--<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>openEntityManagerInViewFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!-- JTA Open Entity Manager in View filter begin -->
     <filter>
-        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <filter-name>openEntityManagerInViewFilterOne</filter-name>
         <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+        <init-param>
+            <param-name>entityManagerFactoryBeanName</param-name>
+            <param-value>entityManagerFactoryOne</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
-        <filter-name>openEntityManagerInViewFilter</filter-name>
+        <filter-name>openEntityManagerInViewFilterOne</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <!-- JTA Open Entity Manager in View filter end -->
 
     <!-- Shiro Security filter配置-->
     <filter>
